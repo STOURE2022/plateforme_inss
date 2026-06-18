@@ -1,0 +1,109 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Carta do Afiliado — e-INSS{% endblock %}
+{% block page_title %}Carta de Saúde{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'agent-affiliate-detail' affiliate.pk %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar à ficha de {{ affiliate.full_name }}
+  </a>
+</div>
+
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-slate-900">Carta de Saúde</h1>
+  <p class="text-slate-500 mt-1 text-sm">{{ affiliate.full_name }}</p>
+</div>
+
+<div class="max-w-2xl">
+  {% if card %}
+  <div class="space-y-5">
+    <!-- Cartão visual -->
+    <div class="relative rounded-2xl p-7 overflow-hidden shadow-xl"
+         style="background: linear-gradient(135deg, #1F3864 0%, #2563EB 60%, #1e40af 100%);">
+      <div class="absolute -right-8 -top-8 w-44 h-44 rounded-full opacity-10 bg-white"></div>
+      <div class="absolute -right-4 -bottom-12 w-52 h-52 rounded-full opacity-5 bg-white"></div>
+
+      <div class="relative z-10">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <p class="text-blue-200 text-xs uppercase tracking-wider">Cartão de Saúde &mdash; e-INSS</p>
+            <p class="text-white font-semibold text-lg mt-0.5">{{ affiliate.full_name }}</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+            {% if card.status == 'ACTIVE' %}bg-emerald-400/20 text-emerald-300
+            {% elif card.status == 'SUSPENDED' %}bg-amber-400/20 text-amber-300
+            {% else %}bg-red-400/20 text-red-300{% endif %}">
+            {% if card.status == 'ACTIVE' %}ATIVO{% elif card.status == 'SUSPENDED' %}SUSPENSO{% else %}{{ card.get_status_display|upper }}{% endif %}
+          </span>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-blue-200 text-xs">N.º Cartão</p>
+            <p class="font-mono font-bold text-white">{{ card.card_number }}</p>
+          </div>
+          <div>
+            <p class="text-blue-200 text-xs">NISS</p>
+            <p class="font-mono font-bold text-white">{{ affiliate.niss }}</p>
+          </div>
+          <div>
+            <p class="text-blue-200 text-xs">Emissão</p>
+            <p class="text-white font-medium text-sm">{{ card.issued_date|date:"d/m/Y" }}</p>
+          </div>
+          <div>
+            <p class="text-blue-200 text-xs">Validade</p>
+            <p class="text-white font-medium text-sm">{{ card.expiry_date|date:"d/m/Y" }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <h3 class="font-semibold text-slate-800 mb-4">Ações Disponíveis</h3>
+      <div class="flex flex-wrap gap-3">
+        <a href="/api/v1/cards/{{ card.pk }}/pdf/"
+           class="flex items-center gap-2 px-4 py-2.5 text-white rounded-xl text-sm font-semibold shadow-sm transition-all hover:shadow-md"
+           style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Regenerar PDF
+        </a>
+        <form method="post" action="/portal/agent/affiliates/{{ affiliate.pk }}/card/new/"
+              onsubmit="return confirm('Confirma a renova\u00e7\u00e3o da carta? A carta atual ser\u00e1 cancelada.')">
+          {% csrf_token %}
+          <button type="submit"
+                  class="flex items-center gap-2 px-4 py-2.5 text-white rounded-xl text-sm font-semibold shadow-sm transition-all hover:shadow-md"
+                  style="background: linear-gradient(135deg, #B8860B, #9a7009);">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Renovar carta
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-5">
+      <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+      </svg>
+    </div>
+    <h3 class="text-lg font-bold text-slate-800 mb-2">Nenhuma carta emitida</h3>
+    <p class="text-slate-400 text-sm mb-6">Este afiliado ainda não tem uma carta de saúde.</p>
+    <form method="post" action="/portal/agent/affiliates/{{ affiliate.pk }}/card/new/">
+      {% csrf_token %}
+      <button type="submit"
+              class="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+              style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Emitir nova carta
+      </button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% if contributions %}
+<div class="overflow-x-auto">
+  <table class="min-w-full">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Período</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Salário Base</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Contrib. Trabalhador</th>
+        <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
+        <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Pagamento</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for c in contributions %}
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="px-6 py-4 text-sm font-semibold text-slate-800">{{ c.period_month|stringformat:"02d" }}/{{ c.period_year }}</td>
+        <td class="px-6 py-4 text-sm text-slate-600">{{ c.salary_base|floatformat:0 }} XOF</td>
+        <td class="px-6 py-4 text-sm text-slate-600">{{ c.employee_amount|floatformat:0 }} XOF</td>
+        <td class="px-6 py-4 text-sm font-bold text-slate-900 text-right">{{ c.total_amount|floatformat:0 }} XOF</td>
+        <td class="px-6 py-4 text-center">
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold
+            {% if c.status == 'PAID' %}bg-emerald-100 text-emerald-700
+            {% elif c.status == 'PENDING' %}bg-blue-100 text-blue-700
+            {% elif c.status == 'LATE' %}bg-red-100 text-red-700
+            {% else %}bg-slate-100 text-slate-600{% endif %}">
+            {% if c.status == 'PAID' %}Pago{% elif c.status == 'PENDING' %}Pendente{% elif c.status == 'LATE' %}Em atraso{% else %}{{ c.status }}{% endif %}
+          </span>
+        </td>
+        <td class="px-6 py-4 text-sm text-slate-500">
+          {% if c.payment_date %}{{ c.payment_date|date:"d/m/Y" }}{% else %}<span class="text-slate-300">&mdash;</span>{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include "components/pagination.html" %}
+{% else %}
+<div class="text-center py-16">
+  <svg class="w-14 h-14 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+  </svg>
+  <p class="text-slate-500 font-medium text-sm">Nenhuma contribuição encontrada</p>
+  <p class="text-slate-400 text-xs mt-1">para os filtros selecionados</p>
+</div>
+{% endif %}

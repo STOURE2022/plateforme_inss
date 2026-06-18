@@ -1,0 +1,99 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Nova Contribuição — e-INSS{% endblock %}
+{% block page_title %}Nova Contribuição{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/employer/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'employer-contributions' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar ao histórico
+  </a>
+</div>
+
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-slate-900">Registar Nova Cotização</h1>
+  <p class="text-slate-500 mt-1 text-sm">Declarar uma contribuição para a Segurança Social</p>
+</div>
+
+<div class="max-w-2xl">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+    {% if form.errors %}
+    <div class="flex items-center gap-3 p-4 mb-6 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+      <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      Por favor, corrija os erros abaixo.
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'employer-contribution-create' %}">
+      {% csrf_token %}
+      <div class="space-y-5">
+        <!-- Trabalhador -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">
+            Trabalhador (Afiliado) *
+          </label>
+          {{ form.affiliate }}
+          {% if form.affiliate.errors %}
+          <p class="text-xs text-red-600 mt-1.5">{{ form.affiliate.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Período -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Ano *</label>
+            {{ form.period_year }}
+            {% if form.period_year.errors %}
+            <p class="text-xs text-red-600 mt-1.5">{{ form.period_year.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Mês *</label>
+            {{ form.period_month }}
+            {% if form.period_month.errors %}
+            <p class="text-xs text-red-600 mt-1.5">{{ form.period_month.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Salário base -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Salário Base (XOF) *</label>
+          {{ form.salary_base }}
+          {% if form.salary_base.errors %}
+          <p class="text-xs text-red-600 mt-1.5">{{ form.salary_base.errors.0 }}</p>
+          {% endif %}
+          <p class="text-xs text-slate-400 mt-1.5">O cálculo será atualizado automaticamente ao alterar o valor.</p>
+        </div>
+
+        <!-- Resultado cálculo HTMX -->
+        <div id="calculation-result">
+          <!-- Preenchido via HTMX quando salário muda -->
+        </div>
+
+        <!-- Notas -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Notas (opcional)</label>
+          {{ form.notes }}
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-8 pt-6 border-t border-slate-100">
+        <button type="submit"
+                class="flex-1 text-white py-3 px-6 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+                style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+          Registar contribuição
+        </button>
+        <a href="{% url 'employer-contributions' %}"
+           class="px-6 py-3 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-colors">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

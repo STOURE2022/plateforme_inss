@@ -1,0 +1,83 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Perfil da Empresa — e-INSS{% endblock %}
+{% block page_title %}Perfil da Empresa{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/employer/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'employer-dashboard' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar ao painel
+  </a>
+</div>
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-slate-900">Perfil da Empresa</h1>
+  <p class="text-slate-500 mt-1 text-sm">Dados de registo do empregador</p>
+</div>
+
+{% if not employer %}
+<div class="max-w-lg mx-auto">
+  <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
+    <p class="text-amber-800 font-semibold">Perfil de empregador não encontrado.</p>
+    <p class="text-amber-600 text-sm mt-1">Contacte o INSS para completar o registo.</p>
+  </div>
+</div>
+{% else %}
+<div class="max-w-2xl">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+    <div class="flex items-start justify-between mb-8 pb-6 border-b border-slate-100">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold flex-shrink-0"
+             style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+          {{ employer.company_name|slice:":2"|upper }}
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">{{ employer.company_name }}</h2>
+          <p class="text-slate-500 text-sm mt-0.5">{{ employer.get_sector_display }}</p>
+        </div>
+      </div>
+      <span class="px-3 py-1.5 rounded-full text-xs font-semibold
+        {% if employer.status == 'ACTIVE' %}bg-emerald-100 text-emerald-700
+        {% elif employer.status == 'INACTIVE' %}bg-slate-100 text-slate-500
+        {% else %}bg-amber-100 text-amber-700{% endif %}">
+        {% if employer.status == 'ACTIVE' %}Ativo{% elif employer.status == 'INACTIVE' %}Inativo{% else %}{{ employer.get_status_display }}{% endif %}
+      </span>
+    </div>
+
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
+      <div>
+        <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">NUIT</dt>
+        <dd class="font-mono font-semibold text-slate-800">{{ employer.nuit }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Sector</dt>
+        <dd class="text-slate-800">{{ employer.get_sector_display }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Telefone</dt>
+        <dd class="text-slate-800">{{ employer.phone|default:"&mdash;" }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email</dt>
+        <dd class="text-slate-800">{{ employer.email|default:"&mdash;" }}</dd>
+      </div>
+      <div class="md:col-span-2">
+        <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Endereço</dt>
+        <dd class="text-slate-800">{{ employer.address|default:"&mdash;" }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Data de Registo</dt>
+        <dd class="text-slate-800">{{ employer.registration_date|date:"d/m/Y" }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Registado por</dt>
+        <dd class="text-slate-800">{{ employer.registered_by.email|default:"&mdash;" }}</dd>
+      </div>
+    </dl>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

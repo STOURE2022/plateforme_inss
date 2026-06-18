@@ -1,0 +1,32 @@
+{% if contributions %}
+{% for c in contributions %}
+<tr class="hover:bg-slate-50 transition-colors">
+  <td class="px-6 py-4">
+    <p class="text-sm font-semibold text-slate-800">{{ c.affiliate.full_name }}</p>
+    <p class="text-xs text-slate-400 font-mono">{{ c.affiliate.niss }}</p>
+  </td>
+  <td class="px-6 py-4 text-sm font-medium text-slate-700">{{ c.period_month|stringformat:"02d" }}/{{ c.period_year }}</td>
+  <td class="px-6 py-4 text-sm text-slate-600 text-right">{{ c.salary_base|floatformat:0 }} XOF</td>
+  <td class="px-6 py-4 text-sm font-bold text-slate-900 text-right">{{ c.total_amount|floatformat:0 }} XOF</td>
+  <td class="px-6 py-4 text-center">
+    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold
+      {% if c.status == 'PAID' %}bg-emerald-100 text-emerald-700
+      {% elif c.status == 'PENDING' %}bg-blue-100 text-blue-700
+      {% elif c.status == 'LATE' %}bg-red-100 text-red-700
+      {% else %}bg-slate-100 text-slate-600{% endif %}">
+      {% if c.status == 'PAID' %}Pago{% elif c.status == 'PENDING' %}Pendente{% elif c.status == 'LATE' %}Em atraso{% else %}{{ c.status }}{% endif %}
+    </span>
+  </td>
+  <td class="px-6 py-4 text-sm text-slate-500">
+    {% if c.payment_date %}{{ c.payment_date|date:"d/m/Y" }}{% else %}<span class="text-slate-300">&mdash;</span>{% endif %}
+  </td>
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+  <td colspan="6" class="px-6 py-14 text-center">
+    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    <p class="text-slate-400 text-sm font-medium">Nenhuma contribuição encontrada para os filtros selecionados.</p>
+  </td>
+</tr>
+{% endif %}

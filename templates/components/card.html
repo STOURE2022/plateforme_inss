@@ -1,0 +1,38 @@
+{% comment %}
+Usage: {% include "components/card.html" with title="Total" value="1234" subtitle="registados" color="blue" %}
+color: blue | emerald | violet | amber | red
+{% endcomment %}
+<div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+  <div class="flex items-center justify-between mb-4">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center
+      {% if color == 'emerald' %}bg-emerald-50
+      {% elif color == 'violet' %}bg-violet-50
+      {% elif color == 'amber' %}bg-amber-50
+      {% elif color == 'red' %}bg-red-50
+      {% else %}bg-blue-50{% endif %}">
+      {% if icon %}
+      <span class="
+        {% if color == 'emerald' %}text-emerald-600
+        {% elif color == 'violet' %}text-violet-600
+        {% elif color == 'amber' %}text-amber-600
+        {% elif color == 'red' %}text-red-600
+        {% else %}text-blue-600{% endif %}">
+        {{ icon }}
+      </span>
+      {% endif %}
+    </div>
+    {% if badge %}
+    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold
+      {% if color == 'emerald' %}bg-emerald-100 text-emerald-700
+      {% elif color == 'violet' %}bg-violet-100 text-violet-700
+      {% elif color == 'amber' %}bg-amber-100 text-amber-700
+      {% elif color == 'red' %}bg-red-100 text-red-700
+      {% else %}bg-blue-100 text-blue-700{% endif %}">
+      {{ badge }}
+    </span>
+    {% endif %}
+  </div>
+  <div class="text-3xl font-bold text-slate-900 mb-1">{{ value }}</div>
+  <div class="text-sm text-slate-500">{{ title }}</div>
+  {% if subtitle %}<div class="text-xs text-slate-400 mt-0.5">{{ subtitle }}</div>{% endif %}
+</div>

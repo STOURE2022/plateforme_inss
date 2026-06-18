@@ -1,0 +1,39 @@
+{% with contributions=affiliate.contributions.all %}
+{% if contributions %}
+<div class="overflow-x-auto">
+  <table class="min-w-full">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Período</th>
+        <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Salário Base</th>
+        <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
+        <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for c in contributions %}
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="px-4 py-3.5 text-sm font-semibold text-slate-800">{{ c.period_month|stringformat:"02d" }}/{{ c.period_year }}</td>
+        <td class="px-4 py-3.5 text-sm text-slate-600 text-right">{{ c.salary_base|floatformat:0 }} XOF</td>
+        <td class="px-4 py-3.5 text-sm font-bold text-slate-900 text-right">{{ c.total_amount|floatformat:0 }} XOF</td>
+        <td class="px-4 py-3.5 text-center">
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold
+            {% if c.status == 'PAID' %}bg-emerald-100 text-emerald-700
+            {% elif c.status == 'PENDING' %}bg-blue-100 text-blue-700
+            {% elif c.status == 'LATE' %}bg-red-100 text-red-700
+            {% else %}bg-slate-100 text-slate-600{% endif %}">
+            {% if c.status == 'PAID' %}Pago{% elif c.status == 'PENDING' %}Pendente{% elif c.status == 'LATE' %}Em atraso{% else %}{{ c.status }}{% endif %}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="py-10 text-center">
+  <svg class="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+  <p class="text-slate-400 text-sm">Nenhuma contribuição registada.</p>
+</div>
+{% endif %}
+{% endwith %}

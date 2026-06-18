@@ -1,0 +1,56 @@
+{% if affiliates %}
+<div class="overflow-x-auto">
+  <table class="min-w-full">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nome</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">NISS</th>
+        <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Registo</th>
+        <th class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Ações</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for a in affiliates %}
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0"
+                 style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+              {{ a.full_name|slice:":1" }}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-slate-800">{{ a.full_name }}</p>
+              <p class="text-xs text-slate-400">{{ a.user.email }}</p>
+            </div>
+          </div>
+        </td>
+        <td class="px-6 py-4 font-mono text-sm text-slate-600">{{ a.niss }}</td>
+        <td class="px-6 py-4 text-center">
+          <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold
+            {% if a.status == 'ACTIVE' %}bg-emerald-100 text-emerald-700
+            {% elif a.status == 'INACTIVE' %}bg-slate-100 text-slate-500
+            {% else %}bg-amber-100 text-amber-700{% endif %}">
+            {% if a.status == 'ACTIVE' %}Ativo{% elif a.status == 'INACTIVE' %}Inativo{% else %}{{ a.get_status_display }}{% endif %}
+          </span>
+        </td>
+        <td class="px-6 py-4 text-sm text-slate-500">{{ a.registration_date|date:"d/m/Y" }}</td>
+        <td class="px-6 py-4 text-right">
+          <a href="{% url 'agent-affiliate-detail' a.pk %}"
+             class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-semibold transition-colors">
+            Ver ficha
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include "components/pagination.html" %}
+{% else %}
+<div class="px-6 py-14 text-center">
+  <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+  <p class="text-slate-400 text-sm font-medium">Nenhum afiliado encontrado.</p>
+</div>
+{% endif %}

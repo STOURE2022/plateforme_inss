@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificação em 2 etapas — e-INSS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .otp-input {
+      width: 3.25rem;
+      height: 3.75rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border: 2px solid #E2E8F0;
+      border-radius: 0.875rem;
+      background: #F8FAFC;
+      color: #0F172A;
+      transition: all 0.2s;
+      -webkit-appearance: none;
+    }
+    .otp-input:focus {
+      outline: none;
+      border-color: #2563EB;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+    }
+    .otp-input.filled {
+      border-color: #1F3864;
+      background: #EFF6FF;
+      color: #1F3864;
+    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { animation: fadeUp 0.45s ease-out forwards; }
+    @keyframes progress { from { width:100%; } to { width:0%; } }
+    .progress-bar { animation: progress 30s linear forwards; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+
+  <div class="w-full max-w-sm fade-up">
+
+    <!-- Brand mini -->
+    <div class="flex items-center justify-center gap-3 mb-8">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style="background:#1F3864;">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-bold text-slate-900 text-lg leading-tight">e-INSS</div>
+          <div class="text-slate-400 text-xs">Guinée-Bissau</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+
+      <!-- Header coloré -->
+      <div class="px-8 py-7 text-center" style="background:linear-gradient(135deg,#1F3864,#2563EB);">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
+             style="background:rgba(255,255,255,0.15);">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h2 class="text-white font-bold text-xl">Verificação em 2 etapas</h2>
+        <p class="text-white/65 text-sm mt-1">Introduza o código do seu autenticador</p>
+      </div>
+
+      <!-- Timer bar -->
+      <div class="h-1 bg-slate-100">
+        <div class="h-full progress-bar rounded-full" style="background:linear-gradient(90deg,#B8860B,#D4A017);"></div>
+      </div>
+
+      <div class="p-8">
+
+        <!-- Erreur -->
+        {% if error %}
+        <div class="flex items-center gap-3 p-3.5 mb-6 bg-red-50 border border-red-200 rounded-xl">
+          <svg class="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-red-700 text-sm">{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="pre_auth_token" value="{{ pre_auth_token }}">
+
+          <!-- Instruction -->
+          <p class="text-center text-sm text-slate-500 mb-5">
+            Abra a sua app de autenticação e insira o código de <strong class="text-slate-700">6 dígitos</strong>
+          </p>
+
+          <!-- Inputs OTP -->
+          <div class="flex justify-center gap-2 mb-6" id="otp-container">
+            <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1"
+                   class="otp-input" autocomplete="one-time-code" autofocus>
+            <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+            <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+            <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+            <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+            <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+          </div>
+          <input type="hidden" name="code" id="otp-hidden">
+
+          <!-- Timer texte -->
+          <p class="text-center text-xs text-slate-400 mb-6">
+            O código expira em <span id="timer" class="font-semibold text-slate-600">30</span> segundos
+          </p>
+
+          <!-- Bouton -->
+          <button type="submit" id="submit-btn" disabled
+                  class="w-full py-3.5 rounded-xl text-white font-semibold text-sm transition-all
+                         disabled:opacity-40 disabled:cursor-not-allowed"
+                  style="background:linear-gradient(135deg,#1F3864,#2563EB);">
+            <span class="flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Verificar código
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Retour login -->
+    <div class="mt-5 text-center">
+      <a href="{% url 'html-login' %}"
+         class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Voltar ao login
+      </a>
+    </div>
+  </div>
+
+<script>
+  // OTP inputs logic
+  var inputs = Array.from(document.querySelectorAll('.otp-input'));
+  var hidden = document.getElementById('otp-hidden');
+  var btn = document.getElementById('submit-btn');
+
+  function updateCode() {
+    var code = inputs.map(i => i.value).join('');
+    hidden.value = code;
+    btn.disabled = code.length < 6;
+    inputs.forEach(i => {
+      if (i.value) i.classList.add('filled');
+      else i.classList.remove('filled');
+    });
+  }
+
+  inputs.forEach(function(input, i) {
+    input.addEventListener('input', function() {
+      input.value = input.value.replace(/\D/g, '').slice(-1);
+      if (input.value && i < 5) inputs[i + 1].focus();
+      updateCode();
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !input.value && i > 0) {
+        inputs[i - 1].focus();
+        inputs[i - 1].value = '';
+        updateCode();
+      }
+      if (e.key === 'ArrowLeft' && i > 0) inputs[i - 1].focus();
+      if (e.key === 'ArrowRight' && i < 5) inputs[i + 1].focus();
+    });
+    input.addEventListener('paste', function(e) {
+      var paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      inputs.forEach(function(inp, j) { inp.value = paste[j] || ''; });
+      if (paste.length >= 6) btn.focus();
+      else if (paste.length > 0) inputs[Math.min(paste.length, 5)].focus();
+      updateCode();
+      e.preventDefault();
+    });
+  });
+
+  // Countdown timer
+  var seconds = 30;
+  var timerEl = document.getElementById('timer');
+  var interval = setInterval(function() {
+    seconds--;
+    if (timerEl) timerEl.textContent = seconds;
+    if (seconds <= 0) {
+      clearInterval(interval);
+      if (timerEl) timerEl.textContent = '0';
+      timerEl.parentElement.innerHTML = '<span class="text-red-500 font-medium">Código expirado — volte ao login</span>';
+    }
+  }, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Novo Afiliado — e-INSS{% endblock %}
+{% block page_title %}Registar Novo Afiliado{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'agent-affiliates' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar à lista
+  </a>
+</div>
+
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-slate-900">Registar Novo Afiliado</h1>
+  <p class="text-slate-500 mt-1 text-sm">Criação de perfil de afiliado e conta de acesso</p>
+</div>
+
+<div class="max-w-2xl">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+    {% if form.non_field_errors %}
+    <div class="flex items-center gap-3 p-4 mb-6 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+      <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'agent-affiliate-create' %}">
+      {% csrf_token %}
+
+      <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background: #1F3864;">1</div>
+        <h3 class="font-semibold text-slate-800">Dados Pessoais</h3>
+      </div>
+
+      <div class="space-y-4 mb-8">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Nome completo *</label>
+          {{ form.full_name }}
+          {% if form.full_name.errors %}<p class="text-xs text-red-600 mt-1.5">{{ form.full_name.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Data de nascimento *</label>
+            {{ form.birth_date }}
+            {% if form.birth_date.errors %}<p class="text-xs text-red-600 mt-1.5">{{ form.birth_date.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Género *</label>
+            {{ form.gender }}
+            {% if form.gender.errors %}<p class="text-xs text-red-600 mt-1.5">{{ form.gender.errors.0 }}</p>{% endif %}
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Nacionalidade</label>
+            {{ form.nationality }}
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Telefone</label>
+            {{ form.phone }}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Endereço</label>
+          {{ form.address }}
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style="background: #1F3864;">2</div>
+        <h3 class="font-semibold text-slate-800">Dados de Acesso</h3>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Email *</label>
+          {{ form.email }}
+          {% if form.email.errors %}<p class="text-xs text-red-600 mt-1.5">{{ form.email.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Senha *</label>
+            {{ form.password }}
+            {% if form.password.errors %}<p class="text-xs text-red-600 mt-1.5">{{ form.password.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Confirmar senha *</label>
+            {{ form.password_confirm }}
+            {% if form.password_confirm.errors %}<p class="text-xs text-red-600 mt-1.5">{{ form.password_confirm.errors.0 }}</p>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-8 pt-6 border-t border-slate-100">
+        <button type="submit"
+                class="flex-1 text-white py-3 px-6 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+                style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+          Registar afiliado
+        </button>
+        <a href="{% url 'agent-affiliates' %}"
+           class="px-6 py-3 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-colors">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — e-INSS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .brand-bg { background: linear-gradient(150deg, #0a1628 0%, #1F3864 55%, #152545 100%); }
+    .input-field {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      background: #F8FAFC;
+      transition: all 0.2s;
+      color: #0F172A;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #2563EB;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #1F3864, #2563EB);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(31,56,100,0.35); }
+    .btn-primary:active { transform: translateY(0); }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .floating { animation: float 6s ease-in-out infinite; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { animation: fadeUp 0.5s ease-out forwards; }
+  </style>
+</head>
+<body class="bg-slate-50">
+
+<div class="min-h-screen flex flex-col lg:flex-row">
+
+  <!-- ── Panneau gauche (brand) ── -->
+  <div class="hidden lg:flex lg:w-5/12 xl:w-1/2 brand-bg flex-col justify-between p-10 xl:p-14 relative overflow-hidden flex-shrink-0">
+
+    <!-- Cercles déco -->
+    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-10 blur-3xl" style="background:#B8860B;"></div>
+    <div class="absolute -bottom-32 -left-20 w-80 h-80 rounded-full opacity-8 blur-3xl" style="background:#2563EB;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-5 blur-3xl bg-white pointer-events-none"></div>
+
+    <!-- Logo -->
+    <div class="flex items-center gap-4 relative z-10">
+      <a href="/" class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl flex-shrink-0" style="background:#B8860B;">
+          <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="text-white font-bold text-2xl leading-tight">e-INSS</div>
+          <div class="text-white/55 text-sm">Instituto Nacional de Segurança Social</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Centre brand -->
+    <div class="relative z-10 space-y-6">
+      <!-- Carte flottante -->
+      <div class="floating max-w-xs">
+        <div class="rounded-2xl overflow-hidden shadow-2xl" style="box-shadow:0 20px 50px rgba(0,0,0,0.4);">
+          <div class="px-5 py-3.5 flex items-center justify-between" style="background:linear-gradient(135deg,#1F3864,#2563EB);">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:#B8860B;">
+                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+              </div>
+              <span class="text-white font-bold text-sm">INSS</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold" style="background:rgba(52,211,153,0.25);color:#6EE7B7;">● Ativo</span>
+          </div>
+          <div class="bg-white px-5 py-4">
+            <div class="text-xs text-slate-400 mb-1">Titular</div>
+            <div class="font-bold text-slate-800 text-sm mb-3">João Manuel Silva</div>
+            <div class="text-xs text-slate-400 mb-1">N.º Cartão</div>
+            <div class="font-mono font-semibold text-slate-700 text-xs tracking-wider">INSS-GW-004-2026</div>
+          </div>
+          <div class="px-5 py-2.5 flex items-center justify-between" style="background:linear-gradient(90deg,#B8860B,#D4A017);">
+            <span class="text-white font-mono font-bold text-xs tracking-widest">7256 3345 1200 89</span>
+            <span class="text-white/70 italic text-xs font-semibold">INSS</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h1 class="text-white font-bold text-3xl xl:text-4xl leading-tight mb-4">
+          Plataforma Nacional<br>de Seguridade Social
+        </h1>
+        <p class="text-white/55 text-base leading-relaxed max-w-sm">
+          Aceda ao seu cartão digital, gerencie contribuições e proteja a sua família — tudo num só lugar.
+        </p>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="flex flex-wrap gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span class="text-white/70 text-xs font-medium">100% Seguro</span>
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span class="text-white/70 text-xs font-medium">Disponível 24/7</span>
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);">
+          <svg class="w-3.5 h-3.5 text-gold-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          <span class="text-white/70 text-xs font-medium">MFA activado</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats bas -->
+    <div class="relative z-10 flex gap-8 border-t border-white/10 pt-6">
+      <div>
+        <div class="text-white font-bold text-xl">+50k</div>
+        <div class="text-white/45 text-xs mt-0.5">Afiliados</div>
+      </div>
+      <div class="w-px bg-white/15"></div>
+      <div>
+        <div class="text-white font-bold text-xl">+35k</div>
+        <div class="text-white/45 text-xs mt-0.5">Cartões</div>
+      </div>
+      <div class="w-px bg-white/15"></div>
+      <div>
+        <div class="text-white font-bold text-xl">99.9%</div>
+        <div class="text-white/45 text-xs mt-0.5">Uptime</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Panneau droit (formulaire) ── -->
+  <div class="flex-1 flex flex-col items-center justify-center p-6 sm:p-10 bg-slate-50 overflow-y-auto">
+
+    <!-- Logo mobile -->
+    <div class="flex lg:hidden items-center gap-3 mb-8">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg" style="background:#1F3864;">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      </div>
+      <div>
+        <div class="font-bold text-lg text-slate-900">e-INSS</div>
+        <div class="text-slate-500 text-xs">Guinée-Bissau</div>
+      </div>
+    </div>
+
+    <div class="w-full max-w-md fade-up">
+
+      <!-- Header formulaire -->
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-900">Bem-vindo de volta</h2>
+        <p class="text-slate-500 mt-1 text-sm">Entre com as suas credenciais para continuar</p>
+      </div>
+
+      <!-- Erreur -->
+      {% if error %}
+      <div class="flex items-start gap-3 p-4 mb-6 bg-red-50 border border-red-200 rounded-2xl">
+        <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        <div>
+          <p class="text-red-700 text-sm font-medium">Erro de autenticação</p>
+          <p class="text-red-600 text-xs mt-0.5">{{ error }}</p>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Formulaire -->
+      <form method="post" class="space-y-5" novalidate>
+        {% csrf_token %}
+
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2" for="email">E-mail</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+              </svg>
+            </div>
+            <input type="email" name="email" id="email" required autofocus
+                   placeholder="email@exemplo.com"
+                   value="{{ request.POST.email|default:'' }}"
+                   class="input-field">
+          </div>
+        </div>
+
+        <!-- Senha -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2" for="password">Senha</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <input type="password" name="password" id="password" required
+                   placeholder="••••••••••"
+                   class="input-field pr-12">
+            <button type="button" onclick="togglePwd()"
+                    class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
+              <svg id="eye-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bouton submit -->
+        <button type="submit" class="btn-primary w-full text-white font-semibold py-3.5 rounded-xl text-sm shadow-lg">
+          Entrar na plataforma
+        </button>
+      </form>
+
+      <!-- Comptes de démonstration -->
+      <div class="mt-8 pt-6 border-t border-slate-200">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Contas de demonstração</p>
+        <div class="grid grid-cols-2 gap-2">
+          {% for label, email, role_color in demo_accounts|default:"" %}
+          {% empty %}
+          <button type="button" onclick="fillDemo('admin@inss.gw','admin123!')"
+                  class="text-left px-3 py-2.5 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all">
+            <div class="text-xs font-bold text-slate-800">Administrador</div>
+            <div class="text-xs text-slate-400 truncate">admin@inss.gw</div>
+          </button>
+          <button type="button" onclick="fillDemo('agent@inss.gw','agent123!')"
+                  class="text-left px-3 py-2.5 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all">
+            <div class="text-xs font-bold text-slate-800">Agente INSS</div>
+            <div class="text-xs text-slate-400 truncate">agent@inss.gw</div>
+          </button>
+          <button type="button" onclick="fillDemo('joao.silva@email.com','citizen123!')"
+                  class="text-left px-3 py-2.5 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 transition-all">
+            <div class="text-xs font-bold text-slate-800">Cidadão</div>
+            <div class="text-xs text-slate-400 truncate">joao.silva@email.com</div>
+          </button>
+          <button type="button" onclick="fillDemo('empresa.abc@email.com','employer123!')"
+                  class="text-left px-3 py-2.5 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50 transition-all">
+            <div class="text-xs font-bold text-slate-800">Empregador</div>
+            <div class="text-xs text-slate-400 truncate">empresa.abc@email.com</div>
+          </button>
+          <button type="button" onclick="fillDemo('clinica.saude@email.com','provider123!')"
+                  class="text-left px-3 py-2.5 rounded-xl border border-slate-200 hover:border-orange-300 hover:bg-orange-50 transition-all">
+            <div class="text-xs font-bold text-slate-800">Prestador</div>
+            <div class="text-xs text-slate-400 truncate">clinica.saude@email.com</div>
+          </button>
+          <button type="button" onclick="fillDemo('maria.costa@email.com','citizen123!')"
+                  class="text-left px-3 py-2.5 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 transition-all">
+            <div class="text-xs font-bold text-slate-800">Cidadã</div>
+            <div class="text-xs text-slate-400 truncate">maria.costa@email.com</div>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Lien inscription -->
+      <div class="mt-6 text-center">
+        <p class="text-sm text-slate-500">
+          Novo utilizador?
+          <a href="{% url 'html-register' %}" class="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+            Criar conta
+          </a>
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <p class="text-center text-xs text-slate-400 mt-8">
+        &copy; 2026 INSS — República da Guinée-Bissau. Todos os direitos reservados.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePwd() {
+    var p = document.getElementById('password');
+    p.type = p.type === 'password' ? 'text' : 'password';
+  }
+  function fillDemo(email, password) {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = password;
+    document.getElementById('email').dispatchEvent(new Event('input'));
+  }
+</script>
+</body>
+</html>

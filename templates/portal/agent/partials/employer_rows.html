@@ -1,0 +1,50 @@
+{% if employers %}
+<div class="overflow-x-auto">
+  <table class="min-w-full">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Empresa</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">NUIT</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Sector</th>
+        <th class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Registo</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for e in employers %}
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                 style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+              {{ e.company_name|slice:":2"|upper }}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-slate-800">{{ e.company_name }}</p>
+              <p class="text-xs text-slate-400">{{ e.email|default:"—" }}</p>
+            </div>
+          </div>
+        </td>
+        <td class="px-6 py-4 font-mono text-sm text-slate-600">{{ e.nuit }}</td>
+        <td class="px-6 py-4 text-sm text-slate-600">{{ e.get_sector_display }}</td>
+        <td class="px-6 py-4 text-center">
+          <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold
+            {% if e.status == 'ACTIVE' %}bg-emerald-100 text-emerald-700
+            {% elif e.status == 'INACTIVE' %}bg-slate-100 text-slate-500
+            {% else %}bg-amber-100 text-amber-700{% endif %}">
+            {% if e.status == 'ACTIVE' %}Ativo{% elif e.status == 'INACTIVE' %}Inativo{% else %}{{ e.get_status_display }}{% endif %}
+          </span>
+        </td>
+        <td class="px-6 py-4 text-sm text-slate-500">{{ e.registration_date|date:"d/m/Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include "components/pagination.html" %}
+{% else %}
+<div class="px-6 py-14 text-center">
+  <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+  <p class="text-slate-400 text-sm font-medium">Nenhuma empresa encontrada.</p>
+</div>
+{% endif %}

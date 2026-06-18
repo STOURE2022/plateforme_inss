@@ -1,0 +1,46 @@
+{% if card %}
+<div class="space-y-4">
+  <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+    <div>
+      <p class="text-xs text-slate-500 mb-0.5">Número do cartão</p>
+      <p class="text-sm font-bold text-slate-800 font-mono">{{ card.card_number }}</p>
+      <div class="mt-1.5">
+        <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold
+          {% if card.status == 'ACTIVE' %}bg-emerald-100 text-emerald-700
+          {% elif card.status == 'SUSPENDED' %}bg-amber-100 text-amber-700
+          {% else %}bg-red-100 text-red-700{% endif %}">
+          {% if card.status == 'ACTIVE' %}Ativo{% elif card.status == 'SUSPENDED' %}Suspenso{% else %}{{ card.get_status_display }}{% endif %}
+        </span>
+      </div>
+    </div>
+    <a href="{% url 'agent-affiliate-card' affiliate.pk %}"
+       class="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+      Gerir carta
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <dl class="grid grid-cols-2 gap-4">
+    <div class="bg-slate-50 rounded-xl p-4">
+      <dt class="text-xs text-slate-400 mb-1">Emitida em</dt>
+      <dd class="text-slate-800 font-medium text-sm">{{ card.issued_date|date:"d/m/Y" }}</dd>
+    </div>
+    <div class="bg-slate-50 rounded-xl p-4">
+      <dt class="text-xs text-slate-400 mb-1">Válida até</dt>
+      <dd class="text-slate-800 font-medium text-sm">{{ card.expiry_date|date:"d/m/Y" }}</dd>
+    </div>
+  </dl>
+</div>
+{% else %}
+<div class="py-10 text-center">
+  <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+  <p class="text-slate-400 text-sm mb-4">Nenhuma carta emitida para este afiliado.</p>
+  <a href="{% url 'agent-affiliate-card' affiliate.pk %}"
+     hx-post="/portal/agent/affiliates/{{ affiliate.pk }}/card/new/"
+     hx-confirm="Confirma a emiss&#227;o de uma nova carta para {{ affiliate.full_name }}?"
+     class="inline-flex items-center gap-2 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md transition-all"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    Emitir carta
+  </a>
+</div>
+{% endif %}

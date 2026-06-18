@@ -1,0 +1,56 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | e-INSS Admin{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+  <a href="{% url 'admin:index' %}">e-INSS — Administration</a>
+</div>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}
+<div id="einss-nav-bar" style="background:#1F3864;padding:6px 40px;display:flex;align-items:center;gap:16px;border-top:1px solid rgba(255,255,255,0.1);">
+  <a href="/" id="einss-back-link"
+     style="display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.75);font-size:12px;font-weight:500;text-decoration:none;"
+     onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">
+    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+    </svg>
+    <span id="einss-back-label">Voltar ao portail</span>
+  </a>
+  <span style="color:rgba(255,255,255,0.2);font-size:12px;">|</span>
+  <span style="color:rgba(255,255,255,0.4);font-size:12px;">Painel de Administração INSS</span>
+</div>
+<script>
+(function() {
+  var path = window.location.pathname;
+  // Remove trailing slash and split
+  var parts = path.replace(/\/$/, '').split('/').filter(Boolean);
+  // parts[0] = 'admin'
+  // change_list:  /admin/app/model/         → parts.length == 3
+  // change_form:  /admin/app/model/id/change → parts.length == 5
+  // add:          /admin/app/model/add/      → parts.length == 4 (last = 'add')
+  var link = document.getElementById('einss-back-link');
+  var label = document.getElementById('einss-back-label');
+  if (!link || !label) return;
+
+  if (parts.length >= 4) {
+    // On a change_form or add page — back to the change_list
+    var modelPart = parts[2]; // e.g. 'users', 'affiliates'
+    link.href = '/admin/' + parts[1] + '/' + modelPart + '/';
+    label.textContent = '← Voltar à lista';
+  } else if (parts.length === 3) {
+    // On a change_list — back to admin index
+    link.href = '/admin/';
+    label.textContent = '← Voltar ao painel';
+  } else {
+    // Admin index or other — back to portal
+    link.href = '/';
+    label.textContent = '← Voltar ao portail';
+  }
+})();
+</script>
+{% endblock %}

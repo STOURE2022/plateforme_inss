@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Cartão de Saúde INSS</title>
+<style>
+  @page {
+    size: 85.6mm 54mm;
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    width: 85.6mm;
+    height: 54mm;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    font-size: 7pt;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1F3864, #2563EB);
+    color: white;
+    padding: 3mm 4mm 2mm 4mm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-left h1 {
+    font-size: 9pt;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: #B8860B;
+    margin-bottom: 0.5mm;
+  }
+
+  .header-left p {
+    font-size: 6pt;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.3px;
+  }
+
+  .header-shield {
+    width: 8mm;
+    height: 8mm;
+    background-color: #B8860B;
+    border-radius: 2mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: row;
+    padding: 2mm 3mm;
+    height: 30mm;
+  }
+
+  .info {
+    flex: 1;
+    padding-right: 3mm;
+  }
+
+  .info .field {
+    margin-bottom: 1.5mm;
+  }
+
+  .info .label {
+    font-size: 5pt;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    font-weight: 700;
+  }
+
+  .info .value {
+    font-size: 7pt;
+    color: #0F172A;
+    font-weight: 700;
+    display: block;
+  }
+
+  .info .card-num {
+    font-size: 7.5pt;
+    color: #1F3864;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  .qr-section {
+    width: 22mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .qr-section img {
+    width: 20mm;
+    height: 20mm;
+  }
+
+  .footer {
+    background: linear-gradient(135deg, #1F3864, #152545);
+    padding: 1.5mm 4mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer .status {
+    font-size: 6pt;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  .footer .status-active { color: #6EE7B7; }
+  .footer .status-suspended { color: #FCD34D; }
+  .footer .status-expired { color: #FCA5A5; }
+  .footer .status-cancelled { color: #94A3B8; }
+
+  .footer .dates {
+    font-size: 5.5pt;
+    color: rgba(255,255,255,0.5);
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>INSS &mdash; GUIN&Eacute;-BISSAU</h1>
+    <p>CART&Atilde;O NACIONAL DE SA&Uacute;DE</p>
+  </div>
+  <div class="header-shield">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+    </svg>
+  </div>
+</div>
+
+<div class="body">
+  <div class="info">
+    <div class="field">
+      <span class="label">Nome completo</span>
+      <span class="value">{{ full_name }}</span>
+    </div>
+    <div class="field">
+      <span class="label">NISS</span>
+      <span class="value">{{ niss }}</span>
+    </div>
+    <div class="field">
+      <span class="label">N&uacute;mero do cart&atilde;o</span>
+      <span class="value card-num">{{ card_number }}</span>
+    </div>
+    <div class="field">
+      <span class="label">Emiss&atilde;o / Validade</span>
+      <span class="value">{{ issued_date }} / {{ expiry_date }}</span>
+    </div>
+  </div>
+
+  <div class="qr-section">
+    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code de verifica&ccedil;&atilde;o" />
+  </div>
+</div>
+
+<div class="footer">
+  <span class="status status-{{ status_class }}">{{ status_display }}</span>
+  <div class="dates">
+    <div>Emitido: {{ issued_date }}</div>
+    <div>V&aacute;lido at&eacute;: {{ expiry_date }}</div>
+  </div>
+</div>
+
+</body>
+</html>

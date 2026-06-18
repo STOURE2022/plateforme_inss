@@ -1,0 +1,159 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Minha Carta — e-INSS{% endblock %}
+{% block page_title %}Carta de Saúde{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/citizen/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'citizen-dashboard' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar ao painel
+  </a>
+</div>
+{% if not card %}
+<div class="max-w-lg mx-auto text-center py-16">
+  <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-5">
+    <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+    </svg>
+  </div>
+  <h2 class="text-xl font-bold text-slate-800 mb-2">Nenhuma carta encontrada</h2>
+  <p class="text-slate-500 text-sm mb-6 leading-relaxed">
+    Ainda não tem uma carta de saúde emitida.<br>Contacte um agente INSS para solicitar a emissão.
+  </p>
+  <a href="mailto:agente@inss.gw"
+     class="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-md transition-all hover:shadow-lg"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+    Contactar agente INSS
+  </a>
+</div>
+{% else %}
+<div class="max-w-2xl mx-auto space-y-6">
+  <div class="mb-2">
+    <h1 class="text-2xl font-bold text-slate-900">Carta de Saúde</h1>
+    <p class="text-slate-500 mt-1 text-sm">Detalhes do seu cartão de segurança social</p>
+  </div>
+
+  <!-- Cartão visual style bancaire -->
+  <div class="relative rounded-2xl p-7 overflow-hidden shadow-xl"
+       style="background: linear-gradient(135deg, #1F3864 0%, #2563EB 60%, #1e40af 100%);">
+    <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full opacity-10 bg-white"></div>
+    <div class="absolute -right-6 -bottom-12 w-52 h-52 rounded-full opacity-5 bg-white"></div>
+
+    <div class="relative z-10">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <p class="text-blue-200 text-xs uppercase tracking-wider">Instituto Nacional de Segurança Social</p>
+          <p class="text-white font-bold text-lg mt-0.5">Guinée-Bissau</p>
+        </div>
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg" style="background: #B8860B;">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="text-blue-200 text-xs uppercase tracking-wider mb-1">Titular</p>
+        <p class="text-white text-xl font-semibold">{{ affiliate.full_name }}</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        <div>
+          <p class="text-blue-200 text-xs uppercase tracking-wider">NISS</p>
+          <p class="font-mono font-bold text-white text-base">{{ affiliate.niss }}</p>
+        </div>
+        <div>
+          <p class="text-blue-200 text-xs uppercase tracking-wider">N.º Cartão</p>
+          <p class="font-mono font-bold text-white text-base">{{ card.card_number }}</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 pt-4 border-t border-white/20">
+        <div>
+          <p class="text-blue-200 text-xs">Emissão</p>
+          <p class="text-white font-medium text-sm">{{ card.issued_date|date:"d/m/Y" }}</p>
+        </div>
+        <div>
+          <p class="text-blue-200 text-xs">Validade</p>
+          <p class="text-white font-medium text-sm">{{ card.expiry_date|date:"d/m/Y" }}</p>
+        </div>
+        <div>
+          <p class="text-blue-200 text-xs">Estado</p>
+          <span class="inline-flex items-center gap-1 text-sm font-semibold
+            {% if card.status == 'ACTIVE' %}text-emerald-300
+            {% elif card.status == 'SUSPENDED' %}text-amber-300
+            {% else %}text-red-300{% endif %}">
+            <span class="w-1.5 h-1.5 rounded-full
+              {% if card.status == 'ACTIVE' %}bg-emerald-400
+              {% elif card.status == 'SUSPENDED' %}bg-amber-400
+              {% else %}bg-red-400{% endif %}"></span>
+            {% if card.status == 'ACTIVE' %}Ativo{% elif card.status == 'SUSPENDED' %}Suspenso{% else %}{{ card.get_status_display }}{% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info e QR -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <!-- Detalhes -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <h3 class="font-semibold text-slate-800 mb-4">Informações do Cartão</h3>
+      <dl class="space-y-3">
+        <div class="flex justify-between items-center text-sm">
+          <dt class="text-slate-500">Estado</dt>
+          <dd>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+              {% if card.status == 'ACTIVE' %}bg-emerald-100 text-emerald-700
+              {% elif card.status == 'SUSPENDED' %}bg-amber-100 text-amber-700
+              {% else %}bg-red-100 text-red-700{% endif %}">
+              {% if card.status == 'ACTIVE' %}Ativo{% elif card.status == 'SUSPENDED' %}Suspenso{% else %}{{ card.get_status_display }}{% endif %}
+            </span>
+          </dd>
+        </div>
+        <div class="flex justify-between text-sm">
+          <dt class="text-slate-500">Número</dt>
+          <dd class="font-mono font-semibold text-slate-800">{{ card.card_number }}</dd>
+        </div>
+        <div class="flex justify-between text-sm">
+          <dt class="text-slate-500">Data de emissão</dt>
+          <dd class="text-slate-800">{{ card.issued_date|date:"d/m/Y" }}</dd>
+        </div>
+        <div class="flex justify-between text-sm">
+          <dt class="text-slate-500">Data de validade</dt>
+          <dd class="text-slate-800">{{ card.expiry_date|date:"d/m/Y" }}</dd>
+        </div>
+      </dl>
+
+      <div class="mt-6 space-y-2">
+        <a href="{% url 'citizen-card-qr' %}" target="_blank"
+           class="flex items-center justify-center gap-2 w-full py-2.5 border-2 border-slate-200 text-slate-700 rounded-xl text-sm font-semibold hover:border-blue-300 hover:text-blue-600 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4"/></svg>
+          Ver QR Code
+        </a>
+        <a href="/api/v1/cards/{{ card.pk }}/pdf/"
+           class="flex items-center justify-center gap-2 w-full py-2.5 text-white rounded-xl text-sm font-semibold transition-all hover:shadow-md"
+           style="background: linear-gradient(135deg, #B8860B, #9a7009);">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Descarregar PDF
+        </a>
+      </div>
+    </div>
+
+    <!-- QR Code -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col items-center justify-center">
+      <h3 class="font-semibold text-slate-800 mb-4 self-start">Código QR</h3>
+      <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+        <img src="{% url 'citizen-card-qr' %}" alt="QR Code da Carta" class="w-40 h-40 object-contain">
+      </div>
+      <p class="text-xs text-slate-400 text-center mt-3">
+        Apresente este QR code a um prestador de cuidados para verificação.
+      </p>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

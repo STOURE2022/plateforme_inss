@@ -1,0 +1,70 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Ficha Afiliado — e-INSS{% endblock %}
+{% block page_title %}Ficha do Afiliado{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'agent-affiliates' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar à lista
+  </a>
+</div>
+
+<!-- Header afiliado -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+  <div class="flex items-center justify-between flex-wrap gap-4">
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold flex-shrink-0"
+           style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+        {{ affiliate.full_name|slice:":1" }}
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">{{ affiliate.full_name }}</h2>
+        <p class="text-sm text-slate-500 font-mono">NISS: {{ affiliate.niss }}</p>
+        <div class="mt-1.5">
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+            {% if affiliate.status == 'ACTIVE' %}bg-emerald-100 text-emerald-700
+            {% elif affiliate.status == 'INACTIVE' %}bg-slate-100 text-slate-500
+            {% else %}bg-amber-100 text-amber-700{% endif %}">
+            {% if affiliate.status == 'ACTIVE' %}Ativo{% elif affiliate.status == 'INACTIVE' %}Inativo{% else %}{{ affiliate.get_status_display }}{% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+    <a href="{% url 'agent-affiliate-card' affiliate.pk %}"
+       class="flex items-center gap-2 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-md transition-all hover:shadow-lg"
+       style="background: linear-gradient(135deg, #B8860B, #9a7009);">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+      </svg>
+      Gerir Carta
+    </a>
+  </div>
+</div>
+
+<!-- Abas HTMX -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  <div class="border-b border-slate-100">
+    <nav class="flex gap-0 px-6 -mb-px overflow-x-auto">
+      {% for tab_id, tab_label in tab_choices %}
+      <button
+          hx-get="{% url 'agent-affiliate-detail' affiliate.pk %}?tab={{ tab_id }}"
+          hx-target="#tab-content"
+          hx-swap="innerHTML"
+          class="px-5 py-3.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap flex-shrink-0
+          {% if tab == tab_id %}border-blue-600 text-blue-600{% else %}border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300{% endif %}">
+        {{ tab_label }}
+      </button>
+      {% endfor %}
+    </nav>
+  </div>
+
+  <div id="tab-content" class="p-6">
+    {% include "portal/agent/partials/tab_info.html" %}
+  </div>
+</div>
+{% endblock %}

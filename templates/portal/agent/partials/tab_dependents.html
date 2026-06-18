@@ -1,0 +1,29 @@
+{% with deps=affiliate.dependents.all %}
+{% if deps %}
+<div class="space-y-2">
+  {% for dep in deps %}
+  <div class="flex items-center justify-between px-4 py-3.5 bg-slate-50 rounded-xl border border-slate-100">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0"
+           style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+        {{ dep.full_name|slice:":1" }}
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-slate-800">{{ dep.full_name }}</p>
+        <p class="text-xs text-slate-400">{{ dep.get_relationship_display }} &middot; Nascido em {{ dep.birth_date|date:"d/m/Y" }}</p>
+      </div>
+    </div>
+    <span class="text-xs px-2.5 py-1 rounded-full font-semibold flex-shrink-0
+      {% if dep.is_active %}bg-emerald-100 text-emerald-700{% else %}bg-slate-100 text-slate-500{% endif %}">
+      {% if dep.is_active %}Ativo{% else %}Inativo{% endif %}
+    </span>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="py-10 text-center">
+  <svg class="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+  <p class="text-slate-400 text-sm">Nenhum dependente registado.</p>
+</div>
+{% endif %}
+{% endwith %}

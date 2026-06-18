@@ -1,0 +1,45 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Contribuições — e-INSS{% endblock %}
+{% block page_title %}Histórico de Contribuições{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/citizen/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'citizen-dashboard' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar ao painel
+  </a>
+</div>
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-slate-900">Histórico de Contribuições</h1>
+  <p class="text-slate-500 mt-1 text-sm">Registo das suas contribuições à Segurança Social</p>
+</div>
+
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  <!-- Filtros -->
+  <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-4">
+    <label class="text-sm font-semibold text-slate-700">Filtrar por ano:</label>
+    <select
+        name="year"
+        hx-get="{% url 'citizen-contributions' %}"
+        hx-trigger="change"
+        hx-target="#contributions-table-wrapper"
+        hx-swap="innerHTML"
+        hx-include="[name='year']"
+        class="border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:border-blue-500 transition-all">
+      <option value="">Todos os anos</option>
+      {% for year in years %}
+      <option value="{{ year }}" {% if selected_year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- Tabela -->
+  <div id="contributions-table-wrapper">
+    {% include "portal/citizen/partials/contributions_table.html" %}
+  </div>
+</div>
+{% endblock %}

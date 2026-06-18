@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code — Carta e-INSS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    @media print {
+      .print-hidden { display: none !important; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-8">
+  <div class="max-w-sm w-full text-center">
+    {% if card %}
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+      <!-- Header -->
+      <div class="px-6 py-4 flex items-center justify-between" style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: #B8860B;">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+          </div>
+          <div class="text-left">
+            <p class="text-white font-bold text-sm leading-tight">e-INSS</p>
+            <p class="text-blue-200 text-xs">Guinée-Bissau</p>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-400/20 text-emerald-300">
+          {% if card.status == 'ACTIVE' %}ATIVO{% else %}{{ card.get_status_display|upper }}{% endif %}
+        </span>
+      </div>
+
+      <!-- QR Code -->
+      <div class="p-8 flex flex-col items-center">
+        <div class="bg-white border-2 border-slate-100 rounded-2xl p-4 shadow-inner mb-5">
+          <div class="w-52 h-52 flex items-center justify-center text-slate-300 text-xs">
+            <!-- QR code gerado via view Python -->
+            <p class="text-slate-400 text-sm text-center px-4">QR Code<br><span class="font-mono text-xs">{{ card.card_number }}</span></p>
+          </div>
+        </div>
+
+        <h2 class="font-bold text-slate-900 text-lg mb-1">{{ card.affiliate.full_name }}</h2>
+        <p class="font-mono text-sm text-slate-500 mb-1">{{ card.card_number }}</p>
+        <p class="text-xs text-slate-400">NISS: {{ card.affiliate.niss }}</p>
+
+        <div class="mt-4 pt-4 border-t border-slate-100 w-full flex justify-between text-xs text-slate-400">
+          <span>Emissão: {{ card.issued_date|date:"d/m/Y" }}</span>
+          <span>Validade: {{ card.expiry_date|date:"d/m/Y" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-5 print-hidden">
+      <button onclick="window.print()"
+              class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white shadow-md"
+              style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        Imprimir
+      </button>
+      <a href="{% url 'citizen-card' %}"
+         class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">
+        &larr; Voltar
+      </a>
+    </div>
+    {% else %}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-10 text-center">
+      <p class="text-slate-500 mb-4">Nenhuma carta encontrada.</p>
+      <a href="{% url 'citizen-dashboard' %}" class="text-blue-600 text-sm hover:underline">&larr; Voltar ao painel</a>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

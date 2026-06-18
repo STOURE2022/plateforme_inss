@@ -1,0 +1,58 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Dependentes — e-INSS{% endblock %}
+{% block page_title %}Dependentes{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/citizen/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'citizen-dashboard' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Voltar ao painel
+  </a>
+</div>
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-slate-900">Dependentes (Ayants-droit)</h1>
+  <p class="text-slate-500 mt-1 text-sm">Pessoas abrangidas pelo seu seguro de saúde</p>
+</div>
+
+{% if dependents %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+  {% for dep in dependents %}
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 card-hover">
+    <div class="flex items-start justify-between mb-4">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+           style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+        {{ dep.full_name|slice:":1" }}
+      </div>
+      <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+        {% if dep.is_active %}bg-emerald-100 text-emerald-700{% else %}bg-slate-100 text-slate-500{% endif %}">
+        {% if dep.is_active %}Ativo{% else %}Inativo{% endif %}
+      </span>
+    </div>
+    <h3 class="font-semibold text-slate-900 text-base">{{ dep.full_name }}</h3>
+    <p class="text-sm text-slate-500 mt-1">{{ dep.get_relationship_display }}</p>
+    <p class="text-xs text-slate-400 mt-1">Nascido em {{ dep.birth_date|date:"d/m/Y" }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="max-w-lg mx-auto text-center py-16">
+  <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-5">
+    <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+    </svg>
+  </div>
+  <h2 class="text-xl font-bold text-slate-800 mb-2">Nenhum dependente registado</h2>
+  <p class="text-slate-500 text-sm mb-6">Para adicionar dependentes, contacte um agente INSS.</p>
+  <a href="mailto:agente@inss.gw"
+     class="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-md transition-all hover:shadow-lg"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+    Contactar agente
+  </a>
+</div>
+{% endif %}
+{% endblock %}

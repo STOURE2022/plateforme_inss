@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}e-INSS{% endblock %} — INSS Guinée-Bissau</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            inss: { DEFAULT: '#1F3864', light: '#2A4A80', dark: '#152545' },
+            gold: { DEFAULT: '#B8860B', light: '#D4A017' },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    [x-cloak] { display: none !important; }
+
+    /* Sidebar toujours visible sur desktop */
+    @media (min-width: 1024px) {
+      #main-sidebar { transform: translateX(0) !important; }
+    }
+
+    .sidebar-item { transition: all 0.15s ease; }
+    .sidebar-item.active { background: rgba(255,255,255,0.12); border-left: 3px solid #B8860B; padding-left: calc(0.75rem - 3px); }
+    .sidebar-item:not(.active):hover { background: rgba(255,255,255,0.07); }
+
+    .card-hover { transition: all 0.2s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2563EB;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    .htmx-indicator { display: none; }
+    .htmx-request .htmx-indicator { display: inline-block; }
+    .htmx-request.htmx-indicator { display: inline-block; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Prevent text overflow in tables */
+    .table-cell-clamp { max-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* Responsive table wrapper */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="h-full bg-slate-50" x-data="{ sidebarOpen: false }">
+
+<!-- ── Overlay mobile ── -->
+<div class="fixed inset-0 z-20 bg-black/50 lg:hidden"
+     x-show="sidebarOpen"
+     x-cloak
+     x-transition:enter="transition-opacity ease-out duration-200"
+     x-transition:enter-start="opacity-0"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition-opacity ease-in duration-150"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0"
+     @click="sidebarOpen = false">
+</div>
+
+<!-- ── Sidebar ── -->
+<aside id="main-sidebar"
+       class="fixed inset-y-0 left-0 z-30 w-64 flex flex-col transition-transform duration-300 -translate-x-full"
+       :class="sidebarOpen ? 'translate-x-0' : ''"
+       style="background: linear-gradient(180deg, #1F3864 0%, #152545 100%);">
+
+  <!-- Logo -->
+  <div class="flex items-center gap-3 px-5 py-5 border-b border-white/10 flex-shrink-0">
+    <a href="/" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: #B8860B;">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="text-white font-bold text-lg leading-tight">e-INSS</div>
+        <div class="text-xs leading-tight truncate max-w-[120px]" style="color: #B8860B;">
+          {% if request.user.role == 'AGENT' %}Agente INSS
+          {% elif request.user.role == 'ADMIN' %}Administrador
+          {% elif request.user.role == 'CITIZEN' %}Cidadão
+          {% elif request.user.role == 'EMPLOYER' %}Empregador
+          {% elif request.user.role == 'PROVIDER' %}Prestador
+          {% else %}Portal{% endif %}
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Nav -->
+  <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+    {% block sidebar_nav %}{% endblock %}
+  </nav>
+
+  <!-- User info + logout -->
+  <div class="px-3 py-4 border-t border-white/10 flex-shrink-0">
+    <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl mb-1" style="background: rgba(255,255,255,0.07);">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+           style="background: #B8860B;">
+        {{ request.user.email|first|upper }}
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="text-white text-sm font-medium truncate">
+          {{ request.user.get_full_name|default:request.user.email }}
+        </div>
+        <div class="text-white/50 text-xs truncate">{{ request.user.email }}</div>
+      </div>
+    </div>
+    <a href="{% url 'html-logout' %}"
+       class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition-all text-sm w-full mt-1">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+      Terminar sessão
+    </a>
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<div class="lg:pl-64 flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-10 bg-white border-b border-slate-100 shadow-sm flex-shrink-0">
+    <div class="flex items-center justify-between px-4 sm:px-6 h-16">
+
+      <!-- Hamburger (mobile) -->
+      <button @click="sidebarOpen = true"
+              class="lg:hidden p-2 rounded-lg hover:bg-slate-100 text-slate-500 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <!-- Breadcrumb (desktop) -->
+      <div class="hidden lg:flex items-center gap-2 text-sm text-slate-500">
+        <span>e-INSS</span>
+        <svg class="w-4 h-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-800">{% block page_title %}Dashboard{% endblock %}</span>
+      </div>
+
+      <!-- Title (mobile) -->
+      <span class="lg:hidden text-sm font-semibold text-slate-800">{% block page_title_mobile %}{% endblock %}</span>
+
+      <!-- Right -->
+      <div class="flex items-center gap-2">
+
+        <!-- Notifications -->
+        <div class="relative" x-data="{ open: false }">
+          <button @click="open = !open"
+                  hx-get="/notifications/dropdown/"
+                  hx-target="#notif-dropdown"
+                  hx-trigger="click once"
+                  class="relative p-2 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">!</span>
+          </button>
+          <div x-show="open"
+               x-cloak
+               @click.outside="open = false"
+               x-transition:enter="transition ease-out duration-150"
+               x-transition:enter-start="opacity-0 scale-95"
+               x-transition:enter-end="opacity-100 scale-100"
+               class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden z-50">
+            <div id="notif-dropdown" class="p-6 text-center text-slate-400 text-sm">
+              <div class="animate-spin w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User chip -->
+        <div class="flex items-center gap-2 pl-2 border-l border-slate-100">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
+               style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+            {{ request.user.email|first|upper }}
+          </div>
+          <span class="hidden sm:block text-sm font-medium text-slate-700 max-w-[150px] truncate">
+            {{ request.user.get_full_name|default:request.user.email|truncatechars:22 }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page content -->
+  <main class="flex-1 p-4 sm:p-6 overflow-x-hidden">
+
+    {% if messages %}
+    <div id="messages-container" class="mb-5 space-y-2">
+      {% for message in messages %}
+      <div class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+        {% if message.tags == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200
+        {% elif message.tags == 'error' %}bg-red-50 text-red-800 border border-red-200
+        {% elif message.tags == 'warning' %}bg-amber-50 text-amber-800 border border-amber-200
+        {% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+        {% if message.tags == 'success' %}
+          <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        {% elif message.tags == 'error' %}
+          <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+        {% else %}
+          <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+        {% endif %}
+        <span class="flex-1 min-w-0">{{ message }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none max-w-sm w-full"></div>
+
+<script>
+  // Auto-dismiss messages
+  var mc = document.getElementById('messages-container');
+  if (mc) {
+    setTimeout(function() {
+      mc.style.transition = 'opacity 0.5s';
+      mc.style.opacity = '0';
+      setTimeout(function() { mc.remove(); }, 500);
+    }, 4000);
+  }
+
+  function showToast(message, type) {
+    var colors = { success:'bg-emerald-600', error:'bg-red-600', warning:'bg-amber-500', info:'bg-blue-600' };
+    var icons = { success:'✓', error:'✕', warning:'⚠', info:'ℹ' };
+    var t = document.createElement('div');
+    t.className = 'pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl text-white text-sm font-medium shadow-lg animate-slide-in ' + (colors[type] || colors.info);
+    t.innerHTML = '<span>' + (icons[type]||'ℹ') + '</span><span>' + message + '</span>';
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(function() {
+      t.style.transition = 'opacity 0.4s, transform 0.4s';
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(100%)';
+      setTimeout(function() { t.remove(); }, 400);
+    }, 3500);
+  }
+
+  document.addEventListener('htmx:responseError', function() { showToast('Erro na operação', 'error'); });
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

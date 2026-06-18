@@ -1,0 +1,38 @@
+<dl class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5">
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nome completo</dt>
+    <dd class="text-slate-800 font-medium">{{ affiliate.full_name }}</dd>
+  </div>
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">NISS</dt>
+    <dd class="font-mono text-slate-800 font-semibold">{{ affiliate.niss }}</dd>
+  </div>
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Data de nascimento</dt>
+    <dd class="text-slate-800">{{ affiliate.birth_date|date:"d/m/Y" }}</dd>
+  </div>
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Género</dt>
+    <dd class="text-slate-800">{{ affiliate.get_gender_display }}</dd>
+  </div>
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nacionalidade</dt>
+    <dd class="text-slate-800">{{ affiliate.nationality }}</dd>
+  </div>
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Telefone</dt>
+    <dd class="text-slate-800">{{ affiliate.phone|default:"&mdash;" }}</dd>
+  </div>
+  <div class="md:col-span-2">
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Endereço</dt>
+    <dd class="text-slate-800">{{ affiliate.address|default:"&mdash;" }}</dd>
+  </div>
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email</dt>
+    <dd class="text-slate-800">{{ affiliate.user.email }}</dd>
+  </div>
+  <div>
+    <dt class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Data de registo</dt>
+    <dd class="text-slate-800">{{ affiliate.registration_date|date:"d/m/Y" }}</dd>
+  </div>
+</dl>
