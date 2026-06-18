@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.production
+render.env
 !.env.example
 
 # RSA Keys — NEVER commit private keys
