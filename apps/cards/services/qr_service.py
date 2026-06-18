@@ -1,5 +1,6 @@
 import uuid
 import io
+import os
 from datetime import timedelta
 
 import jwt
@@ -11,13 +12,19 @@ from apps.cards.exceptions import HealthCardVerificationError
 
 
 def _load_private_key() -> bytes:
-    """Carrega a chave privada RSA a partir do caminho configurado."""
+    """Carrega a chave privada RSA — via env var INSS_PRIVATE_KEY ou ficheiro."""
+    content = os.environ.get("INSS_PRIVATE_KEY", "").replace("\\n", "\n").strip()
+    if content:
+        return content.encode()
     with open(settings.INSS_PRIVATE_KEY_PATH, "rb") as f:
         return f.read()
 
 
 def _load_public_key() -> bytes:
-    """Carrega a chave pública RSA a partir do caminho configurado."""
+    """Carrega a chave pública RSA — via env var INSS_PUBLIC_KEY ou ficheiro."""
+    content = os.environ.get("INSS_PUBLIC_KEY", "").replace("\\n", "\n").strip()
+    if content:
+        return content.encode()
     with open(settings.INSS_PUBLIC_KEY_PATH, "rb") as f:
         return f.read()
 

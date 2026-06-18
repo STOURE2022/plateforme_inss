@@ -1,0 +1,36 @@
+databases:
+  - name: einss-db
+    databaseName: einss
+    user: einss_user
+    plan: free
+
+services:
+  - type: web
+    name: einss-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: einss-db
+          property: connectionString
+      - key: REDIS_URL
+        value: redis://localhost:6379/0  # Remplacer par l'URL Render Key Value
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: STATIC_ROOT
+        value: /app/staticfiles
+      - key: MEDIA_ROOT
+        value: /app/media
+      # RSA Keys — coller le contenu des fichiers PEM (remplacer \n par \\n)
+      - key: INSS_PRIVATE_KEY
+        sync: false  # A renseigner manuellement dans le dashboard Render
+      - key: INSS_PUBLIC_KEY
+        sync: false  # A renseigner manuellement dans le dashboard Render

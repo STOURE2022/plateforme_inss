@@ -18,4 +18,9 @@ COPY pyproject.toml .
 COPY . .
 RUN pip install --no-cache-dir ".[dev]"
 
+COPY scripts/start.sh /start.sh
+RUN chmod +x /start.sh
+
 EXPOSE 8000
+
+CMD ["/start.sh"]
