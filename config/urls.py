@@ -23,6 +23,7 @@ urlpatterns = [
     path("api/v1/", include("apps.verification.urls")),
     path("api/v1/", include("apps.audit.urls")),
     path("api/v1/", include("apps.notifications.urls")),
+    path("api/v1/", include("apps.benefits.urls")),
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/v1/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/v1/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
@@ -34,4 +35,6 @@ urlpatterns = [
     path("portal/agent/", include("apps.accounts.agent_html_urls")),
     path("portal/provider/", include("apps.verification.html_urls")),
     path("notifications/", include("apps.notifications.html_urls")),
+    path("portal/citizen/benefits/", include("apps.benefits.citizen_html_urls")),
+    path("portal/agent/benefits/", include("apps.benefits.agent_html_urls")),
 ]

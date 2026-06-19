@@ -1,0 +1,19 @@
+{% if status == 'DRAFT' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">{{ status_display }}</span>
+{% elif status == 'SUBMITTED' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">{{ status_display }}</span>
+{% elif status == 'UNDER_REVIEW' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700">{{ status_display }}</span>
+{% elif status == 'ADDITIONAL_DOCS' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">{{ status_display }}</span>
+{% elif status == 'APPROVED' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">{{ status_display }}</span>
+{% elif status == 'REJECTED' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">{{ status_display }}</span>
+{% elif status == 'PAYING' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-100 text-cyan-700">{{ status_display }}</span>
+{% elif status == 'CLOSED' %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">{{ status_display }}</span>
+{% else %}
+<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">{{ status_display }}</span>
+{% endif %}

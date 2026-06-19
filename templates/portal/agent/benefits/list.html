@@ -1,0 +1,151 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{% trans "Prestações — Agente" %}{% endblock %}
+{% block page_title %}{% trans "Gestão de Prestações" %}{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">{% trans "Gestão de Prestações" %}</h1>
+    <p class="text-slate-500 mt-1 text-sm">{% trans "Solicitações de prestações sociais submetidas pelos cidadãos" %}</p>
+  </div>
+</div>
+
+<!-- Status summary row -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm text-center">
+    <div class="text-2xl font-bold text-slate-900">{{ total_count }}</div>
+    <div class="text-xs text-slate-500 mt-0.5">{% trans "Total" %}</div>
+  </div>
+  <div class="bg-blue-50 rounded-2xl p-4 border border-blue-200 shadow-sm text-center">
+    <div class="text-2xl font-bold text-blue-700">{{ status_counts.SUBMITTED|default:"0" }}</div>
+    <div class="text-xs text-blue-600 mt-0.5">{% trans "Submetidas" %}</div>
+  </div>
+  <div class="bg-violet-50 rounded-2xl p-4 border border-violet-200 shadow-sm text-center">
+    <div class="text-2xl font-bold text-violet-700">{{ status_counts.UNDER_REVIEW|default:"0" }}</div>
+    <div class="text-xs text-violet-600 mt-0.5">{% trans "Em revisão" %}</div>
+  </div>
+  <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 shadow-sm text-center">
+    <div class="text-2xl font-bold text-emerald-700">{{ status_counts.APPROVED|default:"0" }}</div>
+    <div class="text-xs text-emerald-600 mt-0.5">{% trans "Aprovadas" %}</div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+  <form method="get" class="flex flex-wrap gap-3 items-end">
+    <div class="flex-1 min-w-40">
+      <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{% trans "Pesquisa" %}</label>
+      <input type="text" name="q" value="{{ search_query }}"
+             placeholder="{% trans "Nome, NISS ou referência..." %}"
+             class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+    <div class="min-w-36">
+      <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{% trans "Estado" %}</label>
+      <select name="status"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">{% trans "Todos" %}</option>
+        {% for val, label in status_choices %}
+        <option value="{{ val }}" {% if selected_status == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="min-w-36">
+      <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{% trans "Categoria" %}</label>
+      <select name="category"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">{% trans "Todas" %}</option>
+        {% for val, label in category_choices %}
+        <option value="{{ val }}" {% if selected_category == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="min-w-32">
+      <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{% trans "De" %}</label>
+      <input type="date" name="date_from" value="{{ date_from }}"
+             class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+    <div class="min-w-32">
+      <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{% trans "Até" %}</label>
+      <input type="date" name="date_to" value="{{ date_to }}"
+             class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+    <div class="flex gap-2">
+      <button type="submit"
+              class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+        {% trans "Filtrar" %}
+      </button>
+      <a href="{% url 'agent_benefits:agent_benefit_list' %}"
+         class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">
+        {% trans "Limpar" %}
+      </a>
+    </div>
+  </form>
+</div>
+
+<!-- Table -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  {% if benefit_requests %}
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Referência" %}</th>
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Requerente" %}</th>
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Tipo" %}</th>
+        <th class="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Estado" %}</th>
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Submetida em" %}</th>
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Revisado por" %}</th>
+        <th class="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Ação" %}</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for req in benefit_requests %}
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="px-5 py-4 font-mono text-xs font-semibold text-slate-700">{{ req.reference }}</td>
+        <td class="px-5 py-4">
+          <div class="font-medium text-slate-800">{{ req.applicant_name }}</div>
+          <div class="text-xs text-slate-500 font-mono">{{ req.applicant_niss }}</div>
+        </td>
+        <td class="px-5 py-4">
+          <div class="font-medium text-slate-700 text-xs">{{ req.benefit_type.name }}</div>
+          <div class="text-xs text-slate-400">{{ req.benefit_type.get_category_display }}</div>
+        </td>
+        <td class="px-5 py-4 text-center">
+          {% include "portal/citizen/benefits/_status_badge.html" with status=req.status status_display=req.get_status_display %}
+        </td>
+        <td class="px-5 py-4 text-slate-600 text-xs">
+          {% if req.submitted_at %}{{ req.submitted_at|date:"d/m/Y" }}{% else %}&mdash;{% endif %}
+        </td>
+        <td class="px-5 py-4 text-slate-600 text-xs">
+          {% if req.reviewed_by %}{{ req.reviewed_by.email }}{% else %}&mdash;{% endif %}
+        </td>
+        <td class="px-5 py-4 text-center">
+          <a href="{% url 'agent_benefits:agent_benefit_detail' pk=req.pk %}"
+             class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800">
+            {% trans "Ver" %}
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="py-16 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+    </div>
+    <p class="text-slate-600 font-semibold mb-1">{% trans "Nenhuma solicitação encontrada" %}</p>
+    <p class="text-slate-400 text-sm">{% trans "Tente ajustar os filtros de pesquisa." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

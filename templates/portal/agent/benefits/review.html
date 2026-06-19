@@ -1,0 +1,71 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}Decisao {{ request_obj.reference }}{% endblock %}
+{% block page_title %}{% trans "Decisao da Solicitacao" %}{% endblock %}
+{% block sidebar_nav %}{% include "portal/agent/_sidebar.html" %}{% endblock %}
+{% block content %}
+<div class="mb-6">
+  <a href="{% url 'agent_benefits:agent_benefit_detail' pk=request_obj.pk %}" class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1 mb-2 w-fit">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    {% trans "Voltar" %}
+  </a>
+  <h1 class="text-2xl font-bold text-slate-900">{% trans "Decisao" %} &mdash; <span class="font-mono">{{ request_obj.reference }}</span></h1>
+  <p class="text-slate-500 mt-1 text-sm">{{ request_obj.applicant_name }} &middot; {{ request_obj.benefit_type.name }}</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+{% if form.errors %}
+<div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-xl">
+  <p class="text-sm font-semibold text-red-800 mb-1">{% trans "Corrija os erros:" %}</p>
+  {% for field in form %}{% for error in field.errors %}<p class="text-xs text-red-600">&bull; {{ field.label }}: {{ error }}</p>{% endfor %}{% endfor %}
+</div>
+{% endif %}
+<form method="post" class="space-y-5">
+{% csrf_token %}
+<div>
+  <label class="block text-sm font-semibold text-slate-700 mb-1.5">{{ form.action.label }} <span class="text-red-500">*</span></label>
+  {{ form.action }}
+</div>
+<div>
+  <label class="block text-sm font-semibold text-slate-700 mb-1.5">{{ form.decision_notes.label }}</label>
+  {{ form.decision_notes }}
+</div>
+<div id="rejection-section" style="display:none">
+  <label class="block text-sm font-semibold text-slate-700 mb-1.5">{{ form.rejection_reason.label }} <span class="text-red-500">*</span></label>
+  {{ form.rejection_reason }}
+  {% if form.rejection_reason.errors %}<p class="text-xs text-red-600 mt-1">{{ form.rejection_reason.errors.0 }}</p>{% endif %}
+</div>
+<div id="amount-section" style="display:none">
+  <label class="block text-sm font-semibold text-slate-700 mb-1.5">{{ form.approved_monthly_amount.label }}</label>
+  {{ form.approved_monthly_amount }}
+  <p class="text-xs text-slate-500 mt-1">{% trans "Auto-calculado se vazio" %}: {% if request_obj.benefit_type.calculation_method == 'FIXED' %}{{ request_obj.benefit_type.fixed_amount|floatformat:0 }} XOF{% else %}{{ request_obj.benefit_type.percentage_of_salary }}% x {{ request_obj.average_salary|floatformat:0 }} XOF{% endif %}</p>
+</div>
+<div>
+  <label class="block text-sm font-semibold text-slate-700 mb-1.5">{{ form.comment.label }}</label>
+  {{ form.comment }}
+</div>
+<div class="pt-2 flex gap-3">
+  <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-semibold text-white" style="background:linear-gradient(135deg,#1F3864,#2563EB);">{% trans "Confirmar" %}</button>
+  <a href="{% url 'agent_benefits:agent_benefit_detail' pk=request_obj.pk %}" class="px-5 py-3 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200">{% trans "Cancelar" %}</a>
+</div>
+</form>
+</div>
+</div>
+<div class="space-y-5">
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+  <h3 class="text-sm font-semibold text-slate-800 mb-3">{% trans "Resumo" %}</h3>
+  <div class="space-y-2 text-xs">
+    <div><p class="text-slate-500">{% trans "Estado" %}</p>{% include "portal/citizen/benefits/_status_badge.html" with status=request_obj.status status_display=request_obj.get_status_display %}</div>
+    <div><p class="text-slate-500">{% trans "Requerente" %}</p><p class="font-semibold text-slate-800">{{ request_obj.applicant_name }}</p><p class="font-mono text-slate-500">{{ request_obj.applicant_niss }}</p></div>
+    <div><p class="text-slate-500">{% trans "Meses contrib / minimos" %}</p><p class="font-bold text-slate-800">{{ request_obj.contribution_months_count }} / {{ request_obj.benefit_type.min_contribution_months }}</p></div>
+    <div><p class="text-slate-500">{% trans "Salario medio" %}</p><p class="font-bold text-slate-800">{{ request_obj.average_salary|floatformat:0 }} XOF</p></div>
+    {% if request_obj.is_eligible is not None %}<div><p class="text-slate-500">{% trans "Elegivel" %}</p>{% if request_obj.is_eligible %}<span class="font-bold text-emerald-700">Sim</span>{% else %}<span class="font-bold text-red-700">Nao</span>{% endif %}</div>{% endif %}
+  </div>
+</div>
+</div>
+</div>
+<script>
+(function(){var s=document.getElementById("id_action"),r=document.getElementById("rejection-section"),a=document.getElementById("amount-section"),p=new URLSearchParams(window.location.search).get("action");if(p)s.value=p;function u(){var v=s.value;r.style.display=v==="reject"?"block":"none";a.style.display=v==="approve"?"block":"none";}s.addEventListener("change",u);u();})();
+</script>
+{% endblock %}

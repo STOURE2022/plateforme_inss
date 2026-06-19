@@ -40,6 +40,11 @@ class CitizenDashboardView(CitizenRequiredMixin, TemplateView):
 
         # Dependentes ativos
         ctx["dependents"] = affiliate.dependents.filter(is_active=True)
+        ctx["dependents_count"] = ctx["dependents"].count()
+        ctx["contributions_count"] = affiliate.contributions.count()
+
+        # Prestacoes
+        ctx["benefit_requests_count"] = affiliate.benefit_requests.count()
 
         return ctx
 
@@ -140,6 +145,16 @@ class AgentDashboardView(AgentRequiredMixin, TemplateView):
             verified_at__date=today
         ).count()
         ctx["recent_logs"] = VerificationLog.objects.select_related("verifier", "card").order_by("-verified_at")[:5]
+
+        # Prestacoes pendentes
+        try:
+            from apps.benefits.models import BenefitRequest, BenefitRequestStatus
+            ctx["benefits_pending_count"] = BenefitRequest.objects.filter(
+                status__in=[BenefitRequestStatus.SUBMITTED, BenefitRequestStatus.UNDER_REVIEW]
+            ).count()
+        except Exception:
+            ctx["benefits_pending_count"] = 0
+
         return ctx
 
 

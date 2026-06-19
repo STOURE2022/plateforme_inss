@@ -1,0 +1,191 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{% trans "Nova Solicitação de Prestação" %}{% endblock %}
+{% block page_title %}{% trans "Nova Solicitação" %}{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/citizen/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+  <a href="{% url 'citizen_benefits:citizen_benefit_list' %}" class="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1 mb-2 w-fit">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    {% trans "Voltar à lista" %}
+  </a>
+  <h1 class="text-2xl font-bold text-slate-900">{% trans "Nova Solicitação de Prestação" %}</h1>
+  <p class="text-slate-500 mt-1 text-sm">{% trans "Preencha o formulário para solicitar uma prestação INSS" %}</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  <!-- Form -->
+  <div class="lg:col-span-2">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      {% if form.errors %}
+      <div class="mb-5 p-4 bg-red-50 border border-red-200 rounded-xl">
+        <p class="text-sm font-semibold text-red-800 mb-1">{% trans "Por favor, corrija os erros abaixo:" %}</p>
+        {% for field in form %}
+          {% for error in field.errors %}
+          <p class="text-xs text-red-600">&bull; {{ field.label }}: {{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        <!-- Benefit Type -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+            {{ form.benefit_type.label }} <span class="text-red-500">*</span>
+          </label>
+          {{ form.benefit_type }}
+          {% if form.benefit_type.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ form.benefit_type.errors.0 }}</p>
+          {% endif %}
+          <p class="text-xs text-slate-500 mt-1">{% trans "Selecione o tipo de prestação que pretende solicitar" %}</p>
+        </div>
+
+        <!-- Type info panel (shown via JS when type selected) -->
+        <div id="benefit-type-info" class="hidden p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm">
+          <p class="font-semibold text-blue-800 mb-2" id="type-info-name"></p>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div>
+              <span class="text-blue-600">{% trans "Meses mínimos:" %}</span>
+              <span class="font-semibold text-blue-800 ml-1" id="type-info-months"></span>
+            </div>
+            <div>
+              <span class="text-blue-600">{% trans "Método:" %}</span>
+              <span class="font-semibold text-blue-800 ml-1" id="type-info-method"></span>
+            </div>
+          </div>
+          <p class="text-xs text-blue-600 mt-2" id="type-info-desc"></p>
+        </div>
+
+        <!-- Requested start date -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+            {{ form.requested_start_date.label }} <span class="text-red-500">*</span>
+          </label>
+          {{ form.requested_start_date }}
+          {% if form.requested_start_date.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ form.requested_start_date.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Justification -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+            {{ form.justification.label }} <span class="text-red-500">*</span>
+          </label>
+          {{ form.justification }}
+          {% if form.justification.errors %}
+          <p class="text-xs text-red-600 mt-1">{{ form.justification.errors.0 }}</p>
+          {% endif %}
+          <p class="text-xs text-slate-500 mt-1">{% trans "Explique brevemente o motivo da sua solicitação" %}</p>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit"
+                  class="w-full py-3 rounded-xl text-sm font-semibold text-white transition-all"
+                  style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+            {% trans "Criar Solicitação (Rascunho)" %}
+          </button>
+          <p class="text-xs text-slate-500 text-center mt-2">
+            {% trans "A solicitação será criada como rascunho. Poderá submeter depois." %}
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sidebar info -->
+  <div class="space-y-5">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+      <h3 class="text-sm font-semibold text-slate-800 mb-3">{% trans "Como funciona?" %}</h3>
+      <div class="space-y-3">
+        <div class="flex gap-3">
+          <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-xs font-bold text-blue-700">1</div>
+          <p class="text-xs text-slate-600">{% trans "Crie a solicitação como rascunho e carregue os documentos necessários." %}</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-xs font-bold text-blue-700">2</div>
+          <p class="text-xs text-slate-600">{% trans "Submeta a solicitação para revisão pelo agente INSS." %}</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-xs font-bold text-blue-700">3</div>
+          <p class="text-xs text-slate-600">{% trans "O agente analisa e decide. Será notificado por mensagem." %}</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-xs font-bold text-emerald-700">4</div>
+          <p class="text-xs text-slate-600">{% trans "Se aprovada, os pagamentos são agendados mensalmente." %}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Available types list -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+      <h3 class="text-sm font-semibold text-slate-800 mb-3">{% trans "Tipos de Prestações" %}</h3>
+      <div class="space-y-2">
+        {% for bt in benefit_types %}
+        <div class="p-2.5 bg-slate-50 rounded-lg text-xs">
+          <p class="font-semibold text-slate-700">{{ bt.name }}</p>
+          <p class="text-slate-500 mt-0.5">
+            {% if bt.min_contribution_months > 0 %}
+            {% trans "Min." %} {{ bt.min_contribution_months }} {% trans "meses" %} &middot;
+            {% endif %}
+            {% if bt.calculation_method == 'FIXED' %}
+            {{ bt.fixed_amount|floatformat:0 }} XOF fixo
+            {% elif bt.calculation_method == 'PERCENTAGE' %}
+            {{ bt.percentage_of_salary }}% {% trans "do salário" %}
+            {% endif %}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS for benefit type info panel -->
+<script>
+(function () {
+  const typeData = {
+    {% for bt in benefit_types %}
+    "{{ bt.pk }}": {
+      name: "{{ bt.name }}",
+      months: "{{ bt.min_contribution_months }}",
+      method: "{{ bt.get_calculation_method_display }}",
+      desc: "{{ bt.description|escapejs }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  };
+
+  const select = document.getElementById("id_benefit_type");
+  const panel = document.getElementById("benefit-type-info");
+  const nameEl = document.getElementById("type-info-name");
+  const monthsEl = document.getElementById("type-info-months");
+  const methodEl = document.getElementById("type-info-method");
+  const descEl = document.getElementById("type-info-desc");
+
+  function updatePanel() {
+    const val = select.value;
+    if (val && typeData[val]) {
+      const d = typeData[val];
+      nameEl.textContent = d.name;
+      monthsEl.textContent = d.months + " meses";
+      methodEl.textContent = d.method;
+      descEl.textContent = d.desc;
+      panel.classList.remove("hidden");
+    } else {
+      panel.classList.add("hidden");
+    }
+  }
+
+  select.addEventListener("change", updatePanel);
+  updatePanel();
+})();
+</script>
+{% endblock %}

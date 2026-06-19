@@ -18,8 +18,8 @@
   </div>
 </div>
 
-<!-- Stats 4 colonnes -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+<!-- Stats grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5 mb-8">
   <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
     <div class="flex items-center justify-between mb-3">
       <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50">
@@ -62,6 +62,17 @@
     </div>
     <div class="text-3xl font-bold text-slate-900">{{ total_employers|default:"0" }}</div>
     <div class="text-sm text-slate-500 mt-0.5">{% trans "Empregadores" %}</div>
+  </div>
+
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-rose-50">
+        <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <a href="{% url 'agent_benefits:agent_benefit_list' %}?status=SUBMITTED" class="text-xs font-medium text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full hover:bg-rose-100">{% trans "Ver" %}</a>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ benefits_pending_count|default:"0" }}</div>
+    <div class="text-sm text-slate-500 mt-0.5">{% trans "Prestacoes pendentes" %}</div>
   </div>
 </div>
 
