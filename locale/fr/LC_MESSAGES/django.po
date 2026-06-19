@@ -1,0 +1,532 @@
+# French translations for e-INSS
+# Copyright (C) 2026 INSS Guinée-Bissau
+#
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# ── Landing page ──
+msgid "PLATAFORMA OFICIAL · REPÚBLICA DA GUINÉE-BISSAU"
+msgstr "PLATEFORME OFFICIELLE · REPÚBLICA DA GUINÉE-BISSAU"
+
+msgid "A sua segurança social, digital."
+msgstr "Votre sécurité sociale, numérique."
+
+msgid "O Instituto Nacional de Segurança Social da Guinée-Bissau agora na palma da sua mão. Gerencie contribuições, aceda ao seu cartão de saúde e muito mais — em segundos."
+msgstr "L'Institut National de Sécurité Sociale de Guinée-Bissau maintenant dans la paume de votre main. Gérez les cotisations, accédez à votre carte de santé et bien plus — en quelques secondes."
+
+msgid "Aceder ao Portal"
+msgstr "Accéder au portail"
+
+msgid "Ver portais"
+msgstr "Voir les portails"
+
+msgid "100% Seguro"
+msgstr "100% Sécurisé"
+
+msgid "Disponível 24h/7"
+msgstr "Disponible 24h/7"
+
+msgid "Disponível 24/7"
+msgstr "Disponible 24/7"
+
+msgid "Autenticação MFA"
+msgstr "Authentification MFA"
+
+msgid "Verificado"
+msgstr "Vérifié"
+
+msgid "Há 2 min"
+msgstr "Il y a 2 min"
+
+msgid "MFA Activo"
+msgstr "MFA Actif"
+
+msgid "MFA activado"
+msgstr "MFA activé"
+
+msgid "Acesso seguro"
+msgstr "Accès sécurisé"
+
+msgid "Profissionais de saúde"
+msgstr "Professionnels de santé"
+
+msgid "Saúde digital"
+msgstr "Santé numérique"
+
+msgid "Família protegida"
+msgstr "Famille protégée"
+
+msgid "PARA TODOS OS UTILIZADORES"
+msgstr "POUR TOUS LES UTILISATEURS"
+
+msgid "Qual é o seu perfil?"
+msgstr "Quel est votre profil ?"
+
+msgid "Cada utilizador tem um espaço dedicado, adaptado às suas necessidades específicas."
+msgstr "Chaque utilisateur dispose d'un espace dédié, adapté à ses besoins spécifiques."
+
+msgid "Aceda ao seu cartão, contribuições e dependentes"
+msgstr "Accédez à votre carte, contributions et dépendants"
+
+msgid "Declare e gira as cotizações dos seus trabalhadores"
+msgstr "Déclarez et gérez les cotisations de vos travailleurs"
+
+msgid "Gestão completa de afiliados, cartas e empregadores"
+msgstr "Gestion complète des affiliés, cartes et employeurs"
+
+msgid "Verifique instantaneamente a cobertura dos pacientes"
+msgstr "Vérifiez instantanément la couverture des patients"
+
+msgid "Entrar →"
+msgstr "Se connecter →"
+
+msgid "Portais"
+msgstr "Portails"
+
+msgid "Serviços"
+msgstr "Services"
+
+msgid "Segurança"
+msgstr "Sécurité"
+
+msgid "Como Funciona"
+msgstr "Comment ça marche"
+
+msgid "Perguntas Frequentes"
+msgstr "Questions Fréquentes"
+
+msgid "Contacto"
+msgstr "Contact"
+
+msgid "Administração"
+msgstr "Administration"
+
+msgid "Verificação Instantânea"
+msgstr "Vérification Instantanée"
+
+msgid "Documentos & PDF"
+msgstr "Documents & PDF"
+
+msgid "Cartão de Saúde Digital"
+msgstr "Carte de Santé Numérique"
+
+msgid "Gestão de Contribuições"
+msgstr "Gestion des Cotisations"
+
+msgid "Dependentes & Família"
+msgstr "Dépendants & Famille"
+
+msgid "Portal Empresarial"
+msgstr "Portail Entreprise"
+
+msgid "Todos os direitos reservados."
+msgstr "Tous droits réservés."
+
+msgid "Instituto Nacional de Segurança Social"
+msgstr "Institut National de Sécurité Sociale"
+
+# ── Auth / Login ──
+msgid "Plataforma Nacional de Seguridade Social"
+msgstr "Plateforme Nationale de Sécurité Sociale"
+
+msgid "Plataforma Nacional\nde Seguridade Social"
+msgstr "Plateforme Nationale\nde Sécurité Sociale"
+
+msgid "Aceda ao seu cartão digital, gerencie contribuições e proteja a sua família — tudo num só lugar."
+msgstr "Accédez à votre carte numérique, gérez les cotisations et protégez votre famille — tout en un seul endroit."
+
+msgid "Bem-vindo de volta"
+msgstr "Bon retour"
+
+msgid "Entre com as suas credenciais para continuar"
+msgstr "Connectez-vous avec vos identifiants pour continuer"
+
+msgid "Erro de autenticação"
+msgstr "Erreur d'authentification"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Senha"
+msgstr "Mot de passe"
+
+msgid "Entrar na plataforma"
+msgstr "Se connecter à la plateforme"
+
+msgid "Contas de demonstração"
+msgstr "Comptes de démonstration"
+
+msgid "Novo utilizador?"
+msgstr "Nouvel utilisateur ?"
+
+msgid "Criar conta"
+msgstr "Créer un compte"
+
+msgid "Afiliados"
+msgstr "Affiliés"
+
+msgid "Cartões"
+msgstr "Cartes"
+
+# ── Auth / Register ──
+msgid "Registe-se na plataforma oficial"
+msgstr "Inscrivez-vous sur la plateforme officielle"
+
+msgid "Crie a sua conta e aceda a todos os serviços do INSS digital — cartão de saúde, contribuições e muito mais."
+msgstr "Créez votre compte et accédez à tous les services INSS numériques — carte de santé, cotisations et bien plus."
+
+msgid "Informações pessoais"
+msgstr "Informations personnelles"
+
+msgid "Nome, e-mail e senha"
+msgstr "Nom, e-mail et mot de passe"
+
+msgid "Tipo de conta"
+msgstr "Type de compte"
+
+msgid "Cidadão ou Empregador"
+msgstr "Citoyen ou Employeur"
+
+msgid "Acesso imediato"
+msgstr "Accès immédiat"
+
+msgid "Plataforma disponível 24h/7"
+msgstr "Plateforme disponible 24h/7"
+
+msgid "Nota importante"
+msgstr "Note importante"
+
+msgid "Para afiliados INSS já registados, o perfil completo (cartão, contribuições) será associado pelo agente INSS após verificação de identidade."
+msgstr "Pour les affiliés INSS déjà enregistrés, le profil complet (carte, cotisations) sera associé par l'agent INSS après vérification d'identité."
+
+msgid "Plataforma operacional"
+msgstr "Plateforme opérationnelle"
+
+msgid "Criar nova conta"
+msgstr "Créer un nouveau compte"
+
+msgid "Preencha os seus dados para se registar na plataforma"
+msgstr "Remplissez vos données pour vous inscrire sur la plateforme"
+
+msgid "Erro no registo"
+msgstr "Erreur d'inscription"
+
+msgid "Confirmar senha"
+msgstr "Confirmer le mot de passe"
+
+msgid "Acesse o seu cartão de saúde e contribuições pessoais"
+msgstr "Accédez à votre carte de santé et cotisations personnelles"
+
+msgid "Gira as cotizações dos seus trabalhadores"
+msgstr "Gérez les cotisations de vos travailleurs"
+
+msgid "Nome da empresa"
+msgstr "Nom de l'entreprise"
+
+msgid "O agente INSS validará o registo da empresa."
+msgstr "L'agent INSS validera l'enregistrement de l'entreprise."
+
+msgid "Aceito os"
+msgstr "J'accepte les"
+
+msgid "Termos de Utilização"
+msgstr "Conditions d'Utilisation"
+
+msgid "Política de Privacidade"
+msgstr "Politique de Confidentialité"
+
+msgid "Criar a minha conta"
+msgstr "Créer mon compte"
+
+msgid "Já tem conta?"
+msgstr "Vous avez déjà un compte ?"
+
+msgid "Entrar"
+msgstr "Se connecter"
+
+msgid "Registe-se"
+msgstr "S'inscrire"
+
+# ── Auth / MFA ──
+msgid "Verificação em 2 etapas"
+msgstr "Vérification en 2 étapes"
+
+msgid "Introduza o código do seu autenticador"
+msgstr "Entrez le code de votre application d'authentification"
+
+msgid "Abra a sua app de autenticação e insira o código de"
+msgstr "Ouvrez votre application d'authentification et entrez le code de"
+
+msgid "6 dígitos"
+msgstr "6 chiffres"
+
+msgid "O código expira em"
+msgstr "Le code expire dans"
+
+msgid "segundos"
+msgstr "secondes"
+
+msgid "Verificar código"
+msgstr "Vérifier le code"
+
+msgid "Voltar ao login"
+msgstr "Retour à la connexion"
+
+msgid "Código expirado — volte ao login"
+msgstr "Code expiré — retournez à la connexion"
+
+# ── Portal base ──
+msgid "Terminar sessão"
+msgstr "Se déconnecter"
+
+msgid "Sair"
+msgstr "Se déconnecter"
+
+msgid "Notificações"
+msgstr "Notifications"
+
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+msgid "Agente INSS"
+msgstr "Agent INSS"
+
+msgid "Administrador"
+msgstr "Administrateur"
+
+msgid "Cidadão"
+msgstr "Citoyen"
+
+msgid "Empregador"
+msgstr "Employeur"
+
+msgid "Prestador"
+msgstr "Prestataire"
+
+msgid "Portal"
+msgstr "Portail"
+
+# ── Sidebars ──
+msgid "Painel"
+msgstr "Tableau de bord"
+
+msgid "Minha Carta"
+msgstr "Ma Carte"
+
+msgid "Contribuições"
+msgstr "Cotisations"
+
+msgid "Dependentes"
+msgstr "Dépendants"
+
+msgid "Histórico"
+msgstr "Historique"
+
+msgid "Nova Contribuição"
+msgstr "Nouvelle Cotisation"
+
+msgid "Empresa"
+msgstr "Entreprise"
+
+msgid "Perfil da Empresa"
+msgstr "Profil de l'Entreprise"
+
+msgid "Gestão"
+msgstr "Gestion"
+
+msgid "Novo afiliado"
+msgstr "Nouvel affilié"
+
+msgid "Empresas"
+msgstr "Entreprises"
+
+msgid "Nova empresa"
+msgstr "Nouvelle entreprise"
+
+msgid "Relatórios"
+msgstr "Rapports"
+
+msgid "Logs de Verificação"
+msgstr "Journaux de Vérification"
+
+msgid "Verificação"
+msgstr "Vérification"
+
+msgid "Verificar Cartão"
+msgstr "Vérifier la Carte"
+
+# ── Dashboards ──
+msgid "Meu Painel"
+msgstr "Mon Tableau de bord"
+
+msgid "Aqui está um resumo da sua conta INSS"
+msgstr "Voici un résumé de votre compte INSS"
+
+msgid "Nenhuma carta emitida"
+msgstr "Aucune carte émise"
+
+msgid "Contribuições registadas"
+msgstr "Cotisations enregistrées"
+
+msgid "Dependentes activos"
+msgstr "Dépendants actifs"
+
+msgid "Meu Cartão de Saúde"
+msgstr "Ma Carte de Santé"
+
+msgid "Ver detalhes"
+msgstr "Voir les détails"
+
+msgid "Número do cartão"
+msgstr "Numéro de carte"
+
+msgid "Titular"
+msgstr "Titulaire"
+
+msgid "Válido até"
+msgstr "Valable jusqu'au"
+
+msgid "Ver QR"
+msgstr "Voir QR"
+
+msgid "Nenhum cartão emitido"
+msgstr "Aucune carte émise"
+
+msgid "Contacte o agente INSS"
+msgstr "Contactez l'agent INSS"
+
+msgid "Últimas Contribuições"
+msgstr "Dernières Cotisations"
+
+msgid "Ver todas"
+msgstr "Voir tout"
+
+msgid "Período"
+msgstr "Période"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Estado"
+msgstr "État"
+
+msgid "Pago"
+msgstr "Payé"
+
+msgid "Pendente"
+msgstr "En attente"
+
+msgid "Em atraso"
+msgstr "En retard"
+
+msgid "Nenhuma contribuição registada"
+msgstr "Aucune cotisation enregistrée"
+
+msgid "Painel do Empregador"
+msgstr "Tableau de bord Employeur"
+
+msgid "Perfil de empregador não encontrado."
+msgstr "Profil d'employeur introuvable."
+
+msgid "Contacte o INSS para registar o perfil da sua empresa."
+msgstr "Contactez l'INSS pour enregistrer le profil de votre entreprise."
+
+msgid "XOF pagos este mês"
+msgstr "XOF payés ce mois"
+
+msgid "Trabalhadores cotizantes"
+msgstr "Travailleurs cotisants"
+
+msgid "Contribuições em atraso"
+msgstr "Cotisations en retard"
+
+msgid "Contribuições em atraso que requerem atenção"
+msgstr "Cotisations en retard nécessitant une attention"
+
+msgid "Registar nova cotização"
+msgstr "Enregistrer une nouvelle cotisation"
+
+msgid "Painel do Agente"
+msgstr "Tableau de bord Agent"
+
+msgid "Visão geral das operações de hoje"
+msgstr "Aperçu des opérations d'aujourd'hui"
+
+msgid "Afiliados activos"
+msgstr "Affiliés actifs"
+
+msgid "Cartas emitidas"
+msgstr "Cartes émises"
+
+msgid "Verificações hoje"
+msgstr "Vérifications aujourd'hui"
+
+msgid "Empregadores"
+msgstr "Employeurs"
+
+msgid "Acesso Rápido"
+msgstr "Accès Rapide"
+
+msgid "Novo Afiliado"
+msgstr "Nouvel Affilié"
+
+msgid "Registar novo afiliado"
+msgstr "Enregistrer un nouvel affilié"
+
+msgid "Nova Empresa"
+msgstr "Nouvelle Entreprise"
+
+msgid "Registar empregador"
+msgstr "Enregistrer un employeur"
+
+msgid "Pesquisar Afiliados"
+msgstr "Rechercher des Affiliés"
+
+msgid "Ver lista completa"
+msgstr "Voir la liste complète"
+
+msgid "Histórico de verificações"
+msgstr "Historique des vérifications"
+
+msgid "Verificações Recentes"
+msgstr "Vérifications Récentes"
+
+msgid "Nenhuma verificação recente"
+msgstr "Aucune vérification récente"
+
+msgid "Painel do Prestador de Cuidados"
+msgstr "Tableau de bord Prestataire de Soins"
+
+msgid "Verificação de cartões e histórico de atendimentos"
+msgstr "Vérification de cartes et historique des consultations"
+
+msgid "Verificações bem-sucedidas"
+msgstr "Vérifications réussies"
+
+msgid "Taxa de sucesso"
+msgstr "Taux de succès"
+
+msgid "Verificar Cartão de Saúde"
+msgstr "Vérifier la Carte de Santé"
+
+msgid "Introduza o token do QR code para verificar a validade do cartão do utente."
+msgstr "Entrez le token du QR code pour vérifier la validité de la carte du patient."
+
+msgid "Verificar cartão"
+msgstr "Vérifier la carte"
+
+msgid "Prestador de Saúde"
+msgstr "Prestataire de Santé"
+
+msgid "Aceder à plataforma"
+msgstr "Accéder à la plateforme"
+
+msgid "Cartão de Saúde"
+msgstr "Carte de Santé"
+
+msgid "Painel de Controlo"
+msgstr "Tableau de bord"

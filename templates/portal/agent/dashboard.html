@@ -1,6 +1,7 @@
 {% extends "portal/base_portal.html" %}
-{% block title %}Dashboard Agente{% endblock %}
-{% block page_title %}Painel do Agente{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Painel do Agente" %}{% endblock %}
+{% block page_title %}{% trans "Painel do Agente" %}{% endblock %}
 
 {% block sidebar_nav %}
 {% include "portal/agent/_sidebar.html" %}
@@ -9,8 +10,8 @@
 {% block content %}
 <div class="mb-8 flex items-center justify-between flex-wrap gap-4">
   <div>
-    <h1 class="text-2xl font-bold text-slate-900">Painel do Agente</h1>
-    <p class="text-slate-500 mt-1 text-sm">Visão geral das operações de hoje</p>
+    <h1 class="text-2xl font-bold text-slate-900">{% trans "Painel do Agente" %}</h1>
+    <p class="text-slate-500 mt-1 text-sm">{% trans "Visão geral das operações de hoje" %}</p>
   </div>
   <div class="text-sm text-slate-500 bg-white px-4 py-2 rounded-xl border border-slate-200 font-medium">
     {% now "l, d \d\e F Y" %}
@@ -27,7 +28,7 @@
       <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Total</span>
     </div>
     <div class="text-3xl font-bold text-slate-900">{{ total_affiliates|default:"0" }}</div>
-    <div class="text-sm text-slate-500 mt-0.5">Afiliados activos</div>
+    <div class="text-sm text-slate-500 mt-0.5">{% trans "Afiliados activos" %}</div>
   </div>
 
   <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
@@ -38,7 +39,7 @@
       <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Emitidas</span>
     </div>
     <div class="text-3xl font-bold text-slate-900">{{ total_cards|default:"0" }}</div>
-    <div class="text-sm text-slate-500 mt-0.5">Cartas emitidas</div>
+    <div class="text-sm text-slate-500 mt-0.5">{% trans "Cartas emitidas" %}</div>
   </div>
 
   <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
@@ -49,7 +50,7 @@
       <span class="text-xs font-medium text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full">Hoje</span>
     </div>
     <div class="text-3xl font-bold text-slate-900">{{ verif_today|default:"0" }}</div>
-    <div class="text-sm text-slate-500 mt-0.5">Verificações hoje</div>
+    <div class="text-sm text-slate-500 mt-0.5">{% trans "Verificações hoje" %}</div>
   </div>
 
   <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
@@ -60,7 +61,7 @@
       <span class="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Activos</span>
     </div>
     <div class="text-3xl font-bold text-slate-900">{{ total_employers|default:"0" }}</div>
-    <div class="text-sm text-slate-500 mt-0.5">Empregadores</div>
+    <div class="text-sm text-slate-500 mt-0.5">{% trans "Empregadores" %}</div>
   </div>
 </div>
 
@@ -69,15 +70,15 @@
 
   <!-- Accès rapides -->
   <div>
-    <h2 class="text-base font-semibold text-slate-900 mb-4">Acesso Rápido</h2>
+    <h2 class="text-base font-semibold text-slate-900 mb-4">{% trans "Acesso Rápido" %}</h2>
     <div class="space-y-2">
       <a href="{% url 'agent-affiliate-new' %}" class="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-blue-300 hover:shadow-sm transition-all group">
         <div class="w-9 h-9 rounded-xl bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center transition-colors flex-shrink-0">
           <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
         </div>
         <div class="flex-1">
-          <div class="text-sm font-semibold text-slate-800">Novo Afiliado</div>
-          <div class="text-xs text-slate-500">Registar novo afiliado</div>
+          <div class="text-sm font-semibold text-slate-800">{% trans "Novo Afiliado" %}</div>
+          <div class="text-xs text-slate-500">{% trans "Registar novo afiliado" %}</div>
         </div>
         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -87,8 +88,8 @@
           <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
         </div>
         <div class="flex-1">
-          <div class="text-sm font-semibold text-slate-800">Nova Empresa</div>
-          <div class="text-xs text-slate-500">Registar empregador</div>
+          <div class="text-sm font-semibold text-slate-800">{% trans "Nova Empresa" %}</div>
+          <div class="text-xs text-slate-500">{% trans "Registar empregador" %}</div>
         </div>
         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -98,8 +99,8 @@
           <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </div>
         <div class="flex-1">
-          <div class="text-sm font-semibold text-slate-800">Pesquisar Afiliados</div>
-          <div class="text-xs text-slate-500">Ver lista completa</div>
+          <div class="text-sm font-semibold text-slate-800">{% trans "Pesquisar Afiliados" %}</div>
+          <div class="text-xs text-slate-500">{% trans "Ver lista completa" %}</div>
         </div>
         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -109,8 +110,8 @@
           <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
         </div>
         <div class="flex-1">
-          <div class="text-sm font-semibold text-slate-800">Logs de Verificação</div>
-          <div class="text-xs text-slate-500">Histórico de verificações</div>
+          <div class="text-sm font-semibold text-slate-800">{% trans "Logs de Verificação" %}</div>
+          <div class="text-xs text-slate-500">{% trans "Histórico de verificações" %}</div>
         </div>
         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -120,8 +121,8 @@
   <!-- Recent verifications -->
   <div class="lg:col-span-2">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-base font-semibold text-slate-900">Verificações Recentes</h2>
-      <a href="{% url 'agent-verification-logs' %}" class="text-xs font-medium text-blue-600 hover:text-blue-700">Ver todas &rarr;</a>
+      <h2 class="text-base font-semibold text-slate-900">{% trans "Verificações Recentes" %}</h2>
+      <a href="{% url 'agent-verification-logs' %}" class="text-xs font-medium text-blue-600 hover:text-blue-700">{% trans "Ver todas" %} &rarr;</a>
     </div>
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       {% if recent_verifications %}
@@ -151,7 +152,7 @@
       {% else %}
       <div class="py-12 text-center">
         <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        <p class="text-slate-400 text-sm">Nenhuma verificação recente</p>
+        <p class="text-slate-400 text-sm">{% trans "Nenhuma verificação recente" %}</p>
       </div>
       {% endif %}
     </div>

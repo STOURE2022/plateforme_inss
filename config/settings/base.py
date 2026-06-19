@@ -101,6 +101,7 @@ LANGUAGES = [
     ("fr", "Français"),
     ("en", "English"),
 ]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Africa/Bissau"
 USE_I18N = True
 USE_TZ = True

@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Criar conta — e-INSS</title>
+  <title>{% trans "Criar conta" %} — e-INSS</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -47,6 +48,11 @@
 </head>
 <body class="bg-slate-50">
 
+<!-- Language switcher top-right -->
+<div class="fixed top-4 right-4 z-50" style="background:rgba(31,56,100,0.85);border-radius:0.5rem;padding:2px;">
+  {% include "components/language_switcher.html" with form_id="register-top" %}
+</div>
+
 <div class="min-h-screen flex flex-col lg:flex-row">
 
   <!-- ── Panneau gauche ── -->
@@ -64,7 +70,7 @@
       </div>
       <div>
         <div class="text-white font-bold text-2xl leading-tight">e-INSS</div>
-        <div class="text-white/55 text-sm">Instituto Nacional de Segurança Social</div>
+        <div class="text-white/55 text-sm">{% trans "Instituto Nacional de Segurança Social" %}</div>
       </div>
     </a>
 
@@ -72,10 +78,10 @@
     <div class="relative z-10 space-y-8">
       <div>
         <h1 class="text-white font-bold text-3xl xl:text-4xl leading-tight mb-4">
-          Registe-se na<br>plataforma oficial
+          {% trans "Registe-se na plataforma oficial" %}
         </h1>
         <p class="text-white/55 text-base leading-relaxed max-w-sm">
-          Crie a sua conta e aceda a todos os serviços do INSS digital — cartão de saúde, contribuições e muito mais.
+          {% trans "Crie a sua conta e aceda a todos os serviços do INSS digital — cartão de saúde, contribuições e muito mais." %}
         </p>
       </div>
 
@@ -85,8 +91,8 @@
           <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
                style="background:rgba(184,134,11,0.3);color:#E8C55A;">1</div>
           <div>
-            <div class="text-white font-semibold text-sm">Informações pessoais</div>
-            <div class="text-white/45 text-xs">Nome, e-mail e senha</div>
+            <div class="text-white font-semibold text-sm">{% trans "Informações pessoais" %}</div>
+            <div class="text-white/45 text-xs">{% trans "Nome, e-mail e senha" %}</div>
           </div>
         </div>
         <div class="ml-4 w-px h-4 bg-white/15"></div>
@@ -94,8 +100,8 @@
           <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
                style="background:rgba(184,134,11,0.3);color:#E8C55A;">2</div>
           <div>
-            <div class="text-white font-semibold text-sm">Tipo de conta</div>
-            <div class="text-white/45 text-xs">Cidadão ou Empregador</div>
+            <div class="text-white font-semibold text-sm">{% trans "Tipo de conta" %}</div>
+            <div class="text-white/45 text-xs">{% trans "Cidadão ou Empregador" %}</div>
           </div>
         </div>
         <div class="ml-4 w-px h-4 bg-white/15"></div>
@@ -103,8 +109,8 @@
           <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
                style="background:rgba(52,211,153,0.25);color:#6EE7B7;">✓</div>
           <div>
-            <div class="text-white font-semibold text-sm">Acesso imediato</div>
-            <div class="text-white/45 text-xs">Plataforma disponível 24h/7</div>
+            <div class="text-white font-semibold text-sm">{% trans "Acesso imediato" %}</div>
+            <div class="text-white/45 text-xs">{% trans "Plataforma disponível 24h/7" %}</div>
           </div>
         </div>
       </div>
@@ -116,9 +122,9 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
           <div>
-            <div class="text-white/80 text-sm font-medium">Nota importante</div>
+            <div class="text-white/80 text-sm font-medium">{% trans "Nota importante" %}</div>
             <p class="text-white/50 text-xs mt-1 leading-relaxed">
-              Para afiliados INSS já registados, o perfil completo (cartão, contribuições) será associado pelo agente INSS após verificação de identidade.
+              {% trans "Para afiliados INSS já registados, o perfil completo (cartão, contribuições) será associado pelo agente INSS após verificação de identidade." %}
             </p>
           </div>
         </div>
@@ -130,7 +136,7 @@
       <div class="text-white/40 text-xs">&copy; 2026 INSS Guinée-Bissau</div>
       <div class="flex items-center gap-1.5">
         <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
-        <span class="text-white/40 text-xs">Plataforma operacional</span>
+        <span class="text-white/40 text-xs">{% trans "Plataforma operacional" %}</span>
       </div>
     </div>
   </div>
@@ -152,8 +158,8 @@
     <div class="w-full max-w-lg fade-up">
 
       <div class="mb-8">
-        <h2 class="text-2xl font-bold text-slate-900">Criar nova conta</h2>
-        <p class="text-slate-500 mt-1 text-sm">Preencha os seus dados para se registar na plataforma</p>
+        <h2 class="text-2xl font-bold text-slate-900">{% trans "Criar nova conta" %}</h2>
+        <p class="text-slate-500 mt-1 text-sm">{% trans "Preencha os seus dados para se registar na plataforma" %}</p>
       </div>
 
       <!-- Erreur globale -->
@@ -163,7 +169,7 @@
           <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
         </svg>
         <div>
-          <p class="text-red-700 text-sm font-medium">Erro no registo</p>
+          <p class="text-red-700 text-sm font-medium">{% trans "Erro no registo" %}</p>
           <p class="text-red-600 text-xs mt-0.5">{{ global_error }}</p>
         </div>
       </div>
@@ -174,7 +180,7 @@
 
         <!-- E-mail -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">E-mail</label>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">{% trans "E-mail" %}</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
               <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +200,7 @@
         <!-- Mot de passe -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Senha</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">{% trans "Senha" %}</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -210,7 +216,7 @@
             {% endif %}
           </div>
           <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Confirmar senha</label>
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">{% trans "Confirmar senha" %}</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -240,7 +246,7 @@
 
         <!-- Tipo de conta -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-3">Tipo de conta</label>
+          <label class="block text-sm font-semibold text-slate-700 mb-3">{% trans "Tipo de conta" %}</label>
           <div class="grid grid-cols-2 gap-3">
 
             <!-- Cidadão -->
@@ -255,8 +261,8 @@
                   </svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="font-bold text-slate-800 text-sm">Cidadão</div>
-                  <div class="text-slate-400 text-xs mt-0.5">Acesse o seu cartão de saúde e contribuições pessoais</div>
+                  <div class="font-bold text-slate-800 text-sm">{% trans "Cidadão" %}</div>
+                  <div class="text-slate-400 text-xs mt-0.5">{% trans "Acesse o seu cartão de saúde e contribuições pessoais" %}</div>
                 </div>
               </div>
               <div class="role-check absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-blue-600 items-center justify-center">
@@ -278,8 +284,8 @@
                   </svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="font-bold text-slate-800 text-sm">Empregador</div>
-                  <div class="text-slate-400 text-xs mt-0.5">Gira as cotizações dos seus trabalhadores</div>
+                  <div class="font-bold text-slate-800 text-sm">{% trans "Empregador" %}</div>
+                  <div class="text-slate-400 text-xs mt-0.5">{% trans "Gira as cotizações dos seus trabalhadores" %}</div>
                 </div>
               </div>
               <div class="role-check absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-blue-600 items-center justify-center">
@@ -296,7 +302,7 @@
 
         <!-- Champ nom entreprise (conditionnel) -->
         <div id="company-field" class="hidden">
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Nome da empresa</label>
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">{% trans "Nome da empresa" %}</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
               <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -308,7 +314,7 @@
                    value="{{ form_data.company_name|default:'' }}"
                    class="input-field">
           </div>
-          <p class="text-slate-400 text-xs mt-1">O agente INSS validará o registo da empresa.</p>
+          <p class="text-slate-400 text-xs mt-1">{% trans "O agente INSS validará o registo da empresa." %}</p>
         </div>
 
         <!-- CGU -->
@@ -316,8 +322,8 @@
           <input type="checkbox" name="accept_terms" id="terms" required
                  class="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 flex-shrink-0">
           <label for="terms" class="text-sm text-slate-500 leading-relaxed">
-            Aceito os <a href="#" class="text-blue-600 hover:text-blue-700 font-medium">Termos de Utilização</a>
-            e a <a href="#" class="text-blue-600 hover:text-blue-700 font-medium">Política de Privacidade</a>
+            {% trans "Aceito os" %} <a href="#" class="text-blue-600 hover:text-blue-700 font-medium">{% trans "Termos de Utilização" %}</a>
+            e a <a href="#" class="text-blue-600 hover:text-blue-700 font-medium">{% trans "Política de Privacidade" %}</a>
             do INSS da Guinée-Bissau.
           </label>
         </div>
@@ -331,7 +337,7 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
             </svg>
-            Criar a minha conta
+            {% trans "Criar a minha conta" %}
           </span>
         </button>
 
@@ -340,15 +346,15 @@
       <!-- Lien login -->
       <div class="mt-6 text-center">
         <p class="text-sm text-slate-500">
-          Já tem conta?
+          {% trans "Já tem conta?" %}
           <a href="{% url 'html-login' %}" class="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-            Entrar
+            {% trans "Entrar" %}
           </a>
         </p>
       </div>
 
       <p class="text-center text-xs text-slate-400 mt-6">
-        &copy; 2026 INSS — República da Guinée-Bissau. Todos os direitos reservados.
+        &copy; 2026 INSS — República da Guinée-Bissau. {% trans "Todos os direitos reservados." %}
       </p>
     </div>
   </div>
@@ -407,7 +413,6 @@
   // Vérification concordance mdp en temps réel
   document.getElementById('pwd2').addEventListener('input', function() {
     var p1 = document.getElementById('pwd1').value;
-    var border = p1 === this.value ? '#10B981' : '#EF4444';
     this.style.borderColor = p1 === this.value ? '' : '#EF4444';
   });
 </script>

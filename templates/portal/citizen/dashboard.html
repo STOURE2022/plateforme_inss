@@ -1,6 +1,7 @@
 {% extends "portal/base_portal.html" %}
-{% block title %}Dashboard{% endblock %}
-{% block page_title %}Meu Painel{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Dashboard" %}{% endblock %}
+{% block page_title %}{% trans "Meu Painel" %}{% endblock %}
 
 {% block sidebar_nav %}
 {% include "portal/citizen/_sidebar.html" %}
@@ -9,7 +10,7 @@
 {% block content %}
 <div class="mb-8">
   <h1 class="text-2xl font-bold text-slate-900">Olá, {{ request.user.get_full_name|default:affiliate.full_name|default:"Cidadão" }} 👋</h1>
-  <p class="text-slate-500 mt-1">Aqui está um resumo da sua conta INSS</p>
+  <p class="text-slate-500 mt-1">{% trans "Aqui está um resumo da sua conta INSS" %}</p>
 </div>
 
 <!-- STATS GRID -->
@@ -35,7 +36,7 @@
       {% if card %}{{ card.card_number }}{% else %}&mdash;{% endif %}
     </div>
     <div class="text-sm text-slate-500">
-      {% if card %}Válido até {{ card.expiry_date|date:"d/m/Y" }}{% else %}Nenhuma carta emitida{% endif %}
+      {% if card %}{% trans "Válido até" %} {{ card.expiry_date|date:"d/m/Y" }}{% else %}{% trans "Nenhuma carta emitida" %}{% endif %}
     </div>
   </div>
 
@@ -49,7 +50,7 @@
       </div>
     </div>
     <div class="text-2xl font-bold text-slate-900 mb-1">{{ contributions_count|default:"0" }}</div>
-    <div class="text-sm text-slate-500">Contribuições registadas</div>
+    <div class="text-sm text-slate-500">{% trans "Contribuições registadas" %}</div>
   </div>
 
   <!-- Dependentes -->
@@ -62,7 +63,7 @@
       </div>
     </div>
     <div class="text-2xl font-bold text-slate-900 mb-1">{{ dependents_count|default:"0" }}</div>
-    <div class="text-sm text-slate-500">Dependentes activos</div>
+    <div class="text-sm text-slate-500">{% trans "Dependentes activos" %}</div>
   </div>
 </div>
 
@@ -72,9 +73,9 @@
   <!-- Carte style bancaire -->
   <div class="lg:col-span-2">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-base font-semibold text-slate-900">Meu Cartão de Saúde</h2>
+      <h2 class="text-base font-semibold text-slate-900">{% trans "Meu Cartão de Saúde" %}</h2>
       {% if card %}
-      <a href="{% url 'citizen-card' %}" class="text-xs font-medium text-blue-600 hover:text-blue-700">Ver detalhes &rarr;</a>
+      <a href="{% url 'citizen-card' %}" class="text-xs font-medium text-blue-600 hover:text-blue-700">{% trans "Ver detalhes" %} &rarr;</a>
       {% endif %}
     </div>
 
@@ -96,17 +97,17 @@
         </div>
 
         <div>
-          <div class="text-white/60 text-xs mb-1">Número do cartão</div>
+          <div class="text-white/60 text-xs mb-1">{% trans "Número do cartão" %}</div>
           <div class="text-white font-mono font-semibold text-sm tracking-wider">{{ card.card_number }}</div>
         </div>
 
         <div class="flex items-end justify-between">
           <div>
-            <div class="text-white/60 text-xs mb-0.5">Titular</div>
+            <div class="text-white/60 text-xs mb-0.5">{% trans "Titular" %}</div>
             <div class="text-white font-semibold text-sm">{{ affiliate.full_name|truncatechars:22 }}</div>
           </div>
           <div class="text-right">
-            <div class="text-white/60 text-xs mb-0.5">Válido até</div>
+            <div class="text-white/60 text-xs mb-0.5">{% trans "Válido até" %}</div>
             <div class="text-white font-semibold text-sm">{{ card.expiry_date|date:"m/Y" }}</div>
           </div>
         </div>
@@ -117,7 +118,7 @@
       <a href="{% url 'citizen-card-qr' %}"
          class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 8v.01M4 16h.01M4 20h.01M8 20h.01M8 4h.01M12 8h.01M16 4h.01M20 4h.01M20 8h.01M20 12h.01"/></svg>
-        Ver QR
+        {% trans "Ver QR" %}
       </a>
       <a href="/api/v1/cards/{{ card.id }}/pdf/"
          class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold text-white transition-all"
@@ -131,8 +132,8 @@
       <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
         <svg class="w-7 h-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
       </div>
-      <p class="text-slate-600 font-medium text-sm mb-1">Nenhum cartão emitido</p>
-      <p class="text-slate-400 text-xs">Contacte o agente INSS</p>
+      <p class="text-slate-600 font-medium text-sm mb-1">{% trans "Nenhum cartão emitido" %}</p>
+      <p class="text-slate-400 text-xs">{% trans "Contacte o agente INSS" %}</p>
     </div>
     {% endif %}
   </div>
@@ -140,17 +141,17 @@
   <!-- Últimas cotizações -->
   <div class="lg:col-span-3">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-base font-semibold text-slate-900">Últimas Contribuições</h2>
-      <a href="{% url 'citizen-contributions' %}" class="text-xs font-medium text-blue-600 hover:text-blue-700">Ver todas &rarr;</a>
+      <h2 class="text-base font-semibold text-slate-900">{% trans "Últimas Contribuições" %}</h2>
+      <a href="{% url 'citizen-contributions' %}" class="text-xs font-medium text-blue-600 hover:text-blue-700">{% trans "Ver todas" %} &rarr;</a>
     </div>
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       {% if recent_contributions %}
       <table class="w-full text-sm">
         <thead>
           <tr class="bg-slate-50 border-b border-slate-200">
-            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Período</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
-            <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Período" %}</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Total" %}</th>
+            <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Estado" %}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
@@ -164,7 +165,7 @@
                 {% elif c.status == 'PENDING' %}bg-blue-100 text-blue-700
                 {% elif c.status == 'LATE' %}bg-red-100 text-red-700
                 {% else %}bg-slate-100 text-slate-600{% endif %}">
-                {% if c.status == 'PAID' %}Pago{% elif c.status == 'PENDING' %}Pendente{% elif c.status == 'LATE' %}Em atraso{% else %}{{ c.status }}{% endif %}
+                {% if c.status == 'PAID' %}{% trans "Pago" %}{% elif c.status == 'PENDING' %}{% trans "Pendente" %}{% elif c.status == 'LATE' %}{% trans "Em atraso" %}{% else %}{{ c.status }}{% endif %}
               </span>
             </td>
           </tr>
@@ -174,7 +175,7 @@
       {% else %}
       <div class="py-12 text-center">
         <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        <p class="text-slate-400 text-sm">Nenhuma contribuição registada</p>
+        <p class="text-slate-400 text-sm">{% trans "Nenhuma contribuição registada" %}</p>
       </div>
       {% endif %}
     </div>

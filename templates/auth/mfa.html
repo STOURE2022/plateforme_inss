@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verificação em 2 etapas — e-INSS</title>
+  <title>{% trans "Verificação em 2 etapas" %} — e-INSS</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -41,6 +42,11 @@
 
 <body class="min-h-screen bg-slate-50 flex items-center justify-center p-4">
 
+  <!-- Language switcher top-right -->
+  <div class="fixed top-4 right-4 z-50" style="background:rgba(31,56,100,0.85);border-radius:0.5rem;padding:2px;">
+    {% include "components/language_switcher.html" with form_id="mfa-top" %}
+  </div>
+
   <div class="w-full max-w-sm fade-up">
 
     <!-- Brand mini -->
@@ -69,8 +75,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
           </svg>
         </div>
-        <h2 class="text-white font-bold text-xl">Verificação em 2 etapas</h2>
-        <p class="text-white/65 text-sm mt-1">Introduza o código do seu autenticador</p>
+        <h2 class="text-white font-bold text-xl">{% trans "Verificação em 2 etapas" %}</h2>
+        <p class="text-white/65 text-sm mt-1">{% trans "Introduza o código do seu autenticador" %}</p>
       </div>
 
       <!-- Timer bar -->
@@ -96,7 +102,7 @@
 
           <!-- Instruction -->
           <p class="text-center text-sm text-slate-500 mb-5">
-            Abra a sua app de autenticação e insira o código de <strong class="text-slate-700">6 dígitos</strong>
+            {% trans "Abra a sua app de autenticação e insira o código de" %} <strong class="text-slate-700">{% trans "6 dígitos" %}</strong>
           </p>
 
           <!-- Inputs OTP -->
@@ -113,7 +119,7 @@
 
           <!-- Timer texte -->
           <p class="text-center text-xs text-slate-400 mb-6">
-            O código expira em <span id="timer" class="font-semibold text-slate-600">30</span> segundos
+            {% trans "O código expira em" %} <span id="timer" class="font-semibold text-slate-600">30</span> {% trans "segundos" %}
           </p>
 
           <!-- Bouton -->
@@ -125,7 +131,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              Verificar código
+              {% trans "Verificar código" %}
             </span>
           </button>
         </form>
@@ -139,7 +145,7 @@
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
         </svg>
-        Voltar ao login
+        {% trans "Voltar ao login" %}
       </a>
     </div>
   </div>
@@ -194,7 +200,7 @@
     if (seconds <= 0) {
       clearInterval(interval);
       if (timerEl) timerEl.textContent = '0';
-      timerEl.parentElement.innerHTML = '<span class="text-red-500 font-medium">Código expirado — volte ao login</span>';
+      timerEl.parentElement.innerHTML = '<span class="text-red-500 font-medium">{% trans "Código expirado — volte ao login" %}</span>';
     }
   }, 1000);
 </script>

@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="pt-BR" class="h-full">
 <head>
@@ -91,12 +92,12 @@
       <div>
         <div class="text-white font-bold text-lg leading-tight">e-INSS</div>
         <div class="text-xs leading-tight truncate max-w-[120px]" style="color: #B8860B;">
-          {% if request.user.role == 'AGENT' %}Agente INSS
-          {% elif request.user.role == 'ADMIN' %}Administrador
-          {% elif request.user.role == 'CITIZEN' %}Cidadão
-          {% elif request.user.role == 'EMPLOYER' %}Empregador
-          {% elif request.user.role == 'PROVIDER' %}Prestador
-          {% else %}Portal{% endif %}
+          {% if request.user.role == 'AGENT' %}{% trans "Agente INSS" %}
+          {% elif request.user.role == 'ADMIN' %}{% trans "Administrador" %}
+          {% elif request.user.role == 'CITIZEN' %}{% trans "Cidadão" %}
+          {% elif request.user.role == 'EMPLOYER' %}{% trans "Empregador" %}
+          {% elif request.user.role == 'PROVIDER' %}{% trans "Prestador" %}
+          {% else %}{% trans "Portal" %}{% endif %}
         </div>
       </div>
     </a>
@@ -126,7 +127,7 @@
       <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
       </svg>
-      Terminar sessão
+      {% trans "Terminar sessão" %}
     </a>
   </div>
 </aside>
@@ -160,6 +161,11 @@
 
       <!-- Right -->
       <div class="flex items-center gap-2">
+
+        <!-- Language switcher -->
+        <div class="hidden sm:block">
+          {% include "components/language_switcher_light.html" with form_id="portal" %}
+        </div>
 
         <!-- Notifications -->
         <div class="relative" x-data="{ open: false }">

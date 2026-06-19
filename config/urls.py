@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from django.conf.urls.i18n import set_language
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 urlpatterns = [
     # Page d'accueil publique
     path("", TemplateView.as_view(template_name="landing.html"), name="home"),
+
+    # i18n language switcher
+    path("i18n/set-language/", set_language, name="set_language"),
 
     # Admin Django
     path("admin/", admin.site.urls),
