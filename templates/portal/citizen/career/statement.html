@@ -1,0 +1,259 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+
+{% block title %}Relevé de Carrière — e-INSS{% endblock %}
+{% block page_title %}Relevé de Carrière{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/citizen/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-8 flex-wrap gap-4">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">Relevé de Carrière</h1>
+    <p class="text-slate-500 mt-1 text-sm">Extrato da vida contributiva — NISS: <span class="font-mono font-semibold">{{ affiliate.niss }}</span></p>
+  </div>
+  <a href="{% url 'citizen-career-pdf' %}"
+     class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    Télécharger PDF
+  </a>
+</div>
+
+{% if not affiliate %}
+<div class="bg-amber-50 border border-amber-200 rounded-2xl p-8 text-center">
+  <svg class="w-12 h-12 text-amber-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+  <p class="text-amber-700 font-medium">Nenhum perfil de afiliado encontrado para a sua conta.</p>
+</div>
+{% else %}
+
+<!-- SUMMARY CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+
+  <!-- Total Meses -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+    <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background: #EFF6FF;">
+      <svg class="w-5 h-5" style="color: #2563EB;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+    </div>
+    <div class="text-2xl font-bold text-slate-900 mb-1">{{ total_months }}</div>
+    <div class="text-sm text-slate-500">Total de meses contribuídos</div>
+  </div>
+
+  <!-- Total Contribuído -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+    <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background: #F0FDF4;">
+      <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+    <div class="text-2xl font-bold text-slate-900 mb-1">{{ total_contributed|floatformat:0 }} <span class="text-sm font-medium text-slate-400">XOF</span></div>
+    <div class="text-sm text-slate-500">Total contribuído</div>
+  </div>
+
+  <!-- Salário Médio -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+    <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background: #FFF7ED;">
+      <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+    </div>
+    <div class="text-2xl font-bold text-slate-900 mb-1">{{ avg_salary|floatformat:0 }} <span class="text-sm font-medium text-slate-400">XOF</span></div>
+    <div class="text-sm text-slate-500">Salário médio base</div>
+  </div>
+
+  <!-- Período -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+    <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style="background: #F5F3FF;">
+      <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+      </svg>
+    </div>
+    <div class="text-sm font-bold text-slate-900 mb-1">
+      {% if first_contribution %}
+        {{ first_contribution.period_month|stringformat:"02d" }}/{{ first_contribution.period_year }}
+        &rarr;
+        {{ last_contribution.period_month|stringformat:"02d" }}/{{ last_contribution.period_year }}
+      {% else %}
+        &mdash;
+      {% endif %}
+    </div>
+    <div class="text-sm text-slate-500">Período contributivo</div>
+  </div>
+
+</div>
+
+<!-- HISTORIAL POR EMPREGADOR -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6">
+  <div class="px-6 py-4 border-b border-slate-100">
+    <h2 class="text-base font-semibold text-slate-900">Historial por Empregador</h2>
+    <p class="text-sm text-slate-500 mt-0.5">Contribuições agrupadas por entidade empregadora</p>
+  </div>
+
+  {% if employer_groups %}
+  <div class="divide-y divide-slate-100" x-data="{ open: null }">
+    {% for group in employer_groups %}
+    <div>
+      <!-- Employer header -->
+      <button
+        @click="open = (open === {{ forloop.counter }}) ? null : {{ forloop.counter }}"
+        class="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors text-left">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+               style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="font-semibold text-slate-900 text-sm">
+              {% if group.employer %}{{ group.employer.company_name }}{% else %}Trabalhador Independente{% endif %}
+            </div>
+            <div class="text-xs text-slate-500 mt-0.5">
+              {% if group.employer %}NUIT: {{ group.employer.nuit }} &bull; {{ group.employer.sector }}{% endif %}
+              &bull; {{ group.months_count }} meses
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <div class="font-bold text-slate-900 text-sm">{{ group.total_amount|floatformat:0 }} XOF</div>
+            <div class="text-xs text-slate-500">total contribuído</div>
+          </div>
+          <svg class="w-5 h-5 text-slate-400 transition-transform"
+               :class="open === {{ forloop.counter }} ? 'rotate-180' : ''"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Monthly breakdown table -->
+      <div x-show="open === {{ forloop.counter }}" x-cloak class="border-t border-slate-100 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-slate-50">
+              <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Período</th>
+              <th class="px-4 py-2.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Salário Base</th>
+              <th class="px-4 py-2.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Cota Trabalhador</th>
+              <th class="px-4 py-2.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Cota Empregador</th>
+              <th class="px-4 py-2.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
+              <th class="px-4 py-2.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            {% for c in group.contributions %}
+            <tr class="hover:bg-blue-50/30">
+              <td class="px-4 py-2.5 font-medium text-slate-700">{{ c.period_month|stringformat:"02d" }}/{{ c.period_year }}</td>
+              <td class="px-4 py-2.5 text-right text-slate-700">{{ c.salary_base|floatformat:0 }}</td>
+              <td class="px-4 py-2.5 text-right text-slate-700">{{ c.employee_amount|floatformat:0 }}</td>
+              <td class="px-4 py-2.5 text-right text-slate-700">{{ c.employer_amount|floatformat:0 }}</td>
+              <td class="px-4 py-2.5 text-right font-semibold text-slate-900">{{ c.total_amount|floatformat:0 }}</td>
+              <td class="px-4 py-2.5 text-center">
+                <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold
+                  {% if c.status == 'PAID' %}bg-emerald-100 text-emerald-700
+                  {% elif c.status == 'PENDING' %}bg-blue-100 text-blue-700
+                  {% elif c.status == 'LATE' %}bg-red-100 text-red-700
+                  {% else %}bg-slate-100 text-slate-600{% endif %}">
+                  {% if c.status == 'PAID' %}Pago{% elif c.status == 'PENDING' %}Pendente{% elif c.status == 'LATE' %}Em atraso{% else %}{{ c.status }}{% endif %}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="py-12 text-center">
+    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    <p class="text-slate-400 text-sm">Nenhuma contribuição paga encontrada.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- TIMELINE POR ANO -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6">
+  <div class="px-6 py-4 border-b border-slate-100">
+    <h2 class="text-base font-semibold text-slate-900">Timeline por Ano</h2>
+    <p class="text-sm text-slate-500 mt-0.5">Visão cronológica das suas contribuições</p>
+  </div>
+
+  {% if year_groups %}
+  <div class="divide-y divide-slate-100" x-data="{ openYear: null }">
+    {% for yg in year_groups %}
+    <div>
+      <button
+        @click="openYear = (openYear === {{ yg.year }}) ? null : {{ yg.year }}"
+        class="w-full flex items-center justify-between px-6 py-3.5 hover:bg-slate-50 transition-colors text-left">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-14 h-7 rounded-lg text-sm font-bold text-white"
+                style="background: linear-gradient(135deg, #1F3864, #2563EB);">{{ yg.year }}</span>
+          <span class="text-sm text-slate-600">{{ yg.months }} meses contribuídos</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="font-semibold text-slate-800 text-sm">{{ yg.total|floatformat:0 }} XOF</span>
+          <svg class="w-4 h-4 text-slate-400 transition-transform"
+               :class="openYear === {{ yg.year }} ? 'rotate-180' : ''"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </div>
+      </button>
+      <div x-show="openYear === {{ yg.year }}" x-cloak class="border-t border-slate-50 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-slate-50">
+              <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Mês</th>
+              <th class="px-4 py-2 text-right text-xs font-semibold text-slate-500 uppercase">Salário</th>
+              <th class="px-4 py-2 text-right text-xs font-semibold text-slate-500 uppercase">Total</th>
+              <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">Empregador</th>
+              <th class="px-4 py-2 text-center text-xs font-semibold text-slate-500 uppercase">Estado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            {% for c in yg.contributions %}
+            <tr class="hover:bg-blue-50/20">
+              <td class="px-4 py-2 font-medium text-slate-700">{{ c.period_month|stringformat:"02d" }}/{{ c.period_year }}</td>
+              <td class="px-4 py-2 text-right text-slate-700">{{ c.salary_base|floatformat:0 }}</td>
+              <td class="px-4 py-2 text-right font-semibold text-slate-900">{{ c.total_amount|floatformat:0 }}</td>
+              <td class="px-4 py-2 text-slate-600 text-xs">{% if c.employer %}{{ c.employer.company_name|truncatechars:25 }}{% else %}Independente{% endif %}</td>
+              <td class="px-4 py-2 text-center">
+                <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold
+                  {% if c.status == 'PAID' %}bg-emerald-100 text-emerald-700
+                  {% elif c.status == 'PENDING' %}bg-blue-100 text-blue-700
+                  {% elif c.status == 'LATE' %}bg-red-100 text-red-700
+                  {% else %}bg-slate-100 text-slate-600{% endif %}">
+                  {% if c.status == 'PAID' %}Pago{% elif c.status == 'PENDING' %}Pendente{% elif c.status == 'LATE' %}Em atraso{% else %}{{ c.status }}{% endif %}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="py-8 text-center text-slate-400 text-sm">Nenhum dado disponível.</div>
+  {% endif %}
+</div>
+
+<!-- Footer -->
+<p class="text-center text-xs text-slate-400 mt-4">
+  Gerado em {{ generated_at|date:"d/m/Y H:i" }} &bull; INSS Guinée-Bissau &bull; Documento informativo, não tem valor legal sem carimbo oficial.
+</p>
+
+{% endif %}
+{% endblock %}

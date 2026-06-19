@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 
 class ContributionStatus(models.TextChoices):
@@ -110,3 +111,38 @@ class Contribution(models.Model):
             self.reference = self._generate_reference()
 
         super().save(*args, **kwargs)
+
+
+class CareerStatementLog(models.Model):
+    """Tracks each time a career statement PDF is generated."""
+
+    affiliate = models.ForeignKey(
+        "affiliates.Affiliate",
+        on_delete=models.PROTECT,
+        related_name="career_statement_logs",
+        verbose_name="Afiliado",
+    )
+    generated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="career_statements_generated",
+        verbose_name="Gerado por",
+    )
+    generated_at = models.DateTimeField(auto_now_add=True, verbose_name="Gerado em")
+    ip_address = models.GenericIPAddressField(
+        null=True, blank=True, verbose_name="Endereço IP"
+    )
+    purpose = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="Finalidade",
+        help_text="e.g., demande de pension, contrôle interne",
+    )
+
+    class Meta:
+        ordering = ["-generated_at"]
+        verbose_name = "Relevé de Carrière"
+        verbose_name_plural = "Relevés de Carrière"
+
+    def __str__(self) -> str:
+        return f"Relevé {self.affiliate.niss} — {self.generated_at.strftime('%d/%m/%Y %H:%M')}"

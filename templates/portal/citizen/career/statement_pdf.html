@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Relevé de Carrière — {{ affiliate.niss }}</title>
+<style>
+  @page {
+    size: A4;
+    margin: 15mm 12mm 15mm 12mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    color: #1a1a1a;
+    background: #fff;
+    line-height: 1.4;
+  }
+
+  /* ── Document header ── */
+  .doc-header {
+    background: #1F3864;
+    color: #fff;
+    padding: 10mm 12mm;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-radius: 4px;
+    margin-bottom: 6mm;
+  }
+
+  .doc-header-left h1 {
+    font-size: 16pt;
+    font-weight: bold;
+    color: #B8860B;
+    letter-spacing: 1px;
+    margin-bottom: 1mm;
+  }
+
+  .doc-header-left h2 {
+    font-size: 10pt;
+    color: rgba(255,255,255,0.85);
+    font-weight: normal;
+    margin-bottom: 3mm;
+  }
+
+  .doc-header-left p {
+    font-size: 7.5pt;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .doc-header-right {
+    text-align: right;
+  }
+
+  .doc-header-right .doc-title {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+  }
+
+  .doc-header-right .doc-subtitle {
+    font-size: 9pt;
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+    display: block;
+    margin-top: 1mm;
+  }
+
+  .doc-header-right .doc-ref {
+    font-size: 7.5pt;
+    color: #B8860B;
+    margin-top: 3mm;
+    font-family: "Courier New", monospace;
+  }
+
+  /* ── Sections ── */
+  .section {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin-bottom: 5mm;
+    page-break-inside: avoid;
+  }
+
+  .section-title {
+    background: #f8fafc;
+    border-bottom: 1px solid #d1d5db;
+    padding: 3mm 5mm;
+    font-size: 9pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #1F3864;
+    letter-spacing: 0.5px;
+  }
+
+  .section-body {
+    padding: 4mm 5mm;
+  }
+
+  /* ── Data fields ── */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm 8mm;
+  }
+
+  .field-row {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .field-label {
+    font-size: 7pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: bold;
+  }
+
+  .field-value {
+    font-size: 9.5pt;
+    color: #0f172a;
+    font-weight: 600;
+    margin-top: 0.5mm;
+  }
+
+  /* ── Summary stats ── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3mm;
+  }
+
+  .stat-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
+    padding: 3mm;
+    text-align: center;
+    background: #f8fafc;
+  }
+
+  .stat-value {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #1F3864;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 7pt;
+    color: #64748b;
+    display: block;
+    margin-top: 0.5mm;
+  }
+
+  /* ── Employer blocks ── */
+  .employer-block {
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
+    margin-bottom: 4mm;
+    page-break-inside: avoid;
+  }
+
+  .employer-header {
+    background: #1F3864;
+    color: #fff;
+    padding: 2.5mm 4mm;
+    font-size: 8.5pt;
+    font-weight: bold;
+    border-radius: 3px 3px 0 0;
+  }
+
+  .employer-meta {
+    font-size: 7.5pt;
+    color: rgba(255,255,255,0.75);
+    font-weight: normal;
+    margin-top: 0.5mm;
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8pt;
+  }
+
+  th {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 2mm 3mm;
+    text-align: center;
+    font-size: 7pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #475569;
+    letter-spacing: 0.3px;
+  }
+
+  th.left { text-align: left; }
+  th.right { text-align: right; }
+
+  td {
+    border: 1px solid #e2e8f0;
+    padding: 1.8mm 3mm;
+    vertical-align: middle;
+    color: #334155;
+  }
+
+  td.right { text-align: right; }
+  td.center { text-align: center; }
+
+  tr:nth-child(even) td { background: #f8fafc; }
+
+  .status-paid   { color: #059669; font-weight: bold; }
+  .status-late   { color: #dc2626; font-weight: bold; }
+  .status-pending { color: #2563eb; font-weight: bold; }
+  .status-cancelled { color: #94a3b8; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    margin-top: 8mm;
+    border-top: 2px solid #1F3864;
+    padding-top: 4mm;
+  }
+
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6mm;
+  }
+
+  .footer-notice {
+    font-size: 7.5pt;
+    color: #475569;
+    max-width: 120mm;
+    font-style: italic;
+  }
+
+  .footer-date {
+    text-align: right;
+    font-size: 7.5pt;
+    color: #475569;
+  }
+
+  .signature-zone {
+    border: 1px dashed #cbd5e1;
+    border-radius: 3px;
+    padding: 8mm;
+    text-align: center;
+    margin-top: 6mm;
+  }
+
+  .signature-zone p {
+    font-size: 7.5pt;
+    color: #94a3b8;
+    margin-bottom: 12mm;
+  }
+
+  .signature-line {
+    display: flex;
+    justify-content: space-around;
+    gap: 10mm;
+  }
+
+  .signature-item {
+    flex: 1;
+    border-top: 1px solid #475569;
+    padding-top: 2mm;
+    text-align: center;
+    font-size: 7pt;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+
+<!-- DOCUMENT HEADER -->
+<div class="doc-header">
+  <div class="doc-header-left">
+    <h1>INSS &mdash; GUIN&Eacute;-BISSAU</h1>
+    <h2>Instituto Nacional de Segurança Social</h2>
+    <p>República da Guiné-Bissau</p>
+    <p>Ministério do Trabalho e Segurança Social</p>
+  </div>
+  <div class="doc-header-right">
+    <span class="doc-title">Relevé de Carrière</span>
+    <span class="doc-subtitle">Extrato da Vida Contributiva</span>
+    <div class="doc-ref">Ref: INSS/RC/{{ generated_at|date:"Y" }}/{{ affiliate.niss }}</div>
+  </div>
+</div>
+
+<!-- DADOS DO BENEFICIÁRIO -->
+<div class="section">
+  <div class="section-title">Dados do Beneficiário</div>
+  <div class="section-body">
+    <div class="fields-grid">
+      <div class="field-row">
+        <span class="field-label">Nome Completo</span>
+        <span class="field-value">{{ affiliate.full_name }}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">NISS</span>
+        <span class="field-value" style="font-family: 'Courier New', monospace; font-size: 11pt;">{{ affiliate.niss }}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">Data de Nascimento</span>
+        <span class="field-value">{{ affiliate.birth_date|date:"d/m/Y" }}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">Sexo</span>
+        <span class="field-value">{{ affiliate.get_gender_display }}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">Data de Registo</span>
+        <span class="field-value">{{ affiliate.registration_date|date:"d/m/Y" }}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">Estado</span>
+        <span class="field-value">{{ affiliate.get_status_display }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESUMO DA CARREIRA -->
+<div class="section">
+  <div class="section-title">Resumo da Carreira</div>
+  <div class="section-body">
+    <div class="summary-grid">
+      <div class="stat-box">
+        <span class="stat-value">{{ total_months }}</span>
+        <span class="stat-label">Meses contribuídos</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value">{{ total_contributed|floatformat:0 }}</span>
+        <span class="stat-label">Total XOF</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value">{{ avg_salary|floatformat:0 }}</span>
+        <span class="stat-label">Salário médio XOF</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value">
+          {% if first_contribution %}{{ first_contribution.period_year }}{% else %}&mdash;{% endif %}
+        </span>
+        <span class="stat-label">Ano de início</span>
+      </div>
+    </div>
+    {% if first_contribution %}
+    <div style="margin-top: 3mm; font-size: 8pt; color: #475569;">
+      <strong>Primeiro registo:</strong>
+      {{ first_contribution.period_month|stringformat:"02d" }}/{{ first_contribution.period_year }}
+      &nbsp;&bull;&nbsp;
+      <strong>Último registo:</strong>
+      {{ last_contribution.period_month|stringformat:"02d" }}/{{ last_contribution.period_year }}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- HISTORIAL POR EMPREGADOR -->
+{% if employer_groups %}
+<div class="section">
+  <div class="section-title">Historial por Empregador</div>
+  <div class="section-body" style="padding: 3mm 0 0 0;">
+
+    {% for group in employer_groups %}
+    <div class="employer-block" style="margin: 0 3mm 4mm 3mm;">
+      <div class="employer-header">
+        {% if group.employer %}
+          {{ group.employer.company_name }}
+          <span class="employer-meta">&bull; NUIT: {{ group.employer.nuit }} &bull; Sector: {{ group.employer.sector }}</span>
+        {% else %}
+          Trabalhador Independente
+        {% endif %}
+        <span class="employer-meta" style="float: right;">{{ group.months_count }} meses &bull; {{ group.total_amount|floatformat:0 }} XOF</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th class="left">Período</th>
+            <th class="right">Salário Base</th>
+            <th class="right">Cota Trabalhador</th>
+            <th class="right">Cota Empregador</th>
+            <th class="right">Total</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in group.contributions %}
+          <tr>
+            <td>{{ c.period_month|stringformat:"02d" }}/{{ c.period_year }}</td>
+            <td class="right">{{ c.salary_base|floatformat:0 }}</td>
+            <td class="right">{{ c.employee_amount|floatformat:0 }}</td>
+            <td class="right">{{ c.employer_amount|floatformat:0 }}</td>
+            <td class="right"><strong>{{ c.total_amount|floatformat:0 }}</strong></td>
+            <td class="center">
+              <span class="
+                {% if c.status == 'PAID' %}status-paid
+                {% elif c.status == 'LATE' %}status-late
+                {% elif c.status == 'PENDING' %}status-pending
+                {% else %}status-cancelled{% endif %}">
+                {% if c.status == 'PAID' %}PAGO{% elif c.status == 'LATE' %}ATRASO{% elif c.status == 'PENDING' %}PENDENTE{% else %}CANCELADO{% endif %}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endif %}
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div class="footer-top">
+    <div class="footer-notice">
+      Este documento é emitido pelo Instituto Nacional de Segurança Social (INSS) da República da Guiné-Bissau.
+      Tem valor informativo. Para efeitos legais (pedidos de pensão, prestações sociais ou litígios),
+      deverá ser autenticado com carimbo e assinatura do INSS.
+    </div>
+    <div class="footer-date">
+      <div><strong>Gerado em:</strong> {{ generated_at|date:"d/m/Y H:i" }}</div>
+      <div><strong>Ref.:</strong> INSS/RC/{{ generated_at|date:"Y" }}/{{ affiliate.niss }}</div>
+    </div>
+  </div>
+
+  <div class="signature-zone">
+    <p>Espaço reservado para carimbo e assinaturas</p>
+    <div class="signature-line">
+      <div class="signature-item">Diretor(a) INSS</div>
+      <div class="signature-item">Chefe de Departamento</div>
+      <div class="signature-item">Data e Carimbo Oficial</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
