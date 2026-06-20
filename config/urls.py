@@ -41,4 +41,5 @@ urlpatterns = [
     path("portal/agent/claims/", include("apps.claims.agent_html_urls")),
     path("api/v1/", include("apps.claims.urls")),
     path("", include("apps.contributions.html_urls")),
+    path("", include("apps.statistics_dashboard.urls")),
 ]

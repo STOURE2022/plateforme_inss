@@ -1,0 +1,740 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+
+{% block title %}Estatísticas Nacionais — e-INSS{% endblock %}
+{% block page_title %}Estatísticas Nacionais{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE HEADER
+════════════════════════════════════════════════════════════════════════ -->
+<div class="mb-8 flex items-center justify-between flex-wrap gap-4">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">Estatísticas Nacionais</h1>
+    <p class="text-slate-500 mt-1 text-sm">Visão consolidada do sistema de segurança social</p>
+  </div>
+
+  <div class="flex items-center gap-3 flex-wrap">
+    <!-- Year selector -->
+    <form method="get" class="flex items-center gap-2">
+      <label class="text-sm text-slate-600 font-medium">Ano:</label>
+      <select name="year" onchange="this.form.submit()"
+              class="text-sm border border-slate-200 rounded-xl px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        {% for y in available_years %}
+          <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+      </select>
+    </form>
+
+    <!-- Export dropdown -->
+    <div class="relative" x-data="{ open: false }">
+      <button @click="open = !open"
+              class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-xl transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        </svg>
+        Exportar CSV
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+      <div x-show="open" @click.outside="open = false"
+           class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50">
+        <a href="{% url 'stats-export' %}?export=contributions_monthly&year={{ selected_year }}"
+           class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          Cotizações mensais {{ selected_year }}
+        </a>
+        <a href="{% url 'stats-export' %}?export=defaulting_employers"
+           class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          Empregadores incumpridores
+        </a>
+        <a href="{% url 'stats-export' %}?export=top_employers&year={{ selected_year }}"
+           class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+          </svg>
+          Top empregadores {{ selected_year }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 1 — COBERTURA (6 KPI cards)
+════════════════════════════════════════════════════════════════════════ -->
+<div class="mb-3">
+  <h2 class="text-base font-semibold text-slate-700 uppercase tracking-wide text-xs">Cobertura Nacional</h2>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+
+  <!-- Afiliados Activos -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50">
+        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Activos</span>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ coverage.active_affiliates }}</div>
+    <div class="text-sm text-slate-500 mt-0.5">Afiliados Activos</div>
+    <div class="text-xs text-slate-400 mt-1">Total: {{ coverage.total_affiliates }}</div>
+  </div>
+
+  <!-- Dependentes -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-violet-50">
+        <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+      </div>
+      <span class="text-xs font-medium text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full">Ativos</span>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ coverage.total_dependents }}</div>
+    <div class="text-sm text-slate-500 mt-0.5">Dependentes</div>
+    <div class="text-xs text-slate-400 mt-1">Com cobertura ativa</div>
+  </div>
+
+  <!-- Total Cobertos -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-emerald-50">
+        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+      </div>
+      <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Total</span>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ coverage.total_covered }}</div>
+    <div class="text-sm text-slate-500 mt-0.5">Total Cobertos</div>
+    <div class="text-xs text-emerald-600 mt-1">Afiliados + dependentes</div>
+  </div>
+
+  <!-- Empregadores Ativos -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-50">
+        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+        </svg>
+      </div>
+      <span class="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Activos</span>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ coverage.active_employers }}</div>
+    <div class="text-sm text-slate-500 mt-0.5">Empregadores Ativos</div>
+    <div class="text-xs text-slate-400 mt-1">{{ coverage.inactive_employers }} inactivos/suspensos</div>
+  </div>
+
+  <!-- Taxa de Cobertura -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-indigo-50">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+        </svg>
+      </div>
+      <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">%</span>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ coverage.coverage_rate }}%</div>
+    <div class="text-sm text-slate-500 mt-0.5">Taxa de Cobertura</div>
+    <div class="text-xs text-slate-400 mt-1">Afiliados ativos/total</div>
+  </div>
+
+  <!-- Novos/Mês -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-rose-50">
+        <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+        </svg>
+      </div>
+      <span class="text-xs font-medium text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">Mês</span>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ coverage.new_this_month }}</div>
+    <div class="text-sm text-slate-500 mt-0.5">Novos este Mês</div>
+    <div class="text-xs text-emerald-600 mt-1">↑ Registos recentes</div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 2 — COTIZAÇÕES DO ANO (4 KPI + progress bar)
+════════════════════════════════════════════════════════════════════════ -->
+<div class="mb-3">
+  <h2 class="text-base font-semibold text-slate-700 uppercase tracking-wide text-xs">
+    Cotizações — {{ selected_year }}
+  </h2>
+</div>
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+
+    <!-- Total Cobrado -->
+    <div>
+      <p class="text-xs text-slate-500 font-medium uppercase tracking-wide mb-1">Total Cobrado</p>
+      <p class="text-2xl font-bold text-emerald-700">
+        {{ contributions.amount_collected|floatformat:0 }}
+        <span class="text-sm font-normal text-slate-400">XOF</span>
+      </p>
+      <p class="text-xs text-slate-400 mt-0.5">{{ contributions.total_paid }} cotizações pagas</p>
+    </div>
+
+    <!-- Taxa de Pagamento -->
+    <div>
+      <p class="text-xs text-slate-500 font-medium uppercase tracking-wide mb-1">Taxa de Pagamento</p>
+      <p class="text-2xl font-bold text-blue-700">{{ contributions.payment_rate }}%</p>
+      <p class="text-xs text-slate-400 mt-0.5">{{ contributions.total_paid }}/{{ contributions.total_expected }} cotizações</p>
+    </div>
+
+    <!-- Pendente -->
+    <div>
+      <p class="text-xs text-slate-500 font-medium uppercase tracking-wide mb-1">Pendente</p>
+      <p class="text-2xl font-bold text-amber-600">
+        {{ contributions.amount_pending|floatformat:0 }}
+        <span class="text-sm font-normal text-slate-400">XOF</span>
+      </p>
+      <p class="text-xs text-slate-400 mt-0.5">{{ contributions.total_pending }} cotizações</p>
+    </div>
+
+    <!-- Em Atraso -->
+    <div>
+      <p class="text-xs text-slate-500 font-medium uppercase tracking-wide mb-1">Em Atraso</p>
+      <p class="text-2xl font-bold text-red-600">
+        {{ contributions.amount_late|floatformat:0 }}
+        <span class="text-sm font-normal text-slate-400">XOF</span>
+      </p>
+      <p class="text-xs text-slate-400 mt-0.5">{{ contributions.total_late }} cotizações</p>
+    </div>
+  </div>
+
+  <!-- Payment rate progress bar -->
+  <div>
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium text-slate-600">Taxa de Pagamento Global</span>
+      <span class="text-sm font-bold text-slate-800">{{ contributions.payment_rate }}%</span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-3">
+      <div class="h-3 rounded-full transition-all
+        {% if contributions.payment_rate >= 80 %}bg-emerald-500
+        {% elif contributions.payment_rate >= 50 %}bg-amber-500
+        {% else %}bg-red-500{% endif %}"
+           style="width: {{ contributions.payment_rate|floatformat:0 }}%">
+      </div>
+    </div>
+    <div class="flex justify-between mt-1 text-xs text-slate-400">
+      <span>0%</span>
+      <span>50%</span>
+      <span>100%</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 3 — CHARTS (bar + line)
+════════════════════════════════════════════════════════════════════════ -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+
+  <!-- Bar chart: monthly contributions -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-sm font-semibold text-slate-800">Cotizações Mensais</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Montante cobrado por mês — {{ selected_year }}</p>
+      </div>
+      <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center">
+        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+      </div>
+    </div>
+    <div class="h-64">
+      <canvas id="monthlyChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Line chart: affiliate growth -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-sm font-semibold text-slate-800">Crescimento de Afiliados</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Novos registos — últimos 12 meses</p>
+      </div>
+      <div class="w-8 h-8 bg-emerald-50 rounded-xl flex items-center justify-center">
+        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+        </svg>
+      </div>
+    </div>
+    <div class="h-64">
+      <canvas id="growthChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 4 — PRESTAÇÕES + RECLAMAÇÕES
+════════════════════════════════════════════════════════════════════════ -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+
+  <!-- Prestações -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="text-sm font-semibold text-slate-800">Prestações Sociais</h3>
+      <span class="text-xs text-slate-400">{{ benefits.total_requests }} pedidos total</span>
+    </div>
+
+    <!-- Summary badges -->
+    <div class="grid grid-cols-2 gap-3 mb-5">
+      <div class="bg-amber-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-amber-700">{{ benefits.pending_review }}</div>
+        <div class="text-xs text-amber-600 mt-0.5">Em análise</div>
+      </div>
+      <div class="bg-emerald-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-emerald-700">{{ benefits.approved }}</div>
+        <div class="text-xs text-emerald-600 mt-0.5">Aprovadas</div>
+      </div>
+      <div class="bg-red-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-red-700">{{ benefits.rejected }}</div>
+        <div class="text-xs text-red-600 mt-0.5">Rejeitadas</div>
+      </div>
+      <div class="bg-blue-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-blue-700">{{ benefits.paying }}</div>
+        <div class="text-xs text-blue-600 mt-0.5">Em pagamento</div>
+      </div>
+    </div>
+
+    <!-- Paid this year -->
+    <div class="bg-slate-50 rounded-xl p-3 mb-5">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-slate-600">Total pago este ano</span>
+        <span class="text-sm font-bold text-slate-800">
+          {{ benefits.total_paid_this_year|floatformat:0 }} XOF
+        </span>
+      </div>
+    </div>
+
+    <!-- By category — mini horizontal bars -->
+    <div class="space-y-2.5">
+      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Por Categoria</p>
+      {% for cat in benefits.by_category %}
+      {% if cat.count > 0 %}
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs text-slate-600 truncate max-w-[180px]">{{ cat.label }}</span>
+          <span class="text-xs font-semibold text-slate-700 ml-2">{{ cat.count }}</span>
+        </div>
+        <div class="w-full bg-slate-100 rounded-full h-1.5">
+          <div class="bg-blue-500 h-1.5 rounded-full"
+               style="width: {% widthratio cat.count benefits.total_requests 100 %}%">
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% empty %}
+      <p class="text-xs text-slate-400 text-center py-4">Nenhum pedido registado.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Reclamações -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="text-sm font-semibold text-slate-800">Reclamações</h3>
+      <span class="text-xs text-slate-400">{{ claims.total }} total</span>
+    </div>
+
+    <!-- Status badges -->
+    <div class="grid grid-cols-2 gap-3 mb-5">
+      <div class="bg-blue-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-blue-700">{{ claims.open }}</div>
+        <div class="text-xs text-blue-600 mt-0.5">Abertas</div>
+      </div>
+      <div class="bg-violet-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-violet-700">{{ claims.under_review }}</div>
+        <div class="text-xs text-violet-600 mt-0.5">Em análise</div>
+      </div>
+      <div class="bg-emerald-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-emerald-700">{{ claims.resolved }}</div>
+        <div class="text-xs text-emerald-600 mt-0.5">Resolvidas</div>
+      </div>
+      <div class="bg-red-50 rounded-xl p-3 text-center">
+        <div class="text-xl font-bold text-red-700">{{ claims.overdue }}</div>
+        <div class="text-xs text-red-600 mt-0.5">Em atraso (SLA)</div>
+      </div>
+    </div>
+
+    <!-- Resolution rate -->
+    <div class="mb-5">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-medium text-slate-600">Taxa de Resolução</span>
+        <span class="text-sm font-bold text-slate-800">{{ claims.resolution_rate }}%</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2.5">
+        <div class="h-2.5 rounded-full
+          {% if claims.resolution_rate >= 70 %}bg-emerald-500
+          {% elif claims.resolution_rate >= 40 %}bg-amber-500
+          {% else %}bg-red-500{% endif %}"
+             style="width: {{ claims.resolution_rate|floatformat:0 }}%">
+        </div>
+      </div>
+    </div>
+
+    <!-- Satisfaction rating -->
+    <div class="bg-slate-50 rounded-xl p-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-medium text-slate-600">Satisfação Média</span>
+        <span class="text-sm font-bold text-slate-800">{{ claims.avg_satisfaction }}/5</span>
+      </div>
+      <div class="flex items-center gap-1">
+        {% for i in "12345" %}
+        {% if forloop.counter <= claims.avg_satisfaction_int %}
+        <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        {% else %}
+        <svg class="w-5 h-5 text-slate-300" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        {% endif %}
+        {% endfor %}
+        {% if claims.total == 0 %}
+        <span class="text-xs text-slate-400 ml-2">Sem avaliações</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 5 — TABLES: DEFAULTING + TOP EMPLOYERS
+════════════════════════════════════════════════════════════════════════ -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+
+  <!-- Empregadores Incumpridores -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <div>
+        <h3 class="text-sm font-semibold text-slate-800">Empregadores Incumpridores</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Cotizações em atraso — últimos 90 dias</p>
+      </div>
+      <a href="{% url 'stats-export' %}?export=defaulting_employers"
+         class="text-xs text-blue-600 hover:text-blue-700 font-medium">
+        Exportar
+      </a>
+    </div>
+    {% if defaulting_employers %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-100">
+            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Empresa</th>
+            <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Meses</th>
+            <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Em dívida (XOF)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          {% for emp in defaulting_employers %}
+          <tr class="hover:bg-slate-50 transition-colors
+            {% if emp.late_months > 3 %}bg-red-50 hover:bg-red-100{% endif %}">
+            <td class="px-4 py-3">
+              <div class="font-medium text-slate-800 text-sm">
+                {{ emp.employer__company_name|default:"—" }}
+              </div>
+              <div class="text-xs text-slate-400 font-mono">{{ emp.employer__nuit|default:"" }}</div>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <span class="inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-full text-xs font-bold
+                {% if emp.late_months > 3 %}bg-red-100 text-red-700
+                {% elif emp.late_months > 1 %}bg-amber-100 text-amber-700
+                {% else %}bg-slate-100 text-slate-600{% endif %}">
+                {{ emp.late_months }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-right font-semibold text-slate-700">
+              {{ emp.total_due|floatformat:0 }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="py-12 text-center">
+      <svg class="w-10 h-10 text-emerald-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p class="text-slate-400 text-sm">Nenhum empregador incumpridor nos últimos 90 dias.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Top Empregadores Contribuintes -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <div>
+        <h3 class="text-sm font-semibold text-slate-800">Top Empregadores Contribuintes</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Maior contribuição paga — {{ selected_year }}</p>
+      </div>
+      <a href="{% url 'stats-export' %}?export=top_employers&year={{ selected_year }}"
+         class="text-xs text-blue-600 hover:text-blue-700 font-medium">
+        Exportar
+      </a>
+    </div>
+    {% if top_employers %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-100">
+            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">#</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Empresa</th>
+            <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Meses</th>
+            <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Total (XOF)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          {% for emp in top_employers %}
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
+                {% if forloop.counter == 1 %}bg-amber-100 text-amber-700
+                {% elif forloop.counter == 2 %}bg-slate-200 text-slate-600
+                {% elif forloop.counter == 3 %}bg-orange-100 text-orange-600
+                {% else %}bg-slate-50 text-slate-400{% endif %}">
+                {{ forloop.counter }}
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="font-medium text-slate-800 text-sm">
+                {{ emp.employer__company_name|default:"—" }}
+              </div>
+              <div class="text-xs text-slate-400">
+                {{ emp.employer__nuit|default:"" }}
+                {% if emp.employer__sector %}
+                &middot;
+                <span class="uppercase font-mono">{{ emp.employer__sector }}</span>
+                {% endif %}
+              </div>
+            </td>
+            <td class="px-4 py-3 text-center text-slate-600 font-medium">{{ emp.months }}</td>
+            <td class="px-4 py-3 text-right font-bold text-emerald-700">
+              {{ emp.total|floatformat:0 }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="py-12 text-center">
+      <svg class="w-10 h-10 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      <p class="text-slate-400 text-sm">Sem contribuições pagas em {{ selected_year }}.</p>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SECTION 6 — SECTOR BREAKDOWN
+════════════════════════════════════════════════════════════════════════ -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
+  <div class="flex items-center justify-between mb-5">
+    <div>
+      <h3 class="text-sm font-semibold text-slate-800">Distribuição por Sector</h3>
+      <p class="text-xs text-slate-400 mt-0.5">Empregadores activos e cotizações por sector — {{ selected_year }}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+    <!-- Horizontal bar chart (canvas) -->
+    <div>
+      <div class="h-48">
+        <canvas id="sectorChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Sector table -->
+    <div>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-100">
+            <th class="text-left pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wide">Sector</th>
+            <th class="text-center pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wide">Empregadores</th>
+            <th class="text-right pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wide">Cotizações (XOF)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          {% for sec in sector_breakdown %}
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-sm
+                  {% if sec.sector == 'PUBLIC' %}bg-blue-500
+                  {% elif sec.sector == 'PRIVATE' %}bg-emerald-500
+                  {% elif sec.sector == 'NGO' %}bg-violet-500
+                  {% else %}bg-slate-400{% endif %}">
+                </span>
+                <span class="font-medium text-slate-700">{{ sec.label }}</span>
+              </div>
+            </td>
+            <td class="py-3 text-center text-slate-600 font-medium">{{ sec.employers }}</td>
+            <td class="py-3 text-right font-semibold text-slate-700">{{ sec.contributions|floatformat:0 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ── Monthly contributions bar chart ─────────────────────────────────
+  const monthlyData = {{ monthly_chart|safe }};
+  new Chart(document.getElementById('monthlyChart'), {
+    type: 'bar',
+    data: {
+      labels: monthlyData.map(d => d.month_label),
+      datasets: [{
+        label: 'Cotizações Cobradas (XOF)',
+        data: monthlyData.map(d => d.amount),
+        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+        borderColor: 'rgb(59, 130, 246)',
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const v = ctx.parsed.y;
+              return ' ' + v.toLocaleString('pt-PT') + ' XOF';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(v) {
+              if (v >= 1000000) return (v / 1000000).toFixed(1) + 'M';
+              if (v >= 1000) return (v / 1000).toFixed(0) + 'k';
+              return v;
+            }
+          },
+          grid: { color: 'rgba(148, 163, 184, 0.15)' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Affiliate growth line chart ──────────────────────────────────────
+  const growthData = {{ growth_chart|safe }};
+  new Chart(document.getElementById('growthChart'), {
+    type: 'line',
+    data: {
+      labels: growthData.map(d => d.label),
+      datasets: [{
+        label: 'Novos Afiliados',
+        data: growthData.map(d => d.count),
+        borderColor: 'rgb(16, 185, 129)',
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        tension: 0.3,
+        fill: true,
+        pointBackgroundColor: 'rgb(16, 185, 129)',
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 },
+          grid: { color: 'rgba(148, 163, 184, 0.15)' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // ── Sector horizontal bar chart ──────────────────────────────────────
+  const sectorData = {{ sector_breakdown_json|safe }};
+  const sectorColors = {
+    'PUBLIC':  'rgba(59, 130, 246, 0.8)',
+    'PRIVATE': 'rgba(16, 185, 129, 0.8)',
+    'NGO':     'rgba(139, 92, 246, 0.8)',
+    'OTHER':   'rgba(148, 163, 184, 0.8)',
+  };
+  new Chart(document.getElementById('sectorChart'), {
+    type: 'bar',
+    data: {
+      labels: sectorData.map(s => s.label),
+      datasets: [{
+        label: 'Empregadores Activos',
+        data: sectorData.map(s => s.employers),
+        backgroundColor: sectorData.map(s => sectorColors[s.sector] || 'rgba(148,163,184,0.8)'),
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 },
+          grid: { color: 'rgba(148, 163, 184, 0.15)' }
+        },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+})();
+</script>
+{% endblock %}
