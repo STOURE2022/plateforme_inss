@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ control.pv_reference }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 2cm 2.5cm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "DejaVu Sans", Arial, sans-serif;
+      font-size: 10pt;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid #1F3864;
+      padding-bottom: 12pt;
+      margin-bottom: 16pt;
+    }
+    .header-left {
+      font-size: 9pt;
+      color: #475569;
+    }
+    .header-right {
+      text-align: right;
+    }
+    .institution-name {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1F3864;
+      line-height: 1.3;
+    }
+    .institution-sub {
+      font-size: 9pt;
+      color: #475569;
+    }
+    .doc-title {
+      text-align: center;
+      margin: 20pt 0 16pt;
+      padding: 12pt;
+      background-color: #f1f5f9;
+      border-left: 4pt solid #1F3864;
+    }
+    .doc-title h1 {
+      font-size: 14pt;
+      font-weight: bold;
+      color: #1F3864;
+      text-transform: uppercase;
+      letter-spacing: 0.5pt;
+    }
+    .doc-title .ref {
+      font-size: 10pt;
+      color: #64748b;
+      margin-top: 4pt;
+      font-family: "DejaVu Sans Mono", monospace;
+    }
+    .section {
+      margin-bottom: 14pt;
+    }
+    .section-title {
+      font-size: 9pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5pt;
+      color: #1F3864;
+      border-bottom: 1pt solid #cbd5e1;
+      padding-bottom: 3pt;
+      margin-bottom: 8pt;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6pt 20pt;
+    }
+    .info-row {
+      display: flex;
+      gap: 4pt;
+    }
+    .info-label {
+      font-weight: bold;
+      color: #475569;
+      font-size: 9pt;
+      flex-shrink: 0;
+      min-width: 120pt;
+    }
+    .info-value {
+      color: #1e293b;
+      font-size: 9pt;
+    }
+    .findings-box {
+      background-color: #f8fafc;
+      border: 1pt solid #e2e8f0;
+      border-radius: 4pt;
+      padding: 10pt;
+      min-height: 48pt;
+    }
+    .findings-text {
+      font-size: 9.5pt;
+      color: #334155;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+    table.assessment-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin-top: 6pt;
+    }
+    table.assessment-table th {
+      background-color: #1F3864;
+      color: white;
+      padding: 5pt 6pt;
+      text-align: right;
+      font-weight: bold;
+      font-size: 8.5pt;
+    }
+    table.assessment-table th:first-child {
+      text-align: left;
+    }
+    table.assessment-table td {
+      padding: 4pt 6pt;
+      text-align: right;
+      border-bottom: 0.5pt solid #e2e8f0;
+    }
+    table.assessment-table td:first-child {
+      text-align: left;
+      font-weight: 500;
+    }
+    table.assessment-table tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+    table.assessment-table tfoot td {
+      font-weight: bold;
+      background-color: #e2e8f0;
+      border-top: 2pt solid #1F3864;
+    }
+    .total-box {
+      background-color: #1F3864;
+      color: white;
+      padding: 8pt 12pt;
+      border-radius: 4pt;
+      text-align: right;
+      margin-top: 8pt;
+    }
+    .total-box .label {
+      font-size: 9pt;
+      opacity: 0.8;
+    }
+    .total-box .amount {
+      font-size: 16pt;
+      font-weight: bold;
+      font-family: "DejaVu Sans Mono", monospace;
+    }
+    .legal-notice {
+      background-color: #fefce8;
+      border: 1pt solid #fde047;
+      border-radius: 4pt;
+      padding: 8pt;
+      font-size: 8.5pt;
+      color: #713f12;
+      margin-top: 10pt;
+    }
+    .signatures {
+      margin-top: 28pt;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30pt;
+    }
+    .sig-block {
+      border-top: 1pt solid #94a3b8;
+      padding-top: 8pt;
+    }
+    .sig-label {
+      font-size: 9pt;
+      font-weight: bold;
+      color: #475569;
+      margin-bottom: 4pt;
+    }
+    .sig-name {
+      font-size: 9pt;
+      color: #334155;
+    }
+    .sig-date-line {
+      margin-top: 20pt;
+      font-size: 8.5pt;
+      color: #94a3b8;
+    }
+    .footer {
+      margin-top: 24pt;
+      padding-top: 8pt;
+      border-top: 1pt solid #e2e8f0;
+      font-size: 7.5pt;
+      color: #94a3b8;
+      text-align: center;
+    }
+    .no-break {
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div style="font-size:8pt; color:#94a3b8;">REPÚBLICA DA GUINÉ-BISSAU</div>
+    <div class="institution-name">INSTITUTO NACIONAL<br>DE SEGURANÇA SOCIAL</div>
+    <div class="institution-sub">INSS — Guinée-Bissau</div>
+  </div>
+  <div class="header-right">
+    <div style="font-size:8pt; color:#94a3b8;">Document confidentiel</div>
+    <div style="font-size:9pt; color:#475569; margin-top:4pt;">Date: {{ control.pv_date|date:"d/m/Y" }}</div>
+    <div style="font-size:8.5pt; font-family: monospace; color:#1F3864; margin-top:2pt;">{{ control.pv_reference }}</div>
+  </div>
+</div>
+
+<!-- Document title -->
+<div class="doc-title">
+  <h1>Procès-Verbal de Contrôle et Redressement</h1>
+  <div class="ref">Réf: {{ control.pv_reference }} &nbsp;|&nbsp; Contrôle: {{ control.reference }}</div>
+</div>
+
+<!-- Employer info -->
+<div class="section no-break">
+  <div class="section-title">Empregador / Employeur</div>
+  <div class="info-grid">
+    <div class="info-row">
+      <span class="info-label">Raison sociale:</span>
+      <span class="info-value">{{ control.employer.company_name }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">NUIT:</span>
+      <span class="info-value" style="font-family:monospace;">{{ control.employer.nuit }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Adresse:</span>
+      <span class="info-value">{{ control.employer.address }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Secteur:</span>
+      <span class="info-value">{{ control.employer.get_sector_display }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Téléphone:</span>
+      <span class="info-value">{{ control.employer.phone }}</span>
+    </div>
+    {% if control.employer.email %}
+    <div class="info-row">
+      <span class="info-label">Email:</span>
+      <span class="info-value">{{ control.employer.email }}</span>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Control info -->
+<div class="section no-break">
+  <div class="section-title">Informações do Controlo / Informations du Contrôle</div>
+  <div class="info-grid">
+    <div class="info-row">
+      <span class="info-label">Type de contrôle:</span>
+      <span class="info-value">{{ control.get_control_type_display }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Agent de contrôle:</span>
+      <span class="info-value">{{ control.assigned_agent.get_full_name|default:control.assigned_agent.email }} (INSS)</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Période contrôlée:</span>
+      <span class="info-value">{{ control.period_from|date:"d/m/Y" }} → {{ control.period_to|date:"d/m/Y" }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Date du PV:</span>
+      <span class="info-value">{{ control.pv_date|date:"d/m/Y" }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Findings -->
+<div class="section">
+  <div class="section-title">Constatações / Constatations</div>
+  <div class="findings-box">
+    {% if control.findings_summary %}
+    <p class="findings-text">{{ control.findings_summary }}</p>
+    {% else %}
+    <p style="color:#94a3b8; font-size:9pt; font-style:italic;">Nenhuma constatação registada.</p>
+    {% endif %}
+  </div>
+  {% if control.pv_notes %}
+  <div style="margin-top:6pt;">
+    <div class="section-title" style="font-size:8pt;">Notas adicionais</div>
+    <div class="findings-box">
+      <p class="findings-text">{{ control.pv_notes }}</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Assessment table -->
+<div class="section">
+  <div class="section-title">Tableau de Redressement / Tabela de Redressamento</div>
+  {% if assessments %}
+  <table class="assessment-table">
+    <thead>
+      <tr>
+        <th style="text-align:left;">Período</th>
+        <th>Sal. Declarado (XOF)</th>
+        <th>Sal. Real (XOF)</th>
+        <th>Diferença (XOF)</th>
+        <th>Avaliado 12% (XOF)</th>
+        <th>Penalidade (XOF)</th>
+        <th>Total Linha (XOF)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in assessments %}
+      <tr>
+        <td>{{ a.period_month|stringformat:"02d" }}/{{ a.period_year }}</td>
+        <td>{{ a.declared_salary|floatformat:2 }}</td>
+        <td>{{ a.actual_salary|floatformat:2 }}</td>
+        <td style="font-weight:bold; color:#dc2626;">{{ a.salary_difference|floatformat:2 }}</td>
+        <td>{{ a.assessed_amount|floatformat:2 }}</td>
+        <td style="color:#ea580c;">{{ a.penalty_amount|floatformat:2 }}</td>
+        <td style="font-weight:bold;">{{ a.total_line|floatformat:2 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td style="text-align:left;">TOTAL</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{ control.total_assessed|floatformat:2 }}</td>
+        <td>{{ control.total_penalties|floatformat:2 }}</td>
+        <td>{{ control.total_due|floatformat:2 }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="total-box no-break">
+    <div class="label">MONTANT TOTAL DÛ / MONTANTE TOTAL A PAGAR</div>
+    <div class="amount">{{ control.total_due|floatformat:2 }} XOF</div>
+  </div>
+  {% else %}
+  <p style="color:#94a3b8; font-size:9pt; font-style:italic; padding:8pt;">Nenhuma linha de redressamento registada.</p>
+  {% endif %}
+</div>
+
+<!-- Legal notice -->
+<div class="legal-notice no-break">
+  <strong>Délai de régularisation:</strong> 30 jours à compter de la date de notification officielle.<br>
+  <strong>Droit de contestation:</strong> L'empregador dispose d'un délai de 15 jours pour contester ce PV auprès de la direction de l'INSS.<br>
+  <strong>Délai de réponse:</strong> {% if control.notification_deadline %}{{ control.notification_deadline|date:"d/m/Y" }}{% else %}À définir lors de la notification{% endif %}.
+</div>
+
+<!-- Signatures -->
+<div class="signatures no-break">
+  <div class="sig-block">
+    <div class="sig-label">Agent INSS</div>
+    <div class="sig-name">{{ control.assigned_agent.get_full_name|default:control.assigned_agent.email }}</div>
+    <div style="margin-top:32pt; border-top: 1pt dotted #94a3b8; padding-top:4pt;">
+      <div class="sig-date-line">Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: __________</div>
+    </div>
+    <div style="margin-top:8pt; font-size:8pt; color:#94a3b8;">Cachet INSS: ________________________</div>
+  </div>
+  <div class="sig-block">
+    <div class="sig-label">Empregador / Représentant légal</div>
+    <div class="sig-name">{{ control.employer.company_name }}</div>
+    <div style="margin-top:32pt; border-top: 1pt dotted #94a3b8; padding-top:4pt;">
+      <div class="sig-date-line">Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: __________</div>
+    </div>
+    <div style="margin-top:8pt; font-size:8pt; color:#94a3b8;">Tampon société: ____________________</div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  Institut National de Sécurité Sociale &mdash; République de Guinée-Bissau &mdash;
+  Document généré le {% now "d/m/Y à H:i" %} &mdash; {{ control.pv_reference }}
+</div>
+
+</body>
+</html>

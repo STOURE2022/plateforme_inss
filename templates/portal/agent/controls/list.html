@@ -1,0 +1,197 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}Controlos de Empregadores{% endblock %}
+{% block page_title %}Controlos de Empregadores{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">Controlos / Redressamentos</h1>
+    <p class="text-slate-500 mt-1 text-sm">Gestão de controlos e redressamentos de empregadores</p>
+  </div>
+  <a href="{% url 'agent_controls:agent-control-create' %}"
+     class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    Novo Controlo
+  </a>
+</div>
+
+<!-- Status summary row -->
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
+  {% for val, label in status_choices %}
+  <a href="?status={{ val }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_type %}&control_type={{ selected_type }}{% endif %}"
+     class="bg-white rounded-xl border p-3 text-center hover:border-blue-300 transition-colors
+     {% if selected_status == val %}border-blue-500 shadow-sm{% else %}border-slate-200{% endif %}">
+    <div class="text-xl font-bold text-slate-900">{{ status_counts|default_if_none:0 }}
+      {# We access dynamically #}
+      {% for k, v in status_counts.items %}{% if k == val %}{{ v }}{% endif %}{% endfor %}
+    </div>
+    <div class="text-xs text-slate-500 mt-0.5 leading-tight">{{ label }}</div>
+  </a>
+  {% endfor %}
+</div>
+
+<!-- Filter bar -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6">
+  <form method="get" class="flex flex-wrap items-end gap-3">
+    <div class="flex-1 min-w-48">
+      <label class="block text-xs font-semibold text-slate-500 mb-1">Pesquisar</label>
+      <div class="relative">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" name="q" value="{{ search_query }}"
+               class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+               placeholder="Ref., empresa, NUIT...">
+      </div>
+    </div>
+    <div class="min-w-36">
+      <label class="block text-xs font-semibold text-slate-500 mb-1">Estado</label>
+      <select name="status"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">Todos os estados</option>
+        {% for val, label in status_choices %}
+        <option value="{{ val }}" {% if selected_status == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="min-w-36">
+      <label class="block text-xs font-semibold text-slate-500 mb-1">Tipo</label>
+      <select name="control_type"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">Todos os tipos</option>
+        {% for val, label in type_choices %}
+        <option value="{{ val }}" {% if selected_type == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="min-w-32">
+      <label class="block text-xs font-semibold text-slate-500 mb-1">Agente</label>
+      <select name="assigned"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">Todos</option>
+        <option value="me" {% if assigned_filter == "me" %}selected{% endif %}>Os meus</option>
+      </select>
+    </div>
+    <button type="submit"
+            class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+      Filtrar
+    </button>
+    {% if selected_status or selected_type or search_query or assigned_filter %}
+    <a href="{% url 'agent_controls:agent-control-list' %}"
+       class="px-4 py-2 rounded-xl text-sm font-medium border border-slate-300 text-slate-600 hover:bg-slate-50 transition-colors">
+      Limpar
+    </a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- Table -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  {% if controls %}
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-100">
+      <thead>
+        <tr class="bg-slate-50">
+          <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Referência</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Empregador</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tipo</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Período</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Estado</th>
+          <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Total a Pagar</th>
+          <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Restante</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Agente</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Dias</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% for ctrl in controls %}
+        <tr class="hover:bg-slate-50 transition-colors
+          {% if ctrl.status == 'NOTIFIED' and ctrl.notification_deadline and ctrl.notification_deadline < today %}bg-red-50/40{% endif %}">
+          <td class="px-4 py-3">
+            <a href="{% url 'agent_controls:agent-control-detail' pk=ctrl.pk %}"
+               class="font-mono text-sm font-semibold text-blue-600 hover:text-blue-800">
+              {{ ctrl.reference }}
+            </a>
+          </td>
+          <td class="px-4 py-3">
+            <div class="text-sm font-medium text-slate-800">{{ ctrl.employer.company_name }}</div>
+            <div class="text-xs text-slate-500 font-mono">{{ ctrl.employer.nuit }}</div>
+          </td>
+          <td class="px-4 py-3">
+            {% if ctrl.control_type == 'ROUTINE' %}
+            <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">Routine</span>
+            {% elif ctrl.control_type == 'TARGETED' %}
+            <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-violet-100 text-violet-700">Ciblé</span>
+            {% elif ctrl.control_type == 'COMPLAINT' %}
+            <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Réclamation</span>
+            {% elif ctrl.control_type == 'CROSS_CHECK' %}
+            <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">Recoupement</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-xs text-slate-600">
+            {{ ctrl.period_from|date:"d/m/Y" }} → {{ ctrl.period_to|date:"d/m/Y" }}
+          </td>
+          <td class="px-4 py-3">
+            {% if ctrl.status == 'PLANNED' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">Planificado</span>
+            {% elif ctrl.status == 'IN_PROGRESS' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Em Curso</span>
+            {% elif ctrl.status == 'PV_DRAFTED' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-700">PV Redigido</span>
+            {% elif ctrl.status == 'NOTIFIED' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">Notificado</span>
+            {% elif ctrl.status == 'DISPUTED' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">Contestado</span>
+            {% elif ctrl.status == 'SETTLED' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Regularizado</span>
+            {% elif ctrl.status == 'CLOSED' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Encerrado</span>
+            {% endif %}
+            {% if ctrl.status == 'NOTIFIED' and ctrl.notification_deadline and ctrl.notification_deadline < today %}
+            <span class="ml-1 inline-flex px-1.5 py-0.5 rounded text-xs font-bold bg-red-600 text-white animate-pulse">PRAZO</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-right text-sm font-medium text-slate-700">
+            {% if ctrl.total_due %}{{ ctrl.total_due|floatformat:2 }}{% else %}—{% endif %}
+          </td>
+          <td class="px-4 py-3 text-right">
+            {% if ctrl.total_remaining and ctrl.total_remaining > 0 %}
+            <span class="text-sm font-bold text-red-600">{{ ctrl.total_remaining|floatformat:2 }}</span>
+            {% else %}
+            <span class="text-sm text-slate-400">—</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-xs text-slate-600">{{ ctrl.assigned_agent.email }}</td>
+          <td class="px-4 py-3 text-center text-xs text-slate-500">{{ ctrl.days_open }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="py-16 text-center">
+    <svg class="w-14 h-14 text-slate-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+    </svg>
+    <p class="text-slate-500 font-medium mb-1">Nenhum controlo encontrado</p>
+    <p class="text-slate-400 text-sm">Ajuste os filtros ou crie um novo controlo.</p>
+    <a href="{% url 'agent_controls:agent-control-create' %}"
+       class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-white"
+       style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      Novo Controlo
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

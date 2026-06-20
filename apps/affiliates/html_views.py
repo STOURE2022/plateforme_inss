@@ -183,6 +183,21 @@ class AgentDashboardView(AgentRequiredMixin, TemplateView):
         except Exception:
             ctx["declarations_to_validate"] = 0
 
+        # Controlos de empregadores ativos
+        try:
+            from apps.controls.models import EmployerControl, ControlStatus
+            ctx["active_controls_count"] = EmployerControl.objects.filter(
+                status__in=[
+                    ControlStatus.PLANNED,
+                    ControlStatus.IN_PROGRESS,
+                    ControlStatus.PV_DRAFTED,
+                    ControlStatus.NOTIFIED,
+                    ControlStatus.DISPUTED,
+                ]
+            ).count()
+        except Exception:
+            ctx["active_controls_count"] = 0
+
         return ctx
 
 

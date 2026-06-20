@@ -43,4 +43,5 @@ urlpatterns = [
     path("", include("apps.contributions.html_urls")),
     path("", include("apps.statistics_dashboard.urls")),
     path("", include("apps.payroll.html_urls")),
+    path("", include("apps.controls.html_urls")),
 ]
