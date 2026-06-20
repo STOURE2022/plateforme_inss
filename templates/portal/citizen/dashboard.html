@@ -14,7 +14,7 @@
 </div>
 
 <!-- STATS GRID -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-8">
   <!-- Carta -->
   <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
     <div class="flex items-center justify-between mb-4">
@@ -78,6 +78,20 @@
     </div>
     <div class="text-2xl font-bold text-slate-900 mb-1">{{ dependents_count|default:"0" }}</div>
     <div class="text-sm text-slate-500">{% trans "Dependentes activos" %}</div>
+  </div>
+
+  <!-- Reclamações Abertas -->
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-4">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: #FEF2F2;">
+        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+        </svg>
+      </div>
+      <a href="{% url 'citizen_claims:citizen_claim_list' %}" class="text-xs font-medium text-red-600 hover:text-red-700">{% trans "Ver" %} &rarr;</a>
+    </div>
+    <div class="text-2xl font-bold text-slate-900 mb-1">{{ open_claims_count|default:"0" }}</div>
+    <div class="text-sm text-slate-500">{% trans "Reclamações abertas" %}</div>
   </div>
 </div>
 

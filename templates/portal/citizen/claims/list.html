@@ -1,0 +1,166 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{% trans "Minhas Reclamações" %}{% endblock %}
+{% block page_title %}{% trans "Minhas Reclamações" %}{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/citizen/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">{% trans "Minhas Reclamações" %}</h1>
+    <p class="text-slate-500 mt-1 text-sm">{% trans "Acompanhe as suas reclamações e litígios com o INSS" %}</p>
+  </div>
+  <a href="{% url 'citizen_claims:citizen_claim_create' %}"
+     class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    {% trans "Nova Reclamação" %}
+  </a>
+</div>
+
+<!-- Status filter tabs -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6">
+  <form method="get" class="flex flex-wrap gap-3 items-end">
+    <div class="flex-1 min-w-48">
+      <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{% trans "Estado" %}</label>
+      <select name="status"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">{% trans "Todos" %}</option>
+        {% for val, label in status_choices %}
+        <option value="{{ val }}" {% if selected_status == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="flex gap-2">
+      <button type="submit"
+              class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+        {% trans "Filtrar" %}
+      </button>
+      {% if selected_status %}
+      <a href="{% url 'citizen_claims:citizen_claim_list' %}"
+         class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">
+        {% trans "Limpar" %}
+      </a>
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+<!-- Table -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  {% if claims %}
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-slate-50 border-b border-slate-200">
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Referência" %}</th>
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Tipo" %}</th>
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Assunto" %}</th>
+        <th class="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Prioridade" %}</th>
+        <th class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Submetida em" %}</th>
+        <th class="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Estado" %}</th>
+        <th class="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">{% trans "Ações" %}</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for claim in claims %}
+      <tr class="hover:bg-slate-50 transition-colors{% if claim.is_overdue %} bg-red-50/30{% endif %}">
+        <td class="px-5 py-4 font-mono text-xs font-semibold text-slate-700">{{ claim.reference }}</td>
+        <td class="px-5 py-4">
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+            {{ claim.get_claim_type_display }}
+          </span>
+        </td>
+        <td class="px-5 py-4 text-slate-800 max-w-xs">
+          <div class="truncate font-medium">{{ claim.subject }}</div>
+        </td>
+        <td class="px-5 py-4 text-center">
+          {% if claim.priority == 'URGENT' %}
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
+            {{ claim.get_priority_display }}
+          </span>
+          {% elif claim.priority == 'HIGH' %}
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+            {{ claim.get_priority_display }}
+          </span>
+          {% elif claim.priority == 'LOW' %}
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block"></span>
+            {{ claim.get_priority_display }}
+          </span>
+          {% else %}
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block"></span>
+            {{ claim.get_priority_display }}
+          </span>
+          {% endif %}
+        </td>
+        <td class="px-5 py-4 text-slate-600 text-xs">
+          {{ claim.submitted_at|date:"d/m/Y" }}
+          {% if claim.is_overdue %}
+          <span class="block text-red-600 font-semibold text-xs">ATRASADA</span>
+          {% endif %}
+        </td>
+        <td class="px-5 py-4 text-center">
+          {% if claim.status == 'OPEN' %}
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">{{ claim.get_status_display }}</span>
+          {% elif claim.status == 'UNDER_REVIEW' %}
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700">{{ claim.get_status_display }}</span>
+          {% elif claim.status == 'ADDITIONAL_INFO' %}
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">{{ claim.get_status_display }}</span>
+          {% elif claim.status == 'RESOLVED' %}
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">{{ claim.get_status_display }}</span>
+          {% elif claim.status == 'REJECTED' %}
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">{{ claim.get_status_display }}</span>
+          {% elif claim.status == 'ESCALATED' %}
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-700">{{ claim.get_status_display }}</span>
+          {% else %}
+          <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">{{ claim.get_status_display }}</span>
+          {% endif %}
+        </td>
+        <td class="px-5 py-4 text-center">
+          <a href="{% url 'citizen_claims:citizen_claim_detail' pk=claim.pk %}"
+             class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800">
+            {% trans "Ver" %}
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="py-16 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+      </svg>
+    </div>
+    <p class="text-slate-600 font-semibold mb-1">{% trans "Nenhuma reclamação encontrada" %}</p>
+    <p class="text-slate-400 text-sm mb-5">
+      {% if selected_status %}
+        {% trans "Nenhuma reclamação com este estado." %}
+      {% else %}
+        {% trans "Ainda não submeteu nenhuma reclamação." %}
+      {% endif %}
+    </p>
+    <a href="{% url 'citizen_claims:citizen_claim_create' %}"
+       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
+       style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      {% trans "Submeter Reclamação" %}
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

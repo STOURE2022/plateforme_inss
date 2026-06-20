@@ -55,6 +55,22 @@
   <span>{% trans "Prestacoes" %}</span>
 </a>
 
+<a href="{% url 'agent_claims:agent_claim_list' %}"
+   class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+   {% if 'claim' in request.resolver_match.url_name %}active text-white{% else %}text-white/70 hover:text-white{% endif %}">
+  <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
+  </svg>
+  <span class="flex-1">{% trans "Reclamações" %}</span>
+  {% with pending_claims_count=pending_claims_count|default:0 %}
+  {% if pending_claims_count > 0 %}
+  <span class="ml-auto inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full text-xs font-bold bg-red-500 text-white">
+    {{ pending_claims_count }}
+  </span>
+  {% endif %}
+  {% endwith %}
+</a>
+
 <div class="px-3 pt-4 pb-1">
   <p class="text-white/30 text-xs font-semibold uppercase tracking-wider">{% trans "Relatórios" %}</p>
 </div>

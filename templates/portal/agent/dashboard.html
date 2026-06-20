@@ -19,7 +19,7 @@
 </div>
 
 <!-- Stats grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-5 mb-8">
   <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
     <div class="flex items-center justify-between mb-3">
       <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50">
@@ -73,6 +73,17 @@
     </div>
     <div class="text-3xl font-bold text-slate-900">{{ benefits_pending_count|default:"0" }}</div>
     <div class="text-sm text-slate-500 mt-0.5">{% trans "Prestacoes pendentes" %}</div>
+  </div>
+
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm card-hover">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-red-50">
+        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
+      </div>
+      <a href="{% url 'agent_claims:agent_claim_list' %}" class="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full hover:bg-red-100">{% trans "Ver" %}</a>
+    </div>
+    <div class="text-3xl font-bold text-slate-900">{{ pending_claims_count|default:"0" }}</div>
+    <div class="text-sm text-slate-500 mt-0.5">{% trans "Reclamações pendentes" %}</div>
   </div>
 </div>
 

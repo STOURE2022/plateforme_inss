@@ -37,5 +37,8 @@ urlpatterns = [
     path("notifications/", include("apps.notifications.html_urls")),
     path("portal/citizen/benefits/", include("apps.benefits.citizen_html_urls")),
     path("portal/agent/benefits/", include("apps.benefits.agent_html_urls")),
+    path("portal/citizen/claims/", include("apps.claims.citizen_html_urls")),
+    path("portal/agent/claims/", include("apps.claims.agent_html_urls")),
+    path("api/v1/", include("apps.claims.urls")),
     path("", include("apps.contributions.html_urls")),
 ]

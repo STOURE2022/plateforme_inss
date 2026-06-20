@@ -46,6 +46,16 @@ class CitizenDashboardView(CitizenRequiredMixin, TemplateView):
         # Prestacoes
         ctx["benefit_requests_count"] = affiliate.benefit_requests.count()
 
+        # Reclamações abertas
+        try:
+            from apps.claims.models import Claim, ClaimStatus
+            ctx["open_claims_count"] = Claim.objects.filter(
+                filed_by=self.request.user,
+                status__in=[ClaimStatus.OPEN, ClaimStatus.UNDER_REVIEW, ClaimStatus.ADDITIONAL_INFO, ClaimStatus.ESCALATED],
+            ).count()
+        except Exception:
+            ctx["open_claims_count"] = 0
+
         return ctx
 
 
@@ -154,6 +164,15 @@ class AgentDashboardView(AgentRequiredMixin, TemplateView):
             ).count()
         except Exception:
             ctx["benefits_pending_count"] = 0
+
+        # Reclamações pendentes
+        try:
+            from apps.claims.models import Claim, ClaimStatus
+            ctx["pending_claims_count"] = Claim.objects.filter(
+                status__in=[ClaimStatus.OPEN, ClaimStatus.UNDER_REVIEW, ClaimStatus.ESCALATED]
+            ).count()
+        except Exception:
+            ctx["pending_claims_count"] = 0
 
         return ctx
 
