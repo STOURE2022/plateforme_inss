@@ -1,0 +1,210 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% trans "Configurar autenticação em 2 etapas" %} — e-INSS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .otp-input {
+      width: 3rem; height: 3.5rem; text-align: center;
+      font-size: 1.4rem; font-weight: 700;
+      border: 2px solid #E2E8F0; border-radius: 0.75rem;
+      background: #F8FAFC; color: #0F172A; transition: all 0.2s;
+    }
+    .otp-input:focus { outline: none; border-color: #2563EB; background: #fff; box-shadow: 0 0 0 4px rgba(37,99,235,0.1); }
+    .otp-input.filled { border-color: #1F3864; background: #EFF6FF; color: #1F3864; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { animation: fadeUp 0.45s ease-out forwards; }
+    .step { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .step-num { width: 1.75rem; height: 1.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                font-weight: 700; font-size: 0.75rem; flex-shrink: 0; background: #1F3864; color: white; margin-top: 1px; }
+    .secret-key { font-family: 'Courier New', monospace; letter-spacing: 0.15em; font-size: 0.875rem;
+                  background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 0.5rem; padding: 0.5rem 0.75rem;
+                  color: #1F3864; font-weight: 600; user-select: all; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-10">
+
+  <div class="w-full max-w-lg fade-up">
+
+    <!-- Brand -->
+    <div class="flex items-center justify-center gap-3 mb-8">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style="background:#1F3864;">
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-bold text-slate-900 text-lg leading-tight">e-INSS</div>
+          <div class="text-slate-400 text-xs">Guinée-Bissau</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+
+      <!-- Header -->
+      <div class="px-8 py-6 text-center" style="background:linear-gradient(135deg,#1F3864,#2563EB);">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3" style="background:rgba(255,255,255,0.15);">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h1 class="text-white font-bold text-xl">{% trans "Ativar autenticação em 2 etapas" %}</h1>
+        <p class="text-white/65 text-sm mt-1">{% trans "Proteja a sua conta com um código temporário" %}</p>
+      </div>
+
+      <div class="p-8 space-y-7">
+
+        <!-- Erreur -->
+        {% if error %}
+        <div class="flex items-center gap-3 p-3.5 bg-red-50 border border-red-200 rounded-xl">
+          <svg class="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+          <span class="text-red-700 text-sm">{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Étape 1 : Télécharger l'app -->
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <p class="font-semibold text-slate-800 text-sm mb-1">{% trans "Instale uma aplicação de autenticação" %}</p>
+            <p class="text-slate-500 text-xs leading-relaxed">
+              {% trans "Utilize" %} <strong>Google Authenticator</strong>, <strong>Authy</strong> {% trans "ou" %} <strong>Microsoft Authenticator</strong> {% trans "no seu telemóvel." %}
+            </p>
+          </div>
+        </div>
+
+        <hr class="border-slate-100">
+
+        <!-- Étape 2 : Scanner QR -->
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="flex-1">
+            <p class="font-semibold text-slate-800 text-sm mb-3">{% trans "Digitalize o código QR" %}</p>
+            <div class="flex flex-col sm:flex-row items-center gap-6">
+              <!-- QR Code -->
+              <div class="bg-white border-2 border-slate-200 rounded-2xl p-3 shadow-sm flex-shrink-0">
+                <img src="data:image/png;base64,{{ qr_b64 }}" alt="QR Code MFA" class="w-44 h-44 block">
+              </div>
+              <!-- Clé manuelle -->
+              <div class="flex-1 w-full">
+                <p class="text-xs text-slate-500 mb-2">{% trans "Ou introduza esta chave manualmente:" %}</p>
+                <div class="secret-key break-all" id="secret-display">{{ secret }}</div>
+                <button type="button" onclick="copySecret()"
+                        class="mt-2 inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                  <span id="copy-label">{% trans "Copiar chave" %}</span>
+                </button>
+                <p class="text-xs text-slate-400 mt-3 leading-relaxed">
+                  {% trans "Selecione «Adicionar conta» na sua app, escolha «Chave de configuração» e cole a chave acima." %}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-slate-100">
+
+        <!-- Étape 3 : Confirmer le code -->
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="flex-1">
+            <p class="font-semibold text-slate-800 text-sm mb-1">{% trans "Confirme o código gerado" %}</p>
+            <p class="text-slate-500 text-xs mb-4">{% trans "Insira o código de 6 dígitos gerado pela sua aplicação para confirmar a configuração." %}</p>
+
+            <form method="post">
+              {% csrf_token %}
+              <div class="flex justify-center gap-2 mb-5" id="otp-container">
+                <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1"
+                       class="otp-input" autocomplete="one-time-code" autofocus>
+                <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+                <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+                <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+                <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+                <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input">
+              </div>
+              <input type="hidden" name="code" id="otp-hidden">
+
+              <button type="submit" id="submit-btn" disabled
+                      class="w-full py-3.5 rounded-xl text-white font-semibold text-sm transition-all
+                             disabled:opacity-40 disabled:cursor-not-allowed"
+                      style="background:linear-gradient(135deg,#1F3864,#2563EB);">
+                <span class="flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                  {% trans "Ativar MFA" %}
+                </span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="mt-5 text-center">
+      <a href="/auth/settings/security/"
+         class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        {% trans "Cancelar" %}
+      </a>
+    </div>
+  </div>
+
+<script>
+  var inputs = Array.from(document.querySelectorAll('.otp-input'));
+  var hidden = document.getElementById('otp-hidden');
+  var btn = document.getElementById('submit-btn');
+
+  function updateCode() {
+    var code = inputs.map(i => i.value).join('');
+    hidden.value = code;
+    btn.disabled = code.length < 6;
+    inputs.forEach(i => { i.value ? i.classList.add('filled') : i.classList.remove('filled'); });
+  }
+
+  inputs.forEach(function(input, i) {
+    input.addEventListener('input', function() {
+      input.value = input.value.replace(/\D/g, '').slice(-1);
+      if (input.value && i < 5) inputs[i + 1].focus();
+      updateCode();
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !input.value && i > 0) { inputs[i-1].focus(); inputs[i-1].value = ''; updateCode(); }
+      if (e.key === 'ArrowLeft' && i > 0) inputs[i-1].focus();
+      if (e.key === 'ArrowRight' && i < 5) inputs[i+1].focus();
+    });
+    input.addEventListener('paste', function(e) {
+      var paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      inputs.forEach(function(inp, j) { inp.value = paste[j] || ''; });
+      if (paste.length >= 6) btn.focus(); else if (paste.length > 0) inputs[Math.min(paste.length, 5)].focus();
+      updateCode(); e.preventDefault();
+    });
+  });
+
+  function copySecret() {
+    var txt = document.getElementById('secret-display').textContent.trim();
+    navigator.clipboard.writeText(txt).then(function() {
+      var lbl = document.getElementById('copy-label');
+      lbl.textContent = '{% trans "Copiado!" %}';
+      setTimeout(function() { lbl.textContent = '{% trans "Copiar chave" %}'; }, 2000);
+    });
+  }
+</script>
+</body>
+</html>

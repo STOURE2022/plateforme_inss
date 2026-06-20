@@ -37,10 +37,13 @@
       <!-- QR Code -->
       <div class="p-8 flex flex-col items-center">
         <div class="bg-white border-2 border-slate-100 rounded-2xl p-4 shadow-inner mb-5">
-          <div class="w-52 h-52 flex items-center justify-center text-slate-300 text-xs">
-            <!-- QR code gerado via view Python -->
-            <p class="text-slate-400 text-sm text-center px-4">QR Code<br><span class="font-mono text-xs">{{ card.card_number }}</span></p>
+          {% if qr_b64 %}
+          <img src="data:image/png;base64,{{ qr_b64 }}" alt="QR Code" class="w-52 h-52 object-contain">
+          {% else %}
+          <div class="w-52 h-52 flex items-center justify-center">
+            <p class="text-slate-400 text-sm text-center px-4">QR Code indisponível</p>
           </div>
+          {% endif %}
         </div>
 
         <h2 class="font-bold text-slate-900 text-lg mb-1">{{ card.affiliate.full_name }}</h2>

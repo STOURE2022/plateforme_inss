@@ -129,6 +129,243 @@ msgstr "Tous droits réservés."
 msgid "Instituto Nacional de Segurança Social"
 msgstr "Institut National de Sécurité Sociale"
 
+msgid "e-INSS — Instituto Nacional de Segurança Social · Guinée-Bissau"
+msgstr "e-INSS — Institut National de Sécurité Sociale · Guinée-Bissau"
+
+msgid "Plataforma digital oficial do INSS da Guinée-Bissau. Gerencie contribuições, cartões de saúde e muito mais."
+msgstr "Plateforme numérique officielle de l'INSS de Guinée-Bissau. Gérez les cotisations, les cartes de santé et bien plus."
+
+msgid "Plataforma Oficial · República da Guinée-Bissau"
+msgstr "Plateforme Officielle · République de Guinée-Bissau"
+
+msgid "A sua segurança"
+msgstr "Votre sécurité"
+
+msgid "social, digital."
+msgstr "sociale, numérique."
+
+msgid "Activo · 2026–2027"
+msgstr "Actif · 2026–2027"
+
+msgid "Afiliados registados"
+msgstr "Affiliés enregistrés"
+
+msgid "Cartões emitidos"
+msgstr "Cartes émises"
+
+msgid "Prestadores de saúde"
+msgstr "Prestataires de santé"
+
+msgid "Disponibilidade"
+msgstr "Disponibilité"
+
+msgid "Para todos os utilizadores"
+msgstr "Pour tous les utilisateurs"
+
+msgid "Uma cobertura nacional"
+msgstr "Une couverture nationale"
+
+msgid "Mais de"
+msgstr "Plus de"
+
+msgid "Guineenses"
+msgstr "Guinéens"
+
+msgid "já estão protegidos pela plataforma e-INSS"
+msgstr "sont déjà protégés par la plateforme e-INSS"
+
+msgid "Os nossos serviços"
+msgstr "Nos services"
+
+msgid "Tudo o que precisa,"
+msgstr "Tout ce dont vous avez besoin,"
+
+msgid "num só lugar"
+msgstr "en un seul endroit"
+
+msgid "Uma plataforma completa para gerir toda a sua vida social de forma digital e segura."
+msgstr "Une plateforme complète pour gérer toute votre vie sociale de manière numérique et sécurisée."
+
+msgid "Aceda ao seu cartão de seguro de saúde digital com QR code verificável em tempo real por qualquer prestador."
+msgstr "Accédez à votre carte d'assurance santé numérique avec QR code vérifiable en temps réel par tout prestataire."
+
+msgid "Ver mais"
+msgstr "En savoir plus"
+
+msgid "Consulte o seu histórico de contribuições, verifique pagamentos e acompanhe o seu período contributivo completo."
+msgstr "Consultez votre historique de cotisations, vérifiez les paiements et suivez votre période contributive complète."
+
+msgid "Inclua o cônjuge e filhos na sua cobertura. Todos os beneficiários têm a proteção social INSS."
+msgstr "Incluez le conjoint et les enfants dans votre couverture. Tous les bénéficiaires bénéficient de la protection sociale INSS."
+
+msgid "As empresas gerem declarações e cotizações dos trabalhadores de forma centralizada, simples e em conformidade."
+msgstr "Les entreprises gèrent les déclarations et cotisations des travailleurs de manière centralisée, simple et conforme."
+
+msgid "Prestadores de saúde verificam a cobertura em segundos — basta escanear o QR code do cartão digital."
+msgstr "Les prestataires de santé vérifient la couverture en quelques secondes — il suffit de scanner le QR code de la carte numérique."
+
+msgid "Para prestadores"
+msgstr "Pour les prestataires"
+
+msgid "Gere e descarregue o seu cartão de saúde em PDF e attestations oficiais com assinatura digital certificada."
+msgstr "Générez et téléchargez votre carte de santé en PDF et attestations officielles avec signature numérique certifiée."
+
+msgid "Processo simples"
+msgstr "Processus simple"
+
+msgid "Como funciona?"
+msgstr "Comment ça marche ?"
+
+msgid "Em apenas 3 passos simples, aceda a todos os benefícios do INSS digital."
+msgstr "En seulement 3 étapes simples, accédez à tous les avantages de l'INSS numérique."
+
+msgid "O agente INSS regista o seu perfil na plataforma com os seus dados pessoais e de contribuição."
+msgstr "L'agent INSS enregistre votre profil sur la plateforme avec vos données personnelles et de cotisation."
+
+msgid "Obtenha o seu cartão"
+msgstr "Obtenez votre carte"
+
+msgid "Receba o seu cartão de saúde digital com QR code gerado automaticamente, válido por 1 ano."
+msgstr "Recevez votre carte de santé numérique avec QR code généré automatiquement, valable 1 an."
+
+msgid "Beneficie-se"
+msgstr "Bénéficiez"
+
+msgid "Apresente o QR code em qualquer prestador de saúde parceiro — verificação instantânea e segura."
+msgstr "Présentez le QR code chez tout prestataire de santé partenaire — vérification instantanée et sécurisée."
+
+msgid "Já tenho conta →"
+msgstr "J'ai déjà un compte →"
+
+msgid "Segurança de nível bancário"
+msgstr "Sécurité de niveau bancaire"
+
+msgid "A sua privacidade é"
+msgstr "Votre vie privée est"
+
+msgid "a nossa prioridade"
+msgstr "notre priorité"
+
+msgid "Utilizamos as mais avançadas tecnologias de segurança para proteger os seus dados pessoais e garantir a integridade de cada transação."
+msgstr "Nous utilisons les technologies de sécurité les plus avancées pour protéger vos données personnelles et garantir l'intégrité de chaque transaction."
+
+msgid "Token JWS com assinatura RSA-256"
+msgstr "Token JWS avec signature RSA-256"
+
+msgid "Cada QR code contém um token criptográfico assinado digitalmente, impossível de falsificar."
+msgstr "Chaque QR code contient un token cryptographique signé numériquement, impossible à falsifier."
+
+msgid "Autenticação a dois fatores (MFA)"
+msgstr "Authentification à deux facteurs (MFA)"
+
+msgid "Proteja o acesso à sua conta com um código TOTP gerado pelo seu telemóvel."
+msgstr "Protégez l'accès à votre compte avec un code TOTP généré par votre téléphone."
+
+msgid "Auditoria completa de todas as ações"
+msgstr "Audit complet de toutes les actions"
+
+msgid "Cada verificação, modificação ou acesso fica registado e rastreável com timestamp imutável."
+msgstr "Chaque vérification, modification ou accès est enregistré et traçable avec un horodatage immuable."
+
+msgid "Conformidade RGPD"
+msgstr "Conformité RGPD"
+
+msgid "Os seus dados são processados em conformidade com os regulamentos internacionais de proteção de dados pessoais."
+msgstr "Vos données sont traitées conformément aux réglementations internationales de protection des données personnelles."
+
+msgid "O que dizem os nossos utilizadores"
+msgstr "Ce que disent nos utilisateurs"
+
+msgid "Eles confiam no e-INSS"
+msgstr "Ils font confiance à e-INSS"
+
+msgid "Cidadãos, empregadores e profissionais de saúde partilham a sua experiência."
+msgstr "Citoyens, employeurs et professionnels de santé partagent leur expérience."
+
+msgid "Cidadão · Bissau"
+msgstr "Citoyen · Bissau"
+
+msgid "Diretora RH · Empresa Comercial"
+msgstr "Directrice RH · Entreprise Commerciale"
+
+msgid "Médico · Clínica Central, Bissau"
+msgstr "Médecin · Clinique Centrale, Bissau"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Tudo o que precisa saber sobre a plataforma e-INSS"
+msgstr "Tout ce que vous devez savoir sur la plateforme e-INSS"
+
+msgid "Como me registo na plataforma e-INSS?"
+msgstr "Comment m'inscrire sur la plateforme e-INSS ?"
+
+msgid "O registo é feito por um agente INSS autorizado que regista o seu perfil com os seus dados pessoais, de identidade e contributivos. Após o registo, recebe as suas credenciais de acesso por e-mail."
+msgstr "L'inscription est effectuée par un agent INSS autorisé qui enregistre votre profil avec vos données personnelles, d'identité et contributives. Après l'inscription, vous recevez vos identifiants d'accès par e-mail."
+
+msgid "O cartão de saúde digital é aceite em todos os hospitais?"
+msgstr "La carte de santé numérique est-elle acceptée dans tous les hôpitaux ?"
+
+msgid "Sim, o cartão digital e-INSS é aceite em todos os estabelecimentos de saúde parceiros do INSS na Guinée-Bissau. O prestador apenas precisa de escanear o QR code para verificar instantaneamente a sua cobertura."
+msgstr "Oui, la carte numérique e-INSS est acceptée dans tous les établissements de santé partenaires de l'INSS en Guinée-Bissau. Le prestataire n'a qu'à scanner le QR code pour vérifier instantanément votre couverture."
+
+msgid "Qual é o custo de utilização da plataforma?"
+msgstr "Quel est le coût d'utilisation de la plateforme ?"
+
+msgid "A plataforma e-INSS é gratuita para todos os afiliados registados. Os custos das contribuições são definidos pela lei da segurança social e dependem do salário base do trabalhador."
+msgstr "La plateforme e-INSS est gratuite pour tous les affiliés enregistrés. Les coûts des cotisations sont définis par la loi de sécurité sociale et dépendent du salaire de base du travailleur."
+
+msgid "Por quanto tempo é válido o cartão de saúde digital?"
+msgstr "Quelle est la durée de validité de la carte de santé numérique ?"
+
+msgid "O cartão de saúde digital tem validade de 1 ano a partir da data de emissão, condicionado à regularidade das contribuições. A renovação é automática quando as contribuições estão em dia."
+msgstr "La carte de santé numérique est valable 1 an à partir de la date d'émission, sous réserve de la régularité des cotisations. Le renouvellement est automatique lorsque les cotisations sont à jour."
+
+msgid "Como funciona a autenticação MFA?"
+msgstr "Comment fonctionne l'authentification MFA ?"
+
+msgid "A autenticação de dois fatores (MFA) adiciona uma camada extra de segurança. Após ativar o MFA nas configurações da conta, cada acesso requer um código de 6 dígitos gerado pela sua aplicação autenticadora (Google Authenticator, Authy, etc.)."
+msgstr "L'authentification à deux facteurs (MFA) ajoute une couche supplémentaire de sécurité. Après avoir activé le MFA dans les paramètres du compte, chaque accès nécessite un code à 6 chiffres généré par votre application d'authentification (Google Authenticator, Authy, etc.)."
+
+msgid "O que acontece se eu perder o acesso à minha conta?"
+msgstr "Que se passe-t-il si je perds l'accès à mon compte ?"
+
+msgid "Em caso de perda de acesso, contacte directamente um agente INSS ou o nosso suporte técnico através do e-mail suporte@inss.gw. Um agente irá verificar a sua identidade e restaurar o acesso em 24 a 48 horas."
+msgstr "En cas de perte d'accès, contactez directement un agent INSS ou notre support technique par e-mail à suporte@inss.gw. Un agent vérifiera votre identité et restaurera l'accès en 24 à 48 heures."
+
+msgid "Precisas de ajuda?"
+msgstr "Besoin d'aide ?"
+
+msgid "Os nossos agentes estão disponíveis para o assistir em todos os procedimentos."
+msgstr "Nos agents sont disponibles pour vous assister dans toutes les démarches."
+
+msgid "Contactar suporte"
+msgstr "Contacter le support"
+
+msgid "Pronto para começar?"
+msgstr "Prêt à commencer ?"
+
+msgid "Junte-se a mais de 50 000 cidadãos que já beneficiam da plataforma e-INSS digital."
+msgstr "Rejoignez plus de 50 000 citoyens qui bénéficient déjà de la plateforme e-INSS numérique."
+
+msgid "Criar conta gratuita"
+msgstr "Créer un compte gratuit"
+
+msgid "Já tenho conta — Entrar →"
+msgstr "J'ai déjà un compte — Se connecter →"
+
+msgid "A plataforma digital oficial do INSS da República da Guinée-Bissau. Modernizando a proteção social para todos os cidadãos."
+msgstr "La plateforme numérique officielle de l'INSS de la République de Guinée-Bissau. Modernisation de la protection sociale pour tous les citoyens."
+
+msgid "© 2026 INSS — República da Guinée-Bissau. Todos os direitos reservados."
+msgstr "© 2026 INSS — République de Guinée-Bissau. Tous droits réservés."
+
+msgid "Versão 1.0.0"
+msgstr "Version 1.0.0"
+
+msgid "Técnico"
+msgstr "Technique"
+
 # ── Auth / Login ──
 msgid "Plataforma Nacional de Seguridade Social"
 msgstr "Plateforme Nationale de Sécurité Sociale"

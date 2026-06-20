@@ -56,6 +56,18 @@ class CitizenDashboardView(CitizenRequiredMixin, TemplateView):
         except Exception:
             ctx["open_claims_count"] = 0
 
+        # Actos médicos registados no cartão do cidadão
+        try:
+            if ctx.get("card"):
+                from apps.verification.models import ProviderMedicalAct
+                ctx["recent_medical_acts"] = ProviderMedicalAct.objects.filter(
+                    card=ctx["card"]
+                ).select_related("provider").order_by("-created_at")[:5]
+            else:
+                ctx["recent_medical_acts"] = []
+        except Exception:
+            ctx["recent_medical_acts"] = []
+
         return ctx
 
 
@@ -78,12 +90,21 @@ class CitizenCardQRView(CitizenRequiredMixin, TemplateView):
     template_name = "portal/citizen/card_qr.html"
 
     def get_context_data(self, **kwargs):
+        import base64
+        from apps.cards.services.qr_service import QRTokenService
+
         ctx = super().get_context_data(**kwargs)
         try:
             affiliate = self.request.user.affiliate
-            ctx["card"] = affiliate.health_card
+            card = affiliate.health_card
+            ctx["card"] = card
+            service = QRTokenService()
+            token = service.generate_token(card)
+            qr_bytes = service.generate_qr_image(token)
+            ctx["qr_b64"] = base64.b64encode(qr_bytes).decode("utf-8")
         except (Affiliate.DoesNotExist, HealthCard.DoesNotExist):
             ctx["card"] = None
+            ctx["qr_b64"] = None
         return ctx
 
 
@@ -197,6 +218,15 @@ class AgentDashboardView(AgentRequiredMixin, TemplateView):
             ).count()
         except Exception:
             ctx["active_controls_count"] = 0
+
+        # Actos médicos pendentes
+        try:
+            from apps.verification.models import ProviderMedicalAct, ActStatus
+            ctx["pending_medical_acts_count"] = ProviderMedicalAct.objects.filter(
+                status=ActStatus.PENDING
+            ).count()
+        except Exception:
+            ctx["pending_medical_acts_count"] = 0
 
         return ctx
 

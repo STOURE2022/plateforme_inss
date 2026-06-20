@@ -32,7 +32,7 @@
       </span>
       {% endif %}
     </div>
-    <div class="text-2xl font-bold text-slate-900 mb-1">
+    <div class="text-sm font-bold text-slate-900 mb-1 break-all leading-snug">
       {% if card %}{{ card.card_number }}{% else %}&mdash;{% endif %}
     </div>
     <div class="text-sm text-slate-500">
@@ -122,6 +122,41 @@
     </a>
   </div>
 </div>
+
+<!-- Histórico de utilização do cartão -->
+{% if recent_medical_acts %}
+<div class="mt-6 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-bold text-slate-900">{% trans "Utilização do Cartão" %}</h2>
+  </div>
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="divide-y divide-slate-50">
+      {% for act in recent_medical_acts %}
+      <div class="flex items-center gap-4 px-5 py-4">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0
+          {% if act.status == 'VALIDATED' %}bg-emerald-50{% elif act.status == 'REJECTED' %}bg-red-50{% else %}bg-amber-50{% endif %}">
+          <svg class="w-4 h-4 {% if act.status == 'VALIDATED' %}text-emerald-600{% elif act.status == 'REJECTED' %}text-red-500{% else %}text-amber-500{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-slate-900">{{ act.get_act_type_display }}</p>
+          <p class="text-xs text-slate-400 mt-0.5">
+            {{ act.provider.email }} — {{ act.act_date|date:"d/m/Y" }}
+          </p>
+        </div>
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0
+          {% if act.status == 'VALIDATED' %}bg-emerald-100 text-emerald-700
+          {% elif act.status == 'REJECTED' %}bg-red-100 text-red-700
+          {% else %}bg-amber-100 text-amber-700{% endif %}">
+          {% if act.status == 'VALIDATED' %}{% trans "Validado" %}{% elif act.status == 'REJECTED' %}{% trans "Rejeitado" %}{% else %}{% trans "Pendente" %}{% endif %}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <!-- CARTE VISUELLE + DERNIÈRES COTISATIONS -->
 <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">

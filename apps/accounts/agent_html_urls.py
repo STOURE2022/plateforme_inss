@@ -1,6 +1,7 @@
 from django.urls import path
 from apps.affiliates import html_views as affiliate_views
 from apps.employers import html_views as employer_views
+from apps.verification import html_views as verification_views
 
 urlpatterns = [
     # Dashboard
@@ -29,4 +30,8 @@ urlpatterns = [
 
     # Logs de verificação
     path("verification-logs/", affiliate_views.AgentVerificationLogView.as_view(), name="agent-verification-logs"),
+
+    # Actos médicos
+    path("medical-acts/", verification_views.AgentMedicalActListView.as_view(), name="agent-medical-act-list"),
+    path("medical-acts/<int:pk>/", verification_views.AgentMedicalActReviewView.as_view(), name="agent-medical-act-review"),
 ]

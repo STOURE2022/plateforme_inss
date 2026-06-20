@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>e-INSS — Instituto Nacional de Segurança Social · Guinée-Bissau</title>
-  <meta name="description" content="Plataforma digital oficial do INSS da Guinée-Bissau. Gerencie contribuições, cartões de saúde e muito mais.">
+  <title>{% trans "e-INSS — Instituto Nacional de Segurança Social · Guinée-Bissau" %}</title>
+  <meta name="description" content="{% trans "Plataforma digital oficial do INSS da Guinée-Bissau. Gerencie contribuições, cartões de saúde e muito mais." %}">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -77,17 +77,17 @@
         </div>
       </div>
       <div class="hidden md:flex items-center gap-8">
-        <a href="#portais" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">Portais</a>
-        <a href="#servicos" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">Serviços</a>
-        <a href="#seguranca" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">Segurança</a>
-        <a href="#faq" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">FAQ</a>
+        <a href="#portais" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">{% trans "Portais" %}</a>
+        <a href="#servicos" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">{% trans "Serviços" %}</a>
+        <a href="#seguranca" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">{% trans "Segurança" %}</a>
+        <a href="#faq" class="nav-link text-sm font-medium text-white/80 hover:text-white transition-colors">{% trans "FAQ" %}</a>
       </div>
       <div class="flex items-center gap-3">
-        <a href="{% url 'html-login' %}" class="hidden sm:block text-sm font-semibold text-white/80 hover:text-white transition-colors nav-link">Entrar</a>
+        <a href="{% url 'html-login' %}" class="hidden sm:block text-sm font-semibold text-white/80 hover:text-white transition-colors nav-link">{% trans "Entrar" %}</a>
         <a href="{% url 'html-login' %}"
            class="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-inss-600 bg-white hover:bg-gold-300 transition-all shadow-lg"
            style="color: #1F3864;">
-          Aceder à plataforma
+          {% trans "Aceder à plataforma" %}
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
           </svg>
@@ -122,15 +122,15 @@
   </div>
   <div id="mobile-menu" class="md:hidden" style="background:rgba(15,28,52,0.98);backdrop-filter:blur(16px);">
     <div class="max-w-7xl mx-auto px-4 pb-6 pt-2 flex flex-col gap-1">
-      <a href="#portais" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">Portais</a>
-      <a href="#servicos" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">Serviços</a>
-      <a href="#seguranca" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">Segurança</a>
-      <a href="#faq" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">FAQ</a>
+      <a href="#portais" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">{% trans "Portais" %}</a>
+      <a href="#servicos" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">{% trans "Serviços" %}</a>
+      <a href="#seguranca" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">{% trans "Segurança" %}</a>
+      <a href="#faq" class="mobile-nav-link text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">{% trans "FAQ" %}</a>
       <div class="h-px bg-white/10 my-2"></div>
-      <a href="{% url 'html-login' %}" class="text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">Entrar</a>
+      <a href="{% url 'html-login' %}" class="text-white/80 hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-white/10 transition-all text-sm">{% trans "Entrar" %}</a>
       <a href="{% url 'html-login' %}" class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold text-white transition-all mt-1"
          style="background:linear-gradient(135deg,#B8860B,#D4A017);">
-        Aceder à plataforma
+        {% trans "Aceder à plataforma" %}
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
         </svg>
@@ -171,19 +171,18 @@
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 badge-pulse"
              style="background:rgba(184,134,11,0.15);border:1px solid rgba(184,134,11,0.4);">
           <span class="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></span>
-          <span class="text-gold-300 text-xs font-semibold tracking-wider uppercase">Plataforma Oficial · República da Guinée-Bissau</span>
+          <span class="text-gold-300 text-xs font-semibold tracking-wider uppercase">{% trans "Plataforma Oficial · República da Guinée-Bissau" %}</span>
         </div>
 
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6" style="color:white;">
-          A sua segurança<br>
+          {% trans "A sua segurança" %}<br>
           <span style="background:linear-gradient(90deg,#B8860B,#E8C55A,#B8860B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
-            social, digital.
+            {% trans "social, digital." %}
           </span>
         </h1>
 
         <p class="text-lg text-white/65 leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0" style="color:rgba(255,255,255,0.65);">
-          O Instituto Nacional de Segurança Social da Guinée-Bissau agora na palma da sua mão.
-          Gerencie contribuições, aceda ao seu cartão de saúde e muito mais — em segundos.
+          {% trans "O Instituto Nacional de Segurança Social da Guinée-Bissau agora na palma da sua mão. Gerencie contribuições, aceda ao seu cartão de saúde e muito mais — em segundos." %}
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
@@ -193,7 +192,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
             </svg>
-            Aceder ao Portal
+            {% trans "Aceder ao Portal" %}
             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
             </svg>
@@ -204,22 +203,22 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
-            Ver portais
+            {% trans "Ver portais" %}
           </a>
         </div>
 
         <div class="flex flex-wrap items-center gap-6 justify-center lg:justify-start">
           <div class="flex items-center gap-2 text-sm" style="color:rgba(255,255,255,0.5);">
             <svg class="w-4 h-4" style="color:#34d399;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            100% Seguro
+            {% trans "100% Seguro" %}
           </div>
           <div class="flex items-center gap-2 text-sm" style="color:rgba(255,255,255,0.5);">
             <svg class="w-4 h-4" style="color:#34d399;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Disponível 24h/7
+            {% trans "Disponível 24h/7" %}
           </div>
           <div class="flex items-center gap-2 text-sm" style="color:rgba(255,255,255,0.5);">
             <svg class="w-4 h-4" style="color:#34d399;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Autenticação MFA
+            {% trans "Autenticação MFA" %}
           </div>
         </div>
       </div>
@@ -239,7 +238,7 @@
                 <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white"
                       style="background:rgba(31,56,100,0.7);backdrop-filter:blur(8px);">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  Profissionais de saúde
+                  {% trans "Profissionais de saúde" %}
                 </span>
               </div>
             </div>
@@ -248,7 +247,7 @@
                    alt="Enfermeira e paciente, Bissau" class="w-full h-full object-cover" loading="lazy">
               <div class="photo-overlay absolute inset-0"></div>
               <div class="absolute bottom-3 left-3">
-                <span class="text-white text-xs font-semibold drop-shadow">Saúde digital</span>
+                <span class="text-white text-xs font-semibold drop-shadow">{% trans "Saúde digital" %}</span>
               </div>
             </div>
             <div class="rounded-2xl overflow-hidden shadow-xl relative photo-card">
@@ -256,7 +255,7 @@
                    alt="Família guineense protegida" class="w-full h-full object-cover" loading="lazy">
               <div class="photo-overlay absolute inset-0"></div>
               <div class="absolute bottom-3 left-3">
-                <span class="text-white text-xs font-semibold drop-shadow">Família protegida</span>
+                <span class="text-white text-xs font-semibold drop-shadow">{% trans "Família protegida" %}</span>
               </div>
             </div>
           </div>
@@ -271,7 +270,7 @@
                   </div>
                   <div>
                     <div class="text-white font-black text-sm tracking-wide">INSS</div>
-                    <div class="text-white/60 text-xs">Cartão de Saúde</div>
+                    <div class="text-white/60 text-xs">{% trans "Cartão de Saúde" %}</div>
                   </div>
                 </div>
                 <div class="text-white/50 text-xs">Guinée-Bissau</div>
@@ -286,7 +285,7 @@
                     <div class="text-xs text-slate-500 font-mono">004-589-221</div>
                     <div class="flex items-center gap-1">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                      <span class="text-emerald-600 font-semibold text-xs">Activo · 2026–2027</span>
+                      <span class="text-emerald-600 font-semibold text-xs">{% trans "Activo · 2026–2027" %}</span>
                     </div>
                   </div>
                   <div class="w-12 h-12 flex-shrink-0 rounded-lg border-2 border-slate-200 flex items-center justify-center bg-slate-50">
@@ -311,8 +310,8 @@
               </svg>
             </div>
             <div>
-              <div class="text-xs font-bold text-slate-900">Verificado</div>
-              <div class="text-xs text-slate-500">Há 2 min</div>
+              <div class="text-xs font-bold text-slate-900">{% trans "Verificado" %}</div>
+              <div class="text-xs text-slate-500">{% trans "Há 2 min" %}</div>
             </div>
           </div>
 
@@ -324,8 +323,8 @@
               </svg>
             </div>
             <div>
-              <div class="text-xs font-bold text-slate-900">MFA Activo</div>
-              <div class="text-xs text-slate-500">Acesso seguro</div>
+              <div class="text-xs font-bold text-slate-900">{% trans "MFA Activo" %}</div>
+              <div class="text-xs text-slate-500">{% trans "Acesso seguro" %}</div>
             </div>
           </div>
         </div>
@@ -353,7 +352,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black mb-1" style="color:#1F3864;"><span class="stat-num" data-target="50000">0</span>+</div>
-        <div class="text-sm font-medium text-slate-500">Afiliados registados</div>
+        <div class="text-sm font-medium text-slate-500">{% trans "Afiliados registados" %}</div>
         <div class="w-8 h-0.5 mx-auto mt-3 rounded animated-underline"></div>
       </div>
 
@@ -364,7 +363,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black mb-1" style="color:#1F3864;"><span class="stat-num" data-target="35000">0</span>+</div>
-        <div class="text-sm font-medium text-slate-500">Cartões emitidos</div>
+        <div class="text-sm font-medium text-slate-500">{% trans "Cartões emitidos" %}</div>
         <div class="w-8 h-0.5 mx-auto mt-3 rounded animated-underline"></div>
       </div>
 
@@ -375,7 +374,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black mb-1" style="color:#1F3864;"><span class="stat-num" data-target="200">0</span>+</div>
-        <div class="text-sm font-medium text-slate-500">Prestadores de saúde</div>
+        <div class="text-sm font-medium text-slate-500">{% trans "Prestadores de saúde" %}</div>
         <div class="w-8 h-0.5 mx-auto mt-3 rounded animated-underline"></div>
       </div>
 
@@ -386,7 +385,7 @@
           </svg>
         </div>
         <div class="text-4xl font-black mb-1" style="color:#1F3864;">99.<span class="stat-num" data-target="9">0</span>%</div>
-        <div class="text-sm font-medium text-slate-500">Disponibilidade</div>
+        <div class="text-sm font-medium text-slate-500">{% trans "Disponibilidade" %}</div>
         <div class="w-8 h-0.5 mx-auto mt-3 rounded animated-underline"></div>
       </div>
 
@@ -401,9 +400,9 @@
 
     <div class="text-center max-w-2xl mx-auto mb-10 reveal">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4"
-           style="background:rgba(31,56,100,0.08);color:#1F3864;">Para todos os utilizadores</div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">Qual é o seu perfil?</h2>
-      <p class="text-slate-500 text-lg">Cada utilizador tem um espaço dedicado, adaptado às suas necessidades específicas.</p>
+           style="background:rgba(31,56,100,0.08);color:#1F3864;">{% trans "Para todos os utilizadores" %}</div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">{% trans "Qual é o seu perfil?" %}</h2>
+      <p class="text-slate-500 text-lg">{% trans "Cada utilizador tem um espaço dedicado, adaptado às suas necessidades específicas." %}</p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -415,7 +414,7 @@
                alt="Cidadã guineense" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(31,56,100,0.75) 100%);"></div>
           <div class="absolute bottom-3 left-4">
-            <span class="text-white font-black text-base">Cidadão</span>
+            <span class="text-white font-black text-base">{% trans "Cidadão" %}</span>
           </div>
           <div class="absolute top-3 right-3 w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.92);">
             <svg class="w-4 h-4" style="color:#2563EB;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -424,9 +423,9 @@
           </div>
         </div>
         <div class="p-5">
-          <p class="text-slate-500 text-xs leading-relaxed mb-3">Aceda ao seu cartão, contribuições e dependentes</p>
+          <p class="text-slate-500 text-xs leading-relaxed mb-3">{% trans "Aceda ao seu cartão, contribuições e dependentes" %}</p>
           <div class="inline-flex items-center gap-1.5 text-xs font-semibold" style="color:#2563EB;">
-            Entrar <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Entrar" %} <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </div>
         </div>
       </a>
@@ -438,7 +437,7 @@
                alt="Empregador" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(5,46,22,0.75) 100%);"></div>
           <div class="absolute bottom-3 left-4">
-            <span class="text-white font-black text-base">Empregador</span>
+            <span class="text-white font-black text-base">{% trans "Empregador" %}</span>
           </div>
           <div class="absolute top-3 right-3 w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.92);">
             <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -447,9 +446,9 @@
           </div>
         </div>
         <div class="p-5">
-          <p class="text-slate-500 text-xs leading-relaxed mb-3">Declare e gira as cotizações dos seus trabalhadores</p>
+          <p class="text-slate-500 text-xs leading-relaxed mb-3">{% trans "Declare e gira as cotizações dos seus trabalhadores" %}</p>
           <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
-            Entrar <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Entrar" %} <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </div>
         </div>
       </a>
@@ -461,7 +460,7 @@
                alt="Agente INSS" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(10,22,40,0.85) 100%);"></div>
           <div class="absolute bottom-3 left-4">
-            <span class="text-white font-black text-base">Agente INSS</span>
+            <span class="text-white font-black text-base">{% trans "Agente INSS" %}</span>
           </div>
           <div class="absolute top-3 right-3 w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(184,134,11,0.9);">
             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -470,9 +469,9 @@
           </div>
         </div>
         <div class="p-5" style="background:linear-gradient(135deg,#1F3864,#2563EB);">
-          <p class="text-white/65 text-xs leading-relaxed mb-3">Gestão completa de afiliados, cartas e empregadores</p>
+          <p class="text-white/65 text-xs leading-relaxed mb-3">{% trans "Gestão completa de afiliados, cartas e empregadores" %}</p>
           <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-gold-300">
-            Entrar <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Entrar" %} <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </div>
         </div>
       </a>
@@ -484,7 +483,7 @@
                alt="Médico prestador de saúde" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(67,20,7,0.75) 100%);"></div>
           <div class="absolute bottom-3 left-4">
-            <span class="text-white font-black text-base">Prestador de Saúde</span>
+            <span class="text-white font-black text-base">{% trans "Prestador de Saúde" %}</span>
           </div>
           <div class="absolute top-3 right-3 w-9 h-9 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.92);">
             <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -493,9 +492,9 @@
           </div>
         </div>
         <div class="p-5">
-          <p class="text-slate-500 text-xs leading-relaxed mb-3">Verifique instantaneamente a cobertura dos pacientes</p>
+          <p class="text-slate-500 text-xs leading-relaxed mb-3">{% trans "Verifique instantaneamente a cobertura dos pacientes" %}</p>
           <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-500">
-            Entrar <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Entrar" %} <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </div>
         </div>
       </a>
@@ -511,11 +510,11 @@
   <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(10,22,40,0.88) 0%,rgba(31,56,100,0.72) 100%);"></div>
   <div class="relative z-10 h-full flex items-center justify-center text-center px-4">
     <div>
-      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E8C55A;">Uma cobertura nacional</p>
+      <p class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:#E8C55A;">{% trans "Uma cobertura nacional" %}</p>
       <h2 class="text-3xl sm:text-5xl font-black text-white mb-3">
-        Mais de <span style="color:#E8C55A;">50 000</span> Guineenses
+        {% trans "Mais de" %} <span style="color:#E8C55A;">50 000</span> {% trans "Guineenses" %}
       </h2>
-      <p class="text-lg sm:text-xl text-white/70">já estão protegidos pela plataforma e-INSS</p>
+      <p class="text-lg sm:text-xl text-white/70">{% trans "já estão protegidos pela plataforma e-INSS" %}</p>
     </div>
   </div>
 </section>
@@ -527,9 +526,9 @@
 
     <div class="text-center max-w-2xl mx-auto mb-10 reveal">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4"
-           style="background:rgba(31,56,100,0.08);color:#1F3864;">Os nossos serviços</div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">Tudo o que precisa,<br>num só lugar</h2>
-      <p class="text-slate-500 text-lg">Uma plataforma completa para gerir toda a sua vida social de forma digital e segura.</p>
+           style="background:rgba(31,56,100,0.08);color:#1F3864;">{% trans "Os nossos serviços" %}</div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">{% trans "Tudo o que precisa," %}<br>{% trans "num só lugar" %}</h2>
+      <p class="text-slate-500 text-lg">{% trans "Uma plataforma completa para gerir toda a sua vida social de forma digital e segura." %}</p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -546,10 +545,10 @@
           </div>
         </div>
         <div class="p-6">
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Cartão de Saúde Digital</h3>
-          <p class="text-slate-500 text-sm leading-relaxed mb-4">Aceda ao seu cartão de seguro de saúde digital com QR code verificável em tempo real por qualquer prestador.</p>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">{% trans "Cartão de Saúde Digital" %}</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">{% trans "Aceda ao seu cartão de seguro de saúde digital com QR code verificável em tempo real por qualquer prestador." %}</p>
           <a href="{% url 'html-login' %}" class="flex items-center gap-2 text-sm font-semibold" style="color:#2563EB;">
-            Ver mais <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Ver mais" %} <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </a>
         </div>
       </div>
@@ -566,10 +565,10 @@
           </div>
         </div>
         <div class="p-6">
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Gestão de Contribuições</h3>
-          <p class="text-slate-500 text-sm leading-relaxed mb-4">Consulte o seu histórico de contribuições, verifique pagamentos e acompanhe o seu período contributivo completo.</p>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">{% trans "Gestão de Contribuições" %}</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">{% trans "Consulte o seu histórico de contribuições, verifique pagamentos e acompanhe o seu período contributivo completo." %}</p>
           <a href="{% url 'html-login' %}" class="flex items-center gap-2 text-sm font-semibold text-emerald-600">
-            Ver mais <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Ver mais" %} <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </a>
         </div>
       </div>
@@ -586,10 +585,10 @@
           </div>
         </div>
         <div class="p-6">
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Dependentes & Família</h3>
-          <p class="text-slate-500 text-sm leading-relaxed mb-4">Inclua o cônjuge e filhos na sua cobertura. Todos os beneficiários têm a proteção social INSS.</p>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">{% trans "Dependentes & Família" %}</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">{% trans "Inclua o cônjuge e filhos na sua cobertura. Todos os beneficiários têm a proteção social INSS." %}</p>
           <a href="{% url 'html-login' %}" class="flex items-center gap-2 text-sm font-semibold text-orange-500">
-            Ver mais <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Ver mais" %} <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </a>
         </div>
       </div>
@@ -606,10 +605,10 @@
           </div>
         </div>
         <div class="p-6">
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Portal Empresarial</h3>
-          <p class="text-slate-500 text-sm leading-relaxed mb-4">As empresas gerem declarações e cotizações dos trabalhadores de forma centralizada, simples e em conformidade.</p>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">{% trans "Portal Empresarial" %}</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">{% trans "As empresas gerem declarações e cotizações dos trabalhadores de forma centralizada, simples e em conformidade." %}</p>
           <a href="{% url 'html-login' %}" class="flex items-center gap-2 text-sm font-semibold text-violet-600">
-            Ver mais <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Ver mais" %} <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </a>
         </div>
       </div>
@@ -625,10 +624,10 @@
           </div>
         </div>
         <div class="p-6">
-          <h3 class="text-lg font-bold text-white mb-2">Verificação Instantânea</h3>
-          <p class="text-white/70 text-sm leading-relaxed mb-4">Prestadores de saúde verificam a cobertura em segundos — basta escanear o QR code do cartão digital.</p>
+          <h3 class="text-lg font-bold text-white mb-2">{% trans "Verificação Instantânea" %}</h3>
+          <p class="text-white/70 text-sm leading-relaxed mb-4">{% trans "Prestadores de saúde verificam a cobertura em segundos — basta escanear o QR code do cartão digital." %}</p>
           <a href="{% url 'html-login' %}" class="flex items-center gap-2 text-sm font-semibold text-gold-300">
-            Para prestadores <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Para prestadores" %} <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </a>
         </div>
       </div>
@@ -645,10 +644,10 @@
           </div>
         </div>
         <div class="p-6">
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Documentos & PDF</h3>
-          <p class="text-slate-500 text-sm leading-relaxed mb-4">Gere e descarregue o seu cartão de saúde em PDF e attestations oficiais com assinatura digital certificada.</p>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">{% trans "Documentos & PDF" %}</h3>
+          <p class="text-slate-500 text-sm leading-relaxed mb-4">{% trans "Gere e descarregue o seu cartão de saúde em PDF e attestations oficiais com assinatura digital certificada." %}</p>
           <a href="{% url 'html-login' %}" class="flex items-center gap-2 text-sm font-semibold text-rose-500">
-            Ver mais <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            {% trans "Ver mais" %} <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
           </a>
         </div>
       </div>
@@ -664,9 +663,9 @@
 
     <div class="text-center max-w-2xl mx-auto mb-10 reveal">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4"
-           style="background:rgba(184,134,11,0.1);color:#B8860B;">Processo simples</div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">Como funciona?</h2>
-      <p class="text-slate-500 text-lg">Em apenas 3 passos simples, aceda a todos os benefícios do INSS digital.</p>
+           style="background:rgba(184,134,11,0.1);color:#B8860B;">{% trans "Processo simples" %}</div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">{% trans "Como funciona?" %}</h2>
+      <p class="text-slate-500 text-lg">{% trans "Em apenas 3 passos simples, aceda a todos os benefícios do INSS digital." %}</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -685,8 +684,8 @@
           </div>
           <div class="absolute -top-2 -right-2 w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-sm shadow-lg" style="background:#B8860B;">1</div>
         </div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Registe-se</h3>
-        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">O agente INSS regista o seu perfil na plataforma com os seus dados pessoais e de contribuição.</p>
+        <h3 class="text-xl font-bold text-slate-900 mb-3">{% trans "Registe-se" %}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">{% trans "O agente INSS regista o seu perfil na plataforma com os seus dados pessoais e de contribuição." %}</p>
       </div>
 
       <div class="text-center reveal" style="transition-delay:0.15s;">
@@ -702,8 +701,8 @@
           </div>
           <div class="absolute -top-2 -right-2 w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-sm shadow-lg" style="background:#1F3864;">2</div>
         </div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Obtenha o seu cartão</h3>
-        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">Receba o seu cartão de saúde digital com QR code gerado automaticamente, válido por 1 ano.</p>
+        <h3 class="text-xl font-bold text-slate-900 mb-3">{% trans "Obtenha o seu cartão" %}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">{% trans "Receba o seu cartão de saúde digital com QR code gerado automaticamente, válido por 1 ano." %}</p>
       </div>
 
       <div class="text-center reveal" style="transition-delay:0.3s;">
@@ -719,8 +718,8 @@
           </div>
           <div class="absolute -top-2 -right-2 w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-sm shadow-lg" style="background:#059669;">3</div>
         </div>
-        <h3 class="text-xl font-bold text-slate-900 mb-3">Beneficie-se</h3>
-        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">Apresente o QR code em qualquer prestador de saúde parceiro — verificação instantânea e segura.</p>
+        <h3 class="text-xl font-bold text-slate-900 mb-3">{% trans "Beneficie-se" %}</h3>
+        <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">{% trans "Apresente o QR code em qualquer prestador de saúde parceiro — verificação instantânea e segura." %}</p>
       </div>
     </div>
 
@@ -728,7 +727,7 @@
       <a href="{% url 'html-register' %}"
          class="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white shadow-xl transition-all hover:-translate-y-1"
          style="background:linear-gradient(135deg,#B8860B,#D4A017);box-shadow:0 8px 24px rgba(184,134,11,0.35);">
-        Criar a minha conta
+        {% trans "Criar a minha conta" %}
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
         </svg>
@@ -736,7 +735,7 @@
       <a href="{% url 'html-login' %}"
          class="inline-flex items-center gap-2 text-base font-semibold transition-colors hover:opacity-80"
          style="color:#1F3864;">
-        Já tenho conta →
+        {% trans "Já tenho conta →" %}
       </a>
     </div>
 
@@ -756,18 +755,18 @@
       <div class="reveal">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6"
              style="background:rgba(184,134,11,0.2);color:#E8C55A;border:1px solid rgba(184,134,11,0.3);">
-          Segurança de nível bancário
+          {% trans "Segurança de nível bancário" %}
         </div>
-        <h2 class="text-3xl sm:text-4xl font-black text-white mb-5 leading-tight">A sua privacidade é<br>a nossa prioridade</h2>
-        <p class="text-white/65 text-lg leading-relaxed mb-8">Utilizamos as mais avançadas tecnologias de segurança para proteger os seus dados pessoais e garantir a integridade de cada transação.</p>
+        <h2 class="text-3xl sm:text-4xl font-black text-white mb-5 leading-tight">{% trans "A sua privacidade é" %}<br>{% trans "a nossa prioridade" %}</h2>
+        <p class="text-white/65 text-lg leading-relaxed mb-8">{% trans "Utilizamos as mais avançadas tecnologias de segurança para proteger os seus dados pessoais e garantir a integridade de cada transação." %}</p>
         <div class="space-y-5">
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(184,134,11,0.2);">
               <svg class="w-5 h-5 text-gold-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
             </div>
             <div>
-              <h4 class="text-white font-semibold mb-1">Token JWS com assinatura RSA-256</h4>
-              <p class="text-white/55 text-sm">Cada QR code contém um token criptográfico assinado digitalmente, impossível de falsificar.</p>
+              <h4 class="text-white font-semibold mb-1">{% trans "Token JWS com assinatura RSA-256" %}</h4>
+              <p class="text-white/55 text-sm">{% trans "Cada QR code contém um token criptográfico assinado digitalmente, impossível de falsificar." %}</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -775,8 +774,8 @@
               <svg class="w-5 h-5 text-gold-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             </div>
             <div>
-              <h4 class="text-white font-semibold mb-1">Autenticação a dois fatores (MFA)</h4>
-              <p class="text-white/55 text-sm">Proteja o acesso à sua conta com um código TOTP gerado pelo seu telemóvel.</p>
+              <h4 class="text-white font-semibold mb-1">{% trans "Autenticação a dois fatores (MFA)" %}</h4>
+              <p class="text-white/55 text-sm">{% trans "Proteja o acesso à sua conta com um código TOTP gerado pelo seu telemóvel." %}</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -784,8 +783,8 @@
               <svg class="w-5 h-5 text-gold-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
             </div>
             <div>
-              <h4 class="text-white font-semibold mb-1">Auditoria completa de todas as ações</h4>
-              <p class="text-white/55 text-sm">Cada verificação, modificação ou acesso fica registado e rastreável com timestamp imutável.</p>
+              <h4 class="text-white font-semibold mb-1">{% trans "Auditoria completa de todas as ações" %}</h4>
+              <p class="text-white/55 text-sm">{% trans "Cada verificação, modificação ou acesso fica registado e rastreável com timestamp imutável." %}</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
@@ -795,8 +794,8 @@
               </svg>
             </div>
             <div>
-              <h4 class="text-white font-semibold mb-1">Conformidade RGPD</h4>
-              <p class="text-white/55 text-sm">Os seus dados são processados em conformidade com os regulamentos internacionais de proteção de dados pessoais.</p>
+              <h4 class="text-white font-semibold mb-1">{% trans "Conformidade RGPD" %}</h4>
+              <p class="text-white/55 text-sm">{% trans "Os seus dados são processados em conformidade com os regulamentos internacionais de proteção de dados pessoais." %}</p>
             </div>
           </div>
         </div>
@@ -841,9 +840,9 @@
 
     <div class="text-center max-w-2xl mx-auto mb-10 reveal">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4"
-           style="background:rgba(184,134,11,0.1);color:#B8860B;">O que dizem os nossos utilizadores</div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">Eles confiam no e-INSS</h2>
-      <p class="text-slate-500 text-lg">Cidadãos, empregadores e profissionais de saúde partilham a sua experiência.</p>
+           style="background:rgba(184,134,11,0.1);color:#B8860B;">{% trans "O que dizem os nossos utilizadores" %}</div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">{% trans "Eles confiam no e-INSS" %}</h2>
+      <p class="text-slate-500 text-lg">{% trans "Cidadãos, empregadores e profissionais de saúde partilham a sua experiência." %}</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -860,9 +859,9 @@
           <img src="https://i.pravatar.cc/80?img=11" alt="Mamadou S." class="w-12 h-12 rounded-full object-cover" loading="lazy">
           <div>
             <div class="font-bold text-slate-900 text-sm">Mamadou Sow</div>
-            <div class="text-slate-400 text-xs">Cidadão · Bissau</div>
+            <div class="text-slate-400 text-xs">{% trans "Cidadão · Bissau" %}</div>
           </div>
-          <div class="ml-auto px-2 py-1 rounded-lg text-xs font-semibold" style="background:rgba(31,56,100,0.08);color:#1F3864;">Cidadão</div>
+          <div class="ml-auto px-2 py-1 rounded-lg text-xs font-semibold" style="background:rgba(31,56,100,0.08);color:#1F3864;">{% trans "Cidadão" %}</div>
         </div>
       </div>
 
@@ -878,9 +877,9 @@
           <img src="https://i.pravatar.cc/80?img=5" alt="Fátima B." class="w-12 h-12 rounded-full object-cover" loading="lazy">
           <div>
             <div class="font-bold text-slate-900 text-sm">Fátima Baldé</div>
-            <div class="text-slate-400 text-xs">Diretora RH · Empresa Comercial</div>
+            <div class="text-slate-400 text-xs">{% trans "Diretora RH · Empresa Comercial" %}</div>
           </div>
-          <div class="ml-auto px-2 py-1 rounded-lg text-xs font-semibold" style="background:rgba(5,150,105,0.1);color:#059669;">Empregador</div>
+          <div class="ml-auto px-2 py-1 rounded-lg text-xs font-semibold" style="background:rgba(5,150,105,0.1);color:#059669;">{% trans "Empregador" %}</div>
         </div>
       </div>
 
@@ -896,9 +895,9 @@
           <img src="https://i.pravatar.cc/80?img=33" alt="Dr. Carlos M." class="w-12 h-12 rounded-full object-cover" loading="lazy">
           <div>
             <div class="font-bold text-slate-900 text-sm">Dr. Carlos Mendes</div>
-            <div class="text-slate-400 text-xs">Médico · Clínica Central, Bissau</div>
+            <div class="text-slate-400 text-xs">{% trans "Médico · Clínica Central, Bissau" %}</div>
           </div>
-          <div class="ml-auto px-2 py-1 rounded-lg text-xs font-semibold" style="background:rgba(234,88,12,0.1);color:#EA580C;">Prestador</div>
+          <div class="ml-auto px-2 py-1 rounded-lg text-xs font-semibold" style="background:rgba(234,88,12,0.1);color:#EA580C;">{% trans "Prestador" %}</div>
         </div>
       </div>
 
@@ -913,9 +912,9 @@
 
     <div class="text-center mb-10 reveal">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-4"
-           style="background:rgba(184,134,11,0.1);color:#B8860B;">FAQ</div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">Perguntas Frequentes</h2>
-      <p class="text-slate-500 text-lg">Tudo o que precisa saber sobre a plataforma e-INSS</p>
+           style="background:rgba(184,134,11,0.1);color:#B8860B;">{% trans "FAQ" %}</div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">{% trans "Perguntas Frequentes" %}</h2>
+      <p class="text-slate-500 text-lg">{% trans "Tudo o que precisa saber sobre a plataforma e-INSS" %}</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
@@ -925,73 +924,73 @@
 
         <div class="faq-item bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 pl-4 cursor-pointer" data-faq="1">
           <div class="faq-trigger flex items-center justify-between p-5 pl-4" onclick="toggleFaq(this)">
-            <span class="font-semibold text-slate-900 text-sm pr-4">Como me registo na plataforma e-INSS?</span>
+            <span class="font-semibold text-slate-900 text-sm pr-4">{% trans "Como me registo na plataforma e-INSS?" %}</span>
             <svg class="faq-chevron w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </div>
           <div class="faq-answer px-5 pb-0">
-            <p class="text-slate-500 text-sm leading-relaxed pb-5">O registo é feito por um agente INSS autorizado que regista o seu perfil com os seus dados pessoais, de identidade e contributivos. Após o registo, recebe as suas credenciais de acesso por e-mail.</p>
+            <p class="text-slate-500 text-sm leading-relaxed pb-5">{% trans "O registo é feito por um agente INSS autorizado que regista o seu perfil com os seus dados pessoais, de identidade e contributivos. Após o registo, recebe as suas credenciais de acesso por e-mail." %}</p>
           </div>
         </div>
 
         <div class="faq-item bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 pl-4 cursor-pointer" data-faq="2">
           <div class="faq-trigger flex items-center justify-between p-5 pl-4" onclick="toggleFaq(this)">
-            <span class="font-semibold text-slate-900 text-sm pr-4">O cartão de saúde digital é aceite em todos os hospitais?</span>
+            <span class="font-semibold text-slate-900 text-sm pr-4">{% trans "O cartão de saúde digital é aceite em todos os hospitais?" %}</span>
             <svg class="faq-chevron w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </div>
           <div class="faq-answer px-5 pb-0">
-            <p class="text-slate-500 text-sm leading-relaxed pb-5">Sim, o cartão digital e-INSS é aceite em todos os estabelecimentos de saúde parceiros do INSS na Guinée-Bissau. O prestador apenas precisa de escanear o QR code para verificar instantaneamente a sua cobertura.</p>
+            <p class="text-slate-500 text-sm leading-relaxed pb-5">{% trans "Sim, o cartão digital e-INSS é aceite em todos os estabelecimentos de saúde parceiros do INSS na Guinée-Bissau. O prestador apenas precisa de escanear o QR code para verificar instantaneamente a sua cobertura." %}</p>
           </div>
         </div>
 
         <div class="faq-item bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 pl-4 cursor-pointer" data-faq="3">
           <div class="faq-trigger flex items-center justify-between p-5 pl-4" onclick="toggleFaq(this)">
-            <span class="font-semibold text-slate-900 text-sm pr-4">Qual é o custo de utilização da plataforma?</span>
+            <span class="font-semibold text-slate-900 text-sm pr-4">{% trans "Qual é o custo de utilização da plataforma?" %}</span>
             <svg class="faq-chevron w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </div>
           <div class="faq-answer px-5 pb-0">
-            <p class="text-slate-500 text-sm leading-relaxed pb-5">A plataforma e-INSS é gratuita para todos os afiliados registados. Os custos das contribuições são definidos pela lei da segurança social e dependem do salário base do trabalhador.</p>
+            <p class="text-slate-500 text-sm leading-relaxed pb-5">{% trans "A plataforma e-INSS é gratuita para todos os afiliados registados. Os custos das contribuições são definidos pela lei da segurança social e dependem do salário base do trabalhador." %}</p>
           </div>
         </div>
 
         <div class="faq-item bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 pl-4 cursor-pointer" data-faq="4">
           <div class="faq-trigger flex items-center justify-between p-5 pl-4" onclick="toggleFaq(this)">
-            <span class="font-semibold text-slate-900 text-sm pr-4">Por quanto tempo é válido o cartão de saúde digital?</span>
+            <span class="font-semibold text-slate-900 text-sm pr-4">{% trans "Por quanto tempo é válido o cartão de saúde digital?" %}</span>
             <svg class="faq-chevron w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </div>
           <div class="faq-answer px-5 pb-0">
-            <p class="text-slate-500 text-sm leading-relaxed pb-5">O cartão de saúde digital tem validade de 1 ano a partir da data de emissão, condicionado à regularidade das contribuições. A renovação é automática quando as contribuições estão em dia.</p>
+            <p class="text-slate-500 text-sm leading-relaxed pb-5">{% trans "O cartão de saúde digital tem validade de 1 ano a partir da data de emissão, condicionado à regularidade das contribuições. A renovação é automática quando as contribuições estão em dia." %}</p>
           </div>
         </div>
 
         <div class="faq-item bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 pl-4 cursor-pointer" data-faq="5">
           <div class="faq-trigger flex items-center justify-between p-5 pl-4" onclick="toggleFaq(this)">
-            <span class="font-semibold text-slate-900 text-sm pr-4">Como funciona a autenticação MFA?</span>
+            <span class="font-semibold text-slate-900 text-sm pr-4">{% trans "Como funciona a autenticação MFA?" %}</span>
             <svg class="faq-chevron w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </div>
           <div class="faq-answer px-5 pb-0">
-            <p class="text-slate-500 text-sm leading-relaxed pb-5">A autenticação de dois fatores (MFA) adiciona uma camada extra de segurança. Após ativar o MFA nas configurações da conta, cada acesso requer um código de 6 dígitos gerado pela sua aplicação autenticadora (Google Authenticator, Authy, etc.).</p>
+            <p class="text-slate-500 text-sm leading-relaxed pb-5">{% trans "A autenticação de dois fatores (MFA) adiciona uma camada extra de segurança. Após ativar o MFA nas configurações da conta, cada acesso requer um código de 6 dígitos gerado pela sua aplicação autenticadora (Google Authenticator, Authy, etc.)." %}</p>
           </div>
         </div>
 
         <div class="faq-item bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 pl-4 cursor-pointer" data-faq="6">
           <div class="faq-trigger flex items-center justify-between p-5 pl-4" onclick="toggleFaq(this)">
-            <span class="font-semibold text-slate-900 text-sm pr-4">O que acontece se eu perder o acesso à minha conta?</span>
+            <span class="font-semibold text-slate-900 text-sm pr-4">{% trans "O que acontece se eu perder o acesso à minha conta?" %}</span>
             <svg class="faq-chevron w-5 h-5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </div>
           <div class="faq-answer px-5 pb-0">
-            <p class="text-slate-500 text-sm leading-relaxed pb-5">Em caso de perda de acesso, contacte directamente um agente INSS ou o nosso suporte técnico através do e-mail suporte@inss.gw. Um agente irá verificar a sua identidade e restaurar o acesso em 24 a 48 horas.</p>
+            <p class="text-slate-500 text-sm leading-relaxed pb-5">{% trans "Em caso de perda de acesso, contacte directamente um agente INSS ou o nosso suporte técnico através do e-mail suporte@inss.gw. Um agente irá verificar a sua identidade e restaurar o acesso em 24 a 48 horas." %}</p>
           </div>
         </div>
 
@@ -1004,12 +1003,12 @@
                alt="Profissional de saúde em Bissau" class="w-full h-full object-cover" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 40%,rgba(10,22,40,0.85) 100%);"></div>
           <div class="absolute bottom-6 left-6 right-6">
-            <p class="text-white font-bold text-lg mb-2">Precisas de ajuda?</p>
-            <p class="text-white/65 text-sm mb-4">Os nossos agentes estão disponíveis para o assistir em todos os procedimentos.</p>
+            <p class="text-white font-bold text-lg mb-2">{% trans "Precisas de ajuda?" %}</p>
+            <p class="text-white/65 text-sm mb-4">{% trans "Os nossos agentes estão disponíveis para o assistir em todos os procedimentos." %}</p>
             <a href="mailto:suporte@inss.gw"
                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
                style="background:rgba(184,134,11,0.9);">
-              Contactar suporte
+              {% trans "Contactar suporte" %}
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </a>
           </div>
@@ -1055,9 +1054,9 @@
              style="background:#B8860B;">+50k</div>
       </div>
     </div>
-    <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">Pronto para começar?</h2>
+    <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">{% trans "Pronto para começar?" %}</h2>
     <p class="text-white/65 text-lg mb-8 max-w-xl mx-auto">
-      Junte-se a mais de 50 000 cidadãos que já beneficiam da plataforma e-INSS digital.
+      {% trans "Junte-se a mais de 50 000 cidadãos que já beneficiam da plataforma e-INSS digital." %}
     </p>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
       <a href="{% url 'html-register' %}"
@@ -1066,11 +1065,11 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
         </svg>
-        Criar conta gratuita
+        {% trans "Criar conta gratuita" %}
       </a>
       <a href="{% url 'html-login' %}"
          class="inline-flex items-center gap-3 px-10 py-4 rounded-2xl text-base font-semibold transition-all hover:bg-white/10 border-2 border-white/40 text-white">
-        Já tenho conta — Entrar →
+        {% trans "Já tenho conta — Entrar →" %}
       </a>
     </div>
   </div>
@@ -1089,10 +1088,10 @@
           </div>
           <div>
             <div class="font-bold text-xl">e-INSS</div>
-            <div class="text-white/50 text-xs">Instituto Nacional de Segurança Social</div>
+            <div class="text-white/50 text-xs">{% trans "Instituto Nacional de Segurança Social" %}</div>
           </div>
         </div>
-        <p class="text-white/50 text-sm leading-relaxed mb-5">A plataforma digital oficial do INSS da República da Guinée-Bissau. Modernizando a proteção social para todos os cidadãos.</p>
+        <p class="text-white/50 text-sm leading-relaxed mb-5">{% trans "A plataforma digital oficial do INSS da República da Guinée-Bissau. Modernizando a proteção social para todos os cidadãos." %}</p>
         <div class="flex items-center gap-3 mb-5">
           <div class="px-3 py-1.5 rounded-full text-xs font-medium" style="background:rgba(5,150,105,0.2);color:#6EE7B7;border:1px solid rgba(5,150,105,0.3);">● {{ site_settings.system_status_label }}</div>
         </div>
@@ -1116,19 +1115,19 @@
       </div>
 
       <div>
-        <h4 class="font-semibold text-sm uppercase tracking-wider text-white/40 mb-5">Portais</h4>
+        <h4 class="font-semibold text-sm uppercase tracking-wider text-white/40 mb-5">{% trans "Portais" %}</h4>
         <ul class="space-y-3 text-sm">
-          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">Cidadão</a></li>
-          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">Empregador</a></li>
-          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">Agente INSS</a></li>
-          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">Prestador de Saúde</a></li>
-          <li><a href="/admin/" class="text-white/65 hover:text-white transition-colors">Administração</a></li>
+          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">{% trans "Cidadão" %}</a></li>
+          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">{% trans "Empregador" %}</a></li>
+          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">{% trans "Agente INSS" %}</a></li>
+          <li><a href="{% url 'html-login' %}" class="text-white/65 hover:text-white transition-colors">{% trans "Prestador de Saúde" %}</a></li>
+          <li><a href="/admin/" class="text-white/65 hover:text-white transition-colors">{% trans "Administração" %}</a></li>
         </ul>
       </div>
 
       {% if site_settings.show_api_docs %}
       <div>
-        <h4 class="font-semibold text-sm uppercase tracking-wider text-white/40 mb-5">Técnico</h4>
+        <h4 class="font-semibold text-sm uppercase tracking-wider text-white/40 mb-5">{% trans "Técnico" %}</h4>
         <ul class="space-y-3 text-sm">
           <li><a href="/api/v1/docs/" class="text-white/65 hover:text-white transition-colors">API Swagger</a></li>
           <li><a href="/api/v1/redoc/" class="text-white/65 hover:text-white transition-colors">API ReDoc</a></li>
@@ -1138,7 +1137,7 @@
       {% endif %}
 
       <div>
-        <h4 class="font-semibold text-sm uppercase tracking-wider text-white/40 mb-5">Contacto</h4>
+        <h4 class="font-semibold text-sm uppercase tracking-wider text-white/40 mb-5">{% trans "Contacto" %}</h4>
         <ul class="space-y-3 text-sm">
           <li class="flex items-start gap-2 text-white/65">
             <svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1169,9 +1168,9 @@
 
     </div>
     <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-white/40 text-sm">© 2026 INSS — República da Guinée-Bissau. Todos os direitos reservados.</p>
+      <p class="text-white/40 text-sm">{% trans "© 2026 INSS — República da Guinée-Bissau. Todos os direitos reservados." %}</p>
       <div class="flex items-center gap-6 text-xs text-white/40">
-        <span>Versão 1.0.0</span><span>·</span><span>Django 5 · DRF · PostgreSQL</span>
+        <span>{% trans "Versão 1.0.0" %}</span><span>·</span><span>Django 5 · DRF · PostgreSQL</span>
       </div>
     </div>
   </div>

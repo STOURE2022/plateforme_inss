@@ -1,0 +1,135 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{% trans "Actos Médicos" %}{% endblock %}
+{% block page_title %}{% trans "Actos Médicos" %}{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">{% trans "Actos Médicos" %}</h1>
+    <p class="text-slate-500 text-sm mt-1">{% trans "Actos registados pelos prestadores de saúde" %}</p>
+  </div>
+  {% if pending_count > 0 %}
+  <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-amber-100 text-amber-800">
+    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+    {{ pending_count }} {% trans "pendente(s)" %}
+  </span>
+  {% endif %}
+</div>
+
+<!-- Stats -->
+{% if total_validated_amount %}
+<div class="grid grid-cols-2 gap-4 mb-6">
+  <div class="bg-white rounded-2xl p-4 border border-emerald-200 shadow-sm">
+    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">{% trans "Total Validado" %}</p>
+    <p class="text-xl font-bold text-emerald-600">{{ total_validated_amount|floatformat:0 }} XOF</p>
+  </div>
+</div>
+{% endif %}
+
+<!-- Filtro por prestador -->
+<div class="mb-4">
+  <form method="get" class="flex gap-2 items-center flex-wrap">
+    {% if status_filter %}<input type="hidden" name="status" value="{{ status_filter }}">{% endif %}
+    <select name="provider" onchange="this.form.submit()"
+            class="px-3 py-2 border border-slate-200 rounded-xl text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500">
+      <option value="">{% trans "Todos os prestadores" %}</option>
+      {% for p in providers %}
+      <option value="{{ p.email }}" {% if provider_filter == p.email %}selected{% endif %}>{{ p.email }}</option>
+      {% endfor %}
+    </select>
+    {% if provider_filter %}
+    <a href="?{% if status_filter %}status={{ status_filter }}{% endif %}" class="text-xs text-slate-500 hover:text-slate-700">{% trans "Limpar filtro" %}</a>
+    {% endif %}
+  </form>
+</div>
+
+<!-- Filtros de estado -->
+<div class="flex gap-2 mb-6 flex-wrap">
+  {% for value, label in act_statuses %}
+  <a href="?status={{ value }}"
+     class="px-4 py-2 rounded-xl text-xs font-semibold transition-all
+       {% if status_filter == value %}
+         {% if value == 'PENDING' %}bg-amber-500 text-white
+         {% elif value == 'VALIDATED' %}bg-emerald-500 text-white
+         {% else %}bg-red-500 text-white{% endif %}
+       {% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+    {{ label }}
+  </a>
+  {% endfor %}
+  <a href="?status=ALL"
+     class="px-4 py-2 rounded-xl text-xs font-semibold transition-all
+       {% if status_filter == 'ALL' %}bg-slate-700 text-white{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+    {% trans "Todos" %}
+  </a>
+</div>
+
+<!-- Tabela -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  {% if acts %}
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-slate-100 bg-slate-50">
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Referência" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Titular" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Tipo de Acto" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Data" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Prestador" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Montante" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Estado" %}</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-50">
+        {% for act in acts %}
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="px-5 py-3.5 font-mono text-xs text-slate-600 font-semibold">{{ act.reference }}</td>
+          <td class="px-5 py-3.5">
+            <div class="font-semibold text-slate-900">{{ act.affiliate_name }}</div>
+            <div class="text-xs text-slate-400 font-mono">{{ act.affiliate_niss }}</div>
+          </td>
+          <td class="px-5 py-3.5 text-slate-700">{{ act.get_act_type_display }}</td>
+          <td class="px-5 py-3.5 text-slate-500">{{ act.act_date|date:"d/m/Y" }}</td>
+          <td class="px-5 py-3.5 text-slate-500 text-xs">{{ act.provider.get_full_name|default:act.provider.email }}</td>
+          <td class="px-5 py-3.5 text-slate-700 font-semibold">
+            {% if act.estimated_amount %}{{ act.estimated_amount|floatformat:0 }} XOF{% else %}<span class="text-slate-300">—</span>{% endif %}
+          </td>
+          <td class="px-5 py-3.5">
+            {% if act.status == 'PENDING' %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>{% trans "Pendente" %}
+            </span>
+            {% elif act.status == 'VALIDATED' %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{% trans "Validado" %}
+            </span>
+            {% else %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>{% trans "Rejeitado" %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-3.5">
+            <a href="{% url 'agent-medical-act-review' act.pk %}"
+               class="text-xs font-semibold text-blue-600 hover:text-blue-800">{% trans "Ver" %} →</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-16">
+    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    <p class="text-slate-500 font-medium">{% trans "Nenhum acto médico encontrado" %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

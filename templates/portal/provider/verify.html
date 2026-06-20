@@ -1,19 +1,56 @@
 {% extends "portal/base_portal.html" %}
-{% block title %}Verificar Cartão{% endblock %}
-{% block page_title %}Verificação de Cartão{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Verificar Cartão" %}{% endblock %}
+{% block page_title %}{% trans "Verificação de Cartão" %}{% endblock %}
 
 {% block sidebar_nav %}
 {% include "portal/provider/_sidebar.html" %}
 {% endblock %}
 
+{% block extra_head %}
+<style>
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  .tab-btn { transition: all 0.2s; }
+  .tab-btn.active {
+    background: linear-gradient(135deg, #1F3864, #2563EB);
+    color: white;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+  }
+  .tab-btn:not(.active) { background: #F1F5F9; color: #64748b; }
+  .tab-btn:not(.active):hover { background: #E2E8F0; color: #334155; }
+
+  #qr-reader video { border-radius: 12px; }
+  #qr-reader { border-radius: 12px; overflow: hidden; }
+
+  .scanner-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .scanner-frame {
+    width: 200px; height: 200px;
+    border: 3px solid #2563EB;
+    border-radius: 16px;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,0.45);
+    position: relative;
+  }
+  .scanner-line {
+    position: absolute; left: 8px; right: 8px; top: 50%;
+    height: 2px; background: #2563EB;
+    animation: scan 2s ease-in-out infinite;
+  }
+  @keyframes scan {
+    0%   { top: 15%; opacity:1; }
+    50%  { top: 85%; opacity:1; }
+    100% { top: 15%; opacity:1; }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="mb-4">
-  <a href="{% url 'provider-dashboard' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-    Voltar ao painel
-  </a>
-</div>
-<div class="max-w-2xl mx-auto">
+<div class="max-w-xl mx-auto">
+
   <!-- Hero -->
   <div class="text-center mb-8">
     <div class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl"
@@ -22,36 +59,176 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
       </svg>
     </div>
-    <h1 class="text-2xl font-bold text-slate-900">Verificar Cartão de Saúde</h1>
-    <p class="text-slate-500 mt-1 text-sm">Cole o token obtido pelo QR code do cartão</p>
+    <h1 class="text-2xl font-bold text-slate-900">{% trans "Verificar Cartão de Saúde" %}</h1>
+    <p class="text-slate-500 mt-1 text-sm">{% trans "Scan o QR code ou introduza o número do cartão" %}</p>
   </div>
 
-  <!-- Form card -->
-  <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 mb-6">
-    <form hx-post="{% url 'provider-verify' %}"
+  <!-- Tabs -->
+  <div class="flex gap-3 mb-6">
+    <button onclick="showTab('scan')" id="tab-scan"
+            class="tab-btn active flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 8v.01M4 16h.01M4 20h.01M8 20h.01M8 4h.01M12 8h.01M16 4h.01M20 4h.01M20 8h.01M20 12h.01"/>
+      </svg>
+      {% trans "Scan QR Code" %}
+    </button>
+    <button onclick="showTab('number')" id="tab-number"
+            class="tab-btn flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+      </svg>
+      {% trans "Nº do Cartão" %}
+    </button>
+  </div>
+
+  <!-- Tab: QR Scanner -->
+  <div id="panel-scan" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 mb-6">
+    <div id="scanner-idle" class="text-center py-4">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:#EFF6FF;">
+        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <p class="text-slate-700 font-semibold mb-1">{% trans "Câmera pronta" %}</p>
+      <p class="text-slate-400 text-sm mb-5">{% trans "Aponte a câmera para o QR code do cartão do paciente" %}</p>
+      <button onclick="startScanner()"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white text-sm font-semibold shadow-md"
+              style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        {% trans "Ativar Câmera" %}
+      </button>
+    </div>
+
+    <div id="scanner-active" class="hidden">
+      <div class="relative rounded-2xl overflow-hidden mb-4" style="background:#000;">
+        <div id="qr-reader" style="width:100%;"></div>
+        <div class="scanner-overlay">
+          <div class="scanner-frame">
+            <div class="scanner-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <p class="text-sm text-slate-500 mb-3">{% trans "A aguardar o QR code..." %}</p>
+        <button onclick="stopScanner()"
+                class="text-xs text-slate-400 hover:text-slate-600 underline">
+          {% trans "Cancelar" %}
+        </button>
+      </div>
+    </div>
+
+    <div id="scanner-success" class="hidden text-center py-2">
+      <svg class="w-10 h-10 text-emerald-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p class="text-emerald-700 font-semibold text-sm">{% trans "QR lido! A verificar..." %}</p>
+    </div>
+  </div>
+
+  <!-- Tab: Card Number -->
+  <div id="panel-number" class="hidden bg-white rounded-3xl border border-slate-200 shadow-sm p-6 mb-6">
+    <form hx-post="{% url 'provider-verify-by-number' %}"
           hx-target="#result-zone"
           hx-swap="innerHTML"
-          hx-indicator="#verify-spinner"
-          class="space-y-5">
+          hx-indicator="#spinner-number"
+          class="space-y-4">
       {% csrf_token %}
       <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-2">Token QR</label>
-        <textarea name="token" rows="4" required
-                  placeholder="Cole aqui o token do QR code..."
-                  class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-mono bg-slate-50 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all resize-none"></textarea>
-        <p class="mt-1.5 text-xs text-slate-400">O token começa com "eyJ..." e foi obtido ao escanear o QR code do cartão</p>
+        <label class="block text-sm font-semibold text-slate-700 mb-2">{% trans "Número do Cartão" %}</label>
+        <input type="text" name="card_number" required
+               placeholder="INSS-GW00000000001-2026"
+               class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-mono bg-slate-50 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-50 transition-all uppercase"
+               oninput="this.value=this.value.toUpperCase()">
+        <p class="mt-1.5 text-xs text-slate-400">{% trans "Formato: INSS-GW00000000001-2026" %}</p>
       </div>
       <button type="submit"
               class="w-full flex items-center justify-center gap-3 py-3.5 rounded-xl text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all"
               style="background: linear-gradient(135deg, #1F3864, #2563EB);">
-        <span id="verify-spinner" class="htmx-indicator w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Verificar Cartão
+        <span id="spinner-number" class="htmx-indicator w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        {% trans "Verificar Cartão" %}
       </button>
     </form>
   </div>
 
-  <!-- Result zone -->
+  <!-- Zone résultat -->
   <div id="result-zone"></div>
+
+  <!-- Formulaire caché pour soumission token QR (scan) -->
+  <form id="qr-token-form"
+        hx-post="{% url 'provider-verify' %}"
+        hx-target="#result-zone"
+        hx-swap="innerHTML"
+        style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="token" id="qr-token-input">
+  </form>
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+  let html5QrCode = null;
+
+  function showTab(tab) {
+    document.getElementById('panel-scan').classList.toggle('hidden', tab !== 'scan');
+    document.getElementById('panel-number').classList.toggle('hidden', tab !== 'number');
+    document.getElementById('tab-scan').classList.toggle('active', tab === 'scan');
+    document.getElementById('tab-number').classList.toggle('active', tab === 'number');
+    if (tab !== 'scan') stopScanner();
+  }
+
+  function startScanner() {
+    document.getElementById('scanner-idle').classList.add('hidden');
+    document.getElementById('scanner-active').classList.remove('hidden');
+
+    html5QrCode = new Html5Qrcode("qr-reader");
+    html5QrCode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 200, height: 200 } },
+      (decodedText) => {
+        stopScanner();
+        document.getElementById('scanner-active').classList.add('hidden');
+        document.getElementById('scanner-success').classList.remove('hidden');
+        // Soumettre le token via le formulaire caché HTMX
+        document.getElementById('qr-token-input').value = decodedText;
+        htmx.trigger(document.getElementById('qr-token-form'), 'submit');
+      },
+      null
+    ).catch(() => {
+      stopScanner();
+      document.getElementById('scanner-idle').classList.remove('hidden');
+      document.getElementById('scanner-active').classList.add('hidden');
+      alert("{% trans 'Não foi possível aceder à câmera. Verifique as permissões do browser.' %}");
+    });
+  }
+
+  function stopScanner() {
+    if (html5QrCode) {
+      html5QrCode.stop().catch(() => {}).finally(() => {
+        html5QrCode.clear();
+        html5QrCode = null;
+      });
+    }
+    document.getElementById('scanner-idle').classList.remove('hidden');
+    document.getElementById('scanner-active').classList.add('hidden');
+    document.getElementById('scanner-success').classList.add('hidden');
+  }
+
+  // Après résultat : reset du scanner
+  document.body.addEventListener('htmx:afterSwap', function(e) {
+    if (e.detail.target.id === 'result-zone') {
+      document.getElementById('scanner-success').classList.add('hidden');
+      document.getElementById('scanner-idle').classList.remove('hidden');
+    }
+  });
+</script>
 {% endblock %}

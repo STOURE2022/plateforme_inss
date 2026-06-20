@@ -1,0 +1,103 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{% trans "Meus Actos" %}{% endblock %}
+{% block page_title %}{% trans "Meus Actos Médicos" %}{% endblock %}
+
+{% block sidebar_nav %}{% include "portal/provider/_sidebar.html" %}{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">{% trans "Meus Actos Médicos" %}</h1>
+    <p class="text-slate-500 text-sm mt-1">{% trans "Acompanhe os actos que submeteu ao INSS" %}</p>
+  </div>
+  <a href="{% url 'provider-verify' %}"
+     class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white shadow-sm"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    {% trans "Novo Acto" %}
+  </a>
+</div>
+
+<!-- Filtros -->
+<div class="flex gap-2 mb-6 flex-wrap">
+  <a href="?" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all {% if not status_filter %}bg-slate-700 text-white{% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">{% trans "Todos" %}</a>
+  {% for value, label in act_statuses %}
+  <a href="?status={{ value }}"
+     class="px-4 py-2 rounded-xl text-xs font-semibold transition-all
+       {% if status_filter == value %}
+         {% if value == 'PENDING' %}bg-amber-500 text-white
+         {% elif value == 'VALIDATED' %}bg-emerald-500 text-white
+         {% else %}bg-red-500 text-white{% endif %}
+       {% else %}bg-slate-100 text-slate-600 hover:bg-slate-200{% endif %}">
+    {{ label }}
+  </a>
+  {% endfor %}
+</div>
+
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  {% if acts %}
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-slate-100 bg-slate-50">
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Referência" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Titular" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Tipo" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Data" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Estimado" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Validado" %}</th>
+          <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">{% trans "Estado" %}</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-50">
+        {% for act in acts %}
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="px-5 py-3.5 font-mono text-xs font-semibold text-slate-600">{{ act.reference }}</td>
+          <td class="px-5 py-3.5">
+            <div class="font-semibold text-slate-900">{{ act.affiliate_name }}</div>
+            <div class="text-xs text-slate-400 font-mono">{{ act.affiliate_niss }}</div>
+          </td>
+          <td class="px-5 py-3.5 text-slate-700">{{ act.get_act_type_display }}</td>
+          <td class="px-5 py-3.5 text-slate-500">{{ act.act_date|date:"d/m/Y" }}</td>
+          <td class="px-5 py-3.5 text-slate-600">
+            {% if act.estimated_amount %}{{ act.estimated_amount|floatformat:0 }} XOF{% else %}<span class="text-slate-300">—</span>{% endif %}
+          </td>
+          <td class="px-5 py-3.5">
+            {% if act.validated_amount %}<span class="font-semibold text-emerald-600">{{ act.validated_amount|floatformat:0 }} XOF</span>{% else %}<span class="text-slate-300">—</span>{% endif %}
+          </td>
+          <td class="px-5 py-3.5">
+            {% if act.status == 'PENDING' %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>{% trans "Pendente" %}
+            </span>
+            {% elif act.status == 'VALIDATED' %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{% trans "Validado" %}
+            </span>
+            {% else %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>{% trans "Rejeitado" %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-3.5">
+            <a href="{% url 'provider-act-detail' act.pk %}" class="text-xs font-semibold text-blue-600 hover:text-blue-800">{% trans "Ver" %} →</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-16">
+    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+    </svg>
+    <p class="text-slate-500 font-medium">{% trans "Nenhum acto médico submetido ainda." %}</p>
+    <a href="{% url 'provider-verify' %}" class="text-blue-600 text-sm hover:underline mt-2 inline-block">{% trans "Verificar cartão e registar acto" %} →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
