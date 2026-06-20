@@ -174,6 +174,15 @@ class AgentDashboardView(AgentRequiredMixin, TemplateView):
         except Exception:
             ctx["pending_claims_count"] = 0
 
+        # Declarações de massa salarial a validar
+        try:
+            from apps.payroll.models import PayrollDeclaration, DeclarationStatus
+            ctx["declarations_to_validate"] = PayrollDeclaration.objects.filter(
+                status=DeclarationStatus.SUBMITTED
+            ).count()
+        except Exception:
+            ctx["declarations_to_validate"] = 0
+
         return ctx
 
 

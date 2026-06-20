@@ -1,0 +1,247 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{{ declaration.reference }} — e-INSS{% endblock %}
+{% block page_title %}{% trans "Declaração" %}{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/employer/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!-- Back link + header -->
+<div class="mb-6">
+  <a href="{% url 'employer-declaration-list' %}"
+     class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-4">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+    </svg>
+    {% trans "Voltar às declarações" %}
+  </a>
+  <div class="flex items-start justify-between flex-wrap gap-4">
+    <div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <h1 class="text-2xl font-bold text-slate-900 font-mono">{{ declaration.reference }}</h1>
+        {% if declaration.status == 'DRAFT' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-slate-100 text-slate-700">
+            <span class="w-2 h-2 rounded-full bg-slate-400"></span>{% trans "Rascunho" %}
+          </span>
+        {% elif declaration.status == 'SUBMITTED' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-700">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>{% trans "Submetida" %}
+          </span>
+        {% elif declaration.status == 'VALIDATED' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-700">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>{% trans "Validada" %}
+          </span>
+        {% elif declaration.status == 'REJECTED' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span>{% trans "Rejeitada" %}
+          </span>
+        {% endif %}
+      </div>
+      <p class="text-slate-500 text-sm mt-1">
+        {{ employer.company_name }} &middot; {{ declaration.get_period_display }}
+      </p>
+    </div>
+    <!-- Action buttons top-right -->
+    <div class="flex items-center gap-3">
+      {% if declaration.status == 'VALIDATED' %}
+      <a href="{% url 'employer-declaration-bulletin' declaration.pk %}"
+         class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-semibold text-sm transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        {% trans "Baixar Boletim PDF" %}
+      </a>
+      {% endif %}
+      {% if declaration.status == 'REJECTED' %}
+      <form method="post" action="{% url 'employer-declaration-reopen' declaration.pk %}">
+        {% csrf_token %}
+        <button type="submit"
+                class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-semibold text-sm transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          {% trans "Editar e Ressubmeter" %}
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Status banners -->
+{% if declaration.status == 'DRAFT' %}
+<div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+  <svg class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  </svg>
+  <p class="text-blue-800 text-sm">
+    <strong>{% trans "Rascunho" %}</strong> — {% trans "Adicione os trabalhadores com os respectivos salários e clique em \"Submeter\" quando estiver pronto." %}
+  </p>
+</div>
+
+{% elif declaration.status == 'SUBMITTED' %}
+<div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+  <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  </svg>
+  <p class="text-amber-800 text-sm">
+    <strong>{% trans "Aguardando validação" %}</strong> — {% trans "A declaração foi submetida ao INSS e está a aguardar validação." %}
+    {% if declaration.submitted_at %}
+    {% trans "Submetida em" %} {{ declaration.submitted_at|date:"d/m/Y H:i" }}.
+    {% endif %}
+  </p>
+</div>
+
+{% elif declaration.status == 'VALIDATED' %}
+<div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+  <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+  </svg>
+  <div>
+    <p class="text-emerald-800 text-sm font-semibold">{% trans "Declaração validada!" %}</p>
+    <p class="text-emerald-700 text-sm mt-0.5">
+      {% trans "Validada por" %} {{ declaration.validated_by.get_full_name|default:declaration.validated_by.email }}
+      {% if declaration.validated_at %}{% trans "em" %} {{ declaration.validated_at|date:"d/m/Y" }}{% endif %}.
+      {{ declaration.total_employees }} {% trans "contribuição(ões) gerada(s) automaticamente." %}
+    </p>
+    {% if declaration.validation_notes %}
+    <p class="text-emerald-600 text-xs mt-1">{% trans "Notas" %}: {{ declaration.validation_notes }}</p>
+    {% endif %}
+  </div>
+</div>
+
+{% elif declaration.status == 'REJECTED' %}
+<div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+  <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  </svg>
+  <div>
+    <p class="text-red-800 text-sm font-semibold">{% trans "Declaração rejeitada" %}</p>
+    <p class="text-red-700 text-sm mt-0.5">
+      {% trans "Motivo" %}: {{ declaration.rejection_reason }}
+    </p>
+    <p class="text-red-500 text-xs mt-1">
+      {% trans "Clique em \"Editar e Ressubmeter\" para corrigir e reenviar." %}
+    </p>
+  </div>
+</div>
+{% endif %}
+
+<!-- Django messages -->
+{% if messages %}
+<div class="mb-6 space-y-2">
+  {% for msg in messages %}
+  <div class="rounded-xl px-4 py-3 text-sm font-medium
+    {% if msg.tags == 'error' %}bg-red-50 text-red-800 border border-red-200
+    {% elif msg.tags == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200
+    {% elif msg.tags == 'warning' %}bg-amber-50 text-amber-800 border border-amber-200
+    {% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+    {{ msg }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Lines table (HTMX target) -->
+{% include "portal/employer/declarations/partials/lines_table.html" with declaration=declaration lines=lines DeclarationStatus=DeclarationStatus %}
+
+<!-- Add employee form (DRAFT only) -->
+{% if declaration.status == 'DRAFT' %}
+<div class="mt-8 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+  <h2 class="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
+    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+    </svg>
+    {% trans "Adicionar Trabalhador" %}
+  </h2>
+
+  <!-- HTMX error/success zone -->
+  <div id="add-line-response" class="mb-3"></div>
+
+  <form method="post"
+        action="{% url 'employer-declaration-add-line' declaration.pk %}"
+        hx-post="{% url 'employer-declaration-add-line' declaration.pk %}"
+        hx-target="#lines-section"
+        hx-swap="outerHTML"
+        hx-on::after-request="if(event.detail.successful){this.reset();document.getElementById('niss-lookup-result').innerHTML='';document.getElementById('add-line-response').innerHTML='';}"
+        hx-on::response-error="document.getElementById('add-line-response').innerHTML=event.detail.xhr.responseText;">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+          {{ add_line_form.niss.label }}
+        </label>
+        <input type="text"
+               name="niss"
+               maxlength="15"
+               placeholder="Ex: 123456789012"
+               autocomplete="off"
+               hx-get="{% url 'affiliate-lookup' %}"
+               hx-trigger="keyup changed delay:500ms"
+               hx-target="#niss-lookup-result"
+               class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <div id="niss-lookup-result" class="mt-1 min-h-5"></div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+          {{ add_line_form.salary_base.label }}
+        </label>
+        <input type="number"
+               name="salary_base"
+               min="0"
+               step="0.01"
+               placeholder="0.00"
+               class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      </div>
+      <div class="flex items-end">
+        <button type="submit"
+                class="w-full text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"
+                style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+          <svg class="w-4 h-4 htmx-indicator animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          {% trans "+ Adicionar" %}
+        </button>
+      </div>
+    </div>
+    <div class="mt-3">
+      <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+        {{ add_line_form.notes.label }}
+      </label>
+      <input type="text"
+             name="notes"
+             maxlength="200"
+             placeholder="Observações..."
+             class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+    </div>
+  </form>
+</div>
+
+<!-- Submit Declaration -->
+<div class="mt-6 flex items-center justify-between flex-wrap gap-4">
+  <p class="text-slate-500 text-sm">
+    {% trans "Quando tiver adicionado todos os trabalhadores, submeta a declaração ao INSS." %}
+  </p>
+  <form method="post" action="{% url 'employer-declaration-submit' declaration.pk %}">
+    {% csrf_token %}
+    <button type="submit"
+            {% if declaration.total_employees == 0 %}disabled{% endif %}
+            class="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-md transition-all
+            {% if declaration.total_employees == 0 %}opacity-50 cursor-not-allowed bg-slate-400{% else %}hover:shadow-lg{% endif %}"
+            {% if declaration.total_employees > 0 %}style="background: linear-gradient(135deg, #059669, #10B981);"{% endif %}
+            {% if declaration.total_employees > 0 %}onclick="return confirm('Tem a certeza que pretende submeter esta declaração? Não poderá alterá-la após submissão.');"{% endif %}>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      {% trans "Submeter Declaração" %}
+    </button>
+  </form>
+</div>
+{% endif %}
+
+{% endblock %}

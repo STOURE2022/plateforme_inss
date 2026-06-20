@@ -1,0 +1,91 @@
+{% load i18n %}
+<div id="lines-section">
+  <!-- Summary cards -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+      <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">{% trans "Trabalhadores" %}</p>
+      <p class="text-2xl font-bold text-slate-900">{{ declaration.total_employees }}</p>
+    </div>
+    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+      <p class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">{% trans "Total Salários" %}</p>
+      <p class="text-2xl font-bold text-slate-900">{{ declaration.total_salary_base|floatformat:0 }}</p>
+      <p class="text-xs text-slate-400">XOF</p>
+    </div>
+    <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+      <p class="text-xs text-blue-600 font-medium uppercase tracking-wider mb-1">{% trans "Cota Trab." %}</p>
+      <p class="text-2xl font-bold text-blue-800">{{ declaration.total_employee_contributions|floatformat:0 }}</p>
+      <p class="text-xs text-blue-400">XOF (4%)</p>
+    </div>
+    <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+      <p class="text-xs text-indigo-600 font-medium uppercase tracking-wider mb-1">{% trans "Cota Emp." %}</p>
+      <p class="text-2xl font-bold text-indigo-800">{{ declaration.total_employer_contributions|floatformat:0 }}</p>
+      <p class="text-xs text-indigo-400">XOF (8%)</p>
+    </div>
+  </div>
+
+  <!-- Total banner -->
+  <div class="bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl p-4 mb-6 flex items-center justify-between">
+    <span class="text-white/70 text-sm font-medium">{% trans "Total Geral a Pagar" %}</span>
+    <span class="text-white text-2xl font-bold">{{ declaration.total_contributions|floatformat:0 }} XOF</span>
+  </div>
+
+  <!-- Lines table -->
+  {% if lines %}
+  <div class="overflow-x-auto rounded-xl border border-slate-200">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-slate-50 border-b border-slate-200">
+          <th class="text-left px-4 py-3 font-semibold text-slate-600">{% trans "NISS" %}</th>
+          <th class="text-left px-4 py-3 font-semibold text-slate-600">{% trans "Nome" %}</th>
+          <th class="text-right px-4 py-3 font-semibold text-slate-600">{% trans "Salário Base" %}</th>
+          <th class="text-right px-4 py-3 font-semibold text-slate-600">{% trans "Cota Trab. (4%)" %}</th>
+          <th class="text-right px-4 py-3 font-semibold text-slate-600">{% trans "Cota Emp. (8%)" %}</th>
+          <th class="text-right px-4 py-3 font-semibold text-slate-600">{% trans "Total" %}</th>
+          {% if declaration.status == 'DRAFT' %}
+          <th class="px-4 py-3"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% for line in lines %}
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="px-4 py-3 font-mono text-xs text-slate-600">{{ line.affiliate.niss }}</td>
+          <td class="px-4 py-3 font-medium text-slate-800">{{ line.affiliate.full_name }}</td>
+          <td class="px-4 py-3 text-right font-mono text-slate-700">{{ line.salary_base|floatformat:0 }}</td>
+          <td class="px-4 py-3 text-right font-mono text-blue-700">{{ line.employee_amount|floatformat:0 }}</td>
+          <td class="px-4 py-3 text-right font-mono text-indigo-700">{{ line.employer_amount|floatformat:0 }}</td>
+          <td class="px-4 py-3 text-right font-mono font-semibold text-slate-900">{{ line.total_amount|floatformat:0 }}</td>
+          {% if declaration.status == 'DRAFT' %}
+          <td class="px-4 py-3 text-right">
+            <form method="post"
+                  action="{% url 'employer-declaration-remove-line' declaration.pk line.pk %}"
+                  hx-post="{% url 'employer-declaration-remove-line' declaration.pk line.pk %}"
+                  hx-target="#lines-section"
+                  hx-swap="outerHTML">
+              {% csrf_token %}
+              <button type="submit"
+                      class="text-red-400 hover:text-red-600 transition-colors p-1 rounded-lg hover:bg-red-50"
+                      title="{% trans 'Remover' %}"
+                      onclick="return confirm('Remover {{ line.affiliate.full_name }}?')">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-10 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+    </svg>
+    <p class="text-slate-500 text-sm">{% trans "Nenhum trabalhador adicionado ainda." %}</p>
+    <p class="text-slate-400 text-xs mt-1">{% trans "Use o formulário abaixo para adicionar trabalhadores." %}</p>
+  </div>
+  {% endif %}
+</div>

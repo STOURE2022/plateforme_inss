@@ -1,0 +1,278 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{{ declaration.reference }} — Agente — e-INSS{% endblock %}
+{% block page_title %}{% trans "Detalhe da Declaração" %}{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/agent/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!-- Back -->
+<div class="mb-6">
+  <a href="{% url 'agent-declaration-list' %}"
+     class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-4">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+    </svg>
+    {% trans "Voltar à lista" %}
+  </a>
+
+  <div class="flex items-start justify-between flex-wrap gap-4">
+    <div>
+      <div class="flex items-center gap-3 flex-wrap mb-1">
+        <h1 class="text-2xl font-bold text-slate-900 font-mono">{{ declaration.reference }}</h1>
+        {% if declaration.status == 'DRAFT' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-slate-100 text-slate-700">
+            <span class="w-2 h-2 rounded-full bg-slate-400"></span>{% trans "Rascunho" %}
+          </span>
+        {% elif declaration.status == 'SUBMITTED' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-700">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>{% trans "Aguarda Validação" %}
+          </span>
+        {% elif declaration.status == 'VALIDATED' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-700">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>{% trans "Validada" %}
+          </span>
+        {% elif declaration.status == 'REJECTED' %}
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span>{% trans "Rejeitada" %}
+          </span>
+        {% endif %}
+      </div>
+      <p class="text-slate-500 text-sm">
+        {{ declaration.employer.company_name }}
+        <span class="font-mono text-slate-400">({{ declaration.employer.nuit }})</span>
+        &middot; {{ declaration.get_period_display }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Django messages -->
+{% if messages %}
+<div class="mb-6 space-y-2">
+  {% for msg in messages %}
+  <div class="rounded-xl px-4 py-3 text-sm font-medium
+    {% if msg.tags == 'error' %}bg-red-50 text-red-800 border border-red-200
+    {% elif msg.tags == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200
+    {% elif msg.tags == 'warning' %}bg-amber-50 text-amber-800 border border-amber-200
+    {% else %}bg-blue-50 text-blue-800 border border-blue-200{% endif %}">
+    {{ msg }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Status-specific banners -->
+{% if declaration.status == 'VALIDATED' %}
+<div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+  <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+  </svg>
+  <div>
+    <p class="text-emerald-800 font-semibold text-sm">{% trans "Declaração validada" %}</p>
+    <p class="text-emerald-700 text-sm mt-0.5">
+      {% trans "Validada por" %} <strong>{{ declaration.validated_by.get_full_name|default:declaration.validated_by.email }}</strong>
+      {% if declaration.validated_at %}{% trans "em" %} {{ declaration.validated_at|date:"d/m/Y H:i" }}{% endif %}.
+    </p>
+    {% if declaration.validation_notes %}
+    <p class="text-emerald-600 text-xs mt-1">{{ declaration.validation_notes }}</p>
+    {% endif %}
+  </div>
+</div>
+{% elif declaration.status == 'REJECTED' %}
+<div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+  <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  </svg>
+  <div>
+    <p class="text-red-800 font-semibold text-sm">{% trans "Declaração rejeitada" %}</p>
+    <p class="text-red-700 text-sm mt-0.5">
+      {% trans "Rejeitada por" %} <strong>{{ declaration.rejected_by.get_full_name|default:declaration.rejected_by.email }}</strong>
+      {% if declaration.rejected_at %}{% trans "em" %} {{ declaration.rejected_at|date:"d/m/Y H:i" }}{% endif %}.
+    </p>
+    <p class="text-red-600 text-sm mt-1">{% trans "Motivo" %}: {{ declaration.rejection_reason }}</p>
+  </div>
+</div>
+{% endif %}
+
+<!-- Summary cards -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+    <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">{% trans "Trabalhadores" %}</p>
+    <p class="text-3xl font-bold text-slate-900">{{ declaration.total_employees }}</p>
+  </div>
+  <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+    <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">{% trans "Total Salários" %}</p>
+    <p class="text-3xl font-bold text-slate-900">{{ declaration.total_salary_base|floatformat:0 }}</p>
+    <p class="text-xs text-slate-400 mt-0.5">XOF</p>
+  </div>
+  <div class="bg-blue-50 rounded-2xl p-5 border border-blue-200 shadow-sm">
+    <p class="text-xs text-blue-600 font-semibold uppercase tracking-wider mb-1">{% trans "Cota Trabalhadores" %}</p>
+    <p class="text-3xl font-bold text-blue-800">{{ declaration.total_employee_contributions|floatformat:0 }}</p>
+    <p class="text-xs text-blue-400 mt-0.5">XOF (4%)</p>
+  </div>
+  <div class="bg-indigo-50 rounded-2xl p-5 border border-indigo-200 shadow-sm">
+    <p class="text-xs text-indigo-600 font-semibold uppercase tracking-wider mb-1">{% trans "Cota Empregador" %}</p>
+    <p class="text-3xl font-bold text-indigo-800">{{ declaration.total_employer_contributions|floatformat:0 }}</p>
+    <p class="text-xs text-indigo-400 mt-0.5">XOF (8%)</p>
+  </div>
+</div>
+
+<!-- Total -->
+<div class="bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl p-4 mb-6 flex items-center justify-between">
+  <span class="text-white/70 text-sm font-medium">{% trans "Total Geral" %}</span>
+  <span class="text-white text-2xl font-bold">{{ declaration.total_contributions|floatformat:0 }} XOF</span>
+</div>
+
+<!-- Workers table -->
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+  <div class="px-5 py-4 border-b border-slate-100">
+    <h2 class="text-base font-semibold text-slate-900">{% trans "Relação de Trabalhadores" %}</h2>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-slate-50 border-b border-slate-200">
+          <th class="text-left px-5 py-3 font-semibold text-slate-600">{% trans "NISS" %}</th>
+          <th class="text-left px-5 py-3 font-semibold text-slate-600">{% trans "Nome" %}</th>
+          <th class="text-right px-5 py-3 font-semibold text-slate-600">{% trans "Salário Base" %}</th>
+          <th class="text-right px-5 py-3 font-semibold text-slate-600">{% trans "Cota Trab. (4%)" %}</th>
+          <th class="text-right px-5 py-3 font-semibold text-slate-600">{% trans "Cota Emp. (8%)" %}</th>
+          <th class="text-right px-5 py-3 font-semibold text-slate-600">{% trans "Total" %}</th>
+          <th class="text-left px-5 py-3 font-semibold text-slate-600">{% trans "Contribuição" %}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {% for line in lines %}
+        <tr class="hover:bg-slate-50 transition-colors">
+          <td class="px-5 py-3 font-mono text-xs text-slate-600">{{ line.affiliate.niss }}</td>
+          <td class="px-5 py-3 font-medium text-slate-800">{{ line.affiliate.full_name }}</td>
+          <td class="px-5 py-3 text-right font-mono text-slate-700">{{ line.salary_base|floatformat:0 }}</td>
+          <td class="px-5 py-3 text-right font-mono text-blue-700">{{ line.employee_amount|floatformat:0 }}</td>
+          <td class="px-5 py-3 text-right font-mono text-indigo-700">{{ line.employer_amount|floatformat:0 }}</td>
+          <td class="px-5 py-3 text-right font-mono font-semibold text-slate-900">{{ line.total_amount|floatformat:0 }}</td>
+          <td class="px-5 py-3">
+            {% if line.contribution %}
+            <span class="text-xs font-mono text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">{{ line.contribution.reference }}</span>
+            {% else %}
+            <span class="text-xs text-slate-400">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="px-5 py-8 text-center text-slate-400 text-sm">{% trans "Nenhuma linha." %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Meta info -->
+<div class="bg-slate-50 rounded-2xl border border-slate-200 p-5 mb-6 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+  <div>
+    <span class="text-slate-500">{% trans "Criada por" %}</span>
+    <p class="font-medium text-slate-800 mt-0.5">{{ declaration.created_by.get_full_name|default:declaration.created_by.email }}</p>
+  </div>
+  <div>
+    <span class="text-slate-500">{% trans "Criada em" %}</span>
+    <p class="font-medium text-slate-800 mt-0.5">{{ declaration.created_at|date:"d/m/Y H:i" }}</p>
+  </div>
+  {% if declaration.submitted_at %}
+  <div>
+    <span class="text-slate-500">{% trans "Submetida em" %}</span>
+    <p class="font-medium text-slate-800 mt-0.5">{{ declaration.submitted_at|date:"d/m/Y H:i" }}</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Agent actions (only if SUBMITTED) -->
+{% if declaration.status == 'SUBMITTED' %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6" x-data="{ showRejectForm: false }">
+
+  <!-- Validate -->
+  <div class="bg-white rounded-2xl border-2 border-emerald-200 shadow-sm p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h3 class="text-base font-semibold text-emerald-800">{% trans "Validar Declaração" %}</h3>
+    </div>
+    <p class="text-slate-600 text-sm mb-4">
+      {% trans "Ao validar, serão geradas automaticamente" %} <strong>{{ declaration.total_employees }}</strong> {% trans "contribuição(ões)." %}
+    </p>
+    <form method="post" action="{% url 'agent-declaration-validate' declaration.pk %}"
+          onsubmit="return confirm('Confirma a validação desta declaração? {{ declaration.total_employees }} contribuição(ões) serão geradas.');">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+          {{ validate_form.validation_notes.label }}
+        </label>
+        {{ validate_form.validation_notes }}
+      </div>
+      <button type="submit"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+        </svg>
+        {% trans "Validar e Gerar Contribuições" %}
+      </button>
+    </form>
+  </div>
+
+  <!-- Reject -->
+  <div class="bg-white rounded-2xl border-2 border-red-200 shadow-sm p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </div>
+      <h3 class="text-base font-semibold text-red-800">{% trans "Rejeitar Declaração" %}</h3>
+    </div>
+    <p class="text-slate-600 text-sm mb-4">
+      {% trans "O empregador será notificado e poderá corrigir e ressubmeter." %}
+    </p>
+    <div x-show="!showRejectForm">
+      <button @click="showRejectForm = true"
+              type="button"
+              class="w-full border-2 border-red-300 hover:border-red-400 hover:bg-red-50 text-red-700 px-4 py-3 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        {% trans "Rejeitar" %}
+      </button>
+    </div>
+    <div x-show="showRejectForm" x-cloak>
+      <form method="post" action="{% url 'agent-declaration-reject' declaration.pk %}">
+        {% csrf_token %}
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-slate-700 mb-1.5">
+            {{ reject_form.rejection_reason.label }} <span class="text-red-500">*</span>
+          </label>
+          {{ reject_form.rejection_reason }}
+        </div>
+        <div class="flex gap-3">
+          <button type="submit"
+                  class="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-colors">
+            {% trans "Confirmar Rejeição" %}
+          </button>
+          <button type="button"
+                  @click="showRejectForm = false"
+                  class="px-4 py-2.5 border border-slate-300 hover:bg-slate-50 text-slate-600 rounded-xl font-semibold text-sm transition-colors">
+            {% trans "Cancelar" %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endif %}
+
+{% endblock %}

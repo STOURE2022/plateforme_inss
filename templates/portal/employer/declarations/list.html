@@ -1,0 +1,135 @@
+{% extends "portal/base_portal.html" %}
+{% load i18n %}
+{% block title %}{% trans "Declarações de Massa Salarial" %} — e-INSS{% endblock %}
+{% block page_title %}{% trans "Declarações" %}{% endblock %}
+
+{% block sidebar_nav %}
+{% include "portal/employer/_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+  <div>
+    <h1 class="text-2xl font-bold text-slate-900">{% trans "Declarações de Massa Salarial" %}</h1>
+    <p class="text-slate-500 text-sm mt-1">{% trans "Histórico de declarações da sua empresa" %}</p>
+  </div>
+  <a href="{% url 'employer-declaration-create' %}"
+     class="inline-flex items-center gap-2 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    {% trans "Nova Declaração" %}
+  </a>
+</div>
+
+<!-- Status filter tabs -->
+<div class="flex gap-2 flex-wrap mb-6">
+  <a href="{% url 'employer-declaration-list' %}"
+     class="px-4 py-2 rounded-xl text-sm font-medium transition-colors
+     {% if not status_filter %}bg-slate-900 text-white{% else %}bg-white border border-slate-200 text-slate-600 hover:border-slate-400{% endif %}">
+    {% trans "Todos" %}
+  </a>
+  <a href="?status=DRAFT"
+     class="px-4 py-2 rounded-xl text-sm font-medium transition-colors
+     {% if status_filter == 'DRAFT' %}bg-slate-700 text-white{% else %}bg-white border border-slate-200 text-slate-600 hover:border-slate-400{% endif %}">
+    {% trans "Rascunho" %}
+  </a>
+  <a href="?status=SUBMITTED"
+     class="px-4 py-2 rounded-xl text-sm font-medium transition-colors
+     {% if status_filter == 'SUBMITTED' %}bg-amber-500 text-white{% else %}bg-white border border-slate-200 text-slate-600 hover:border-slate-400{% endif %}">
+    {% trans "Submetida" %}
+  </a>
+  <a href="?status=VALIDATED"
+     class="px-4 py-2 rounded-xl text-sm font-medium transition-colors
+     {% if status_filter == 'VALIDATED' %}bg-emerald-600 text-white{% else %}bg-white border border-slate-200 text-slate-600 hover:border-slate-400{% endif %}">
+    {% trans "Validada" %}
+  </a>
+  <a href="?status=REJECTED"
+     class="px-4 py-2 rounded-xl text-sm font-medium transition-colors
+     {% if status_filter == 'REJECTED' %}bg-red-600 text-white{% else %}bg-white border border-slate-200 text-slate-600 hover:border-slate-400{% endif %}">
+    {% trans "Rejeitada" %}
+  </a>
+</div>
+
+{% if not employer %}
+<div class="bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
+  <p class="text-amber-800 font-semibold">{% trans "Perfil de empregador não encontrado." %}</p>
+</div>
+{% elif not declarations %}
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 text-center">
+  <svg class="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+  </svg>
+  <p class="text-slate-500 font-medium mb-2">{% trans "Nenhuma declaração encontrada" %}</p>
+  <p class="text-slate-400 text-sm mb-6">{% trans "Crie a sua primeira declaração de massa salarial" %}</p>
+  <a href="{% url 'employer-declaration-create' %}"
+     class="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl font-semibold text-sm"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    {% trans "Nova Declaração" %}
+  </a>
+</div>
+{% else %}
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-100 bg-slate-50">
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Referência" %}</th>
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Período" %}</th>
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Estado" %}</th>
+        <th class="text-right px-5 py-3.5 font-semibold text-slate-600">{% trans "Trabalhadores" %}</th>
+        <th class="text-right px-5 py-3.5 font-semibold text-slate-600">{% trans "Total XOF" %}</th>
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Submetida em" %}</th>
+        <th class="px-5 py-3.5"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for decl in declarations %}
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="px-5 py-3.5">
+          <span class="font-mono font-semibold text-slate-800 text-xs">{{ decl.reference }}</span>
+        </td>
+        <td class="px-5 py-3.5 text-slate-700 font-medium">{{ decl.get_period_display }}</td>
+        <td class="px-5 py-3.5">
+          {% if decl.status == 'DRAFT' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>{% trans "Rascunho" %}
+            </span>
+          {% elif decl.status == 'SUBMITTED' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>{% trans "Submetida" %}
+            </span>
+          {% elif decl.status == 'VALIDATED' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{% trans "Validada" %}
+            </span>
+          {% elif decl.status == 'REJECTED' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>{% trans "Rejeitada" %}
+            </span>
+          {% endif %}
+        </td>
+        <td class="px-5 py-3.5 text-right text-slate-700 font-semibold">{{ decl.total_employees }}</td>
+        <td class="px-5 py-3.5 text-right text-slate-700 font-mono font-semibold">{{ decl.total_contributions|floatformat:0 }}</td>
+        <td class="px-5 py-3.5 text-slate-500 text-xs">
+          {% if decl.submitted_at %}{{ decl.submitted_at|date:"d/m/Y" }}{% else %}—{% endif %}
+        </td>
+        <td class="px-5 py-3.5 text-right">
+          <a href="{% url 'employer-declaration-detail' decl.pk %}"
+             class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+            {% trans "Ver" %}
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

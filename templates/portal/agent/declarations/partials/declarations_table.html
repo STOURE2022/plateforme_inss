@@ -1,0 +1,64 @@
+{% load i18n %}
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-100 bg-slate-50">
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Referência" %}</th>
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Empregador" %}</th>
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Período" %}</th>
+        <th class="text-left px-5 py-3.5 font-semibold text-slate-600">{% trans "Estado" %}</th>
+        <th class="text-right px-5 py-3.5 font-semibold text-slate-600">{% trans "Trabalhadores" %}</th>
+        <th class="text-right px-5 py-3.5 font-semibold text-slate-600">{% trans "Total XOF" %}</th>
+        <th class="px-5 py-3.5"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      {% for decl in declarations %}
+      <tr class="hover:bg-slate-50 transition-colors">
+        <td class="px-5 py-3.5 font-mono font-semibold text-slate-800 text-xs">{{ decl.reference }}</td>
+        <td class="px-5 py-3.5">
+          <div class="font-medium text-slate-800">{{ decl.employer.company_name }}</div>
+          <div class="text-xs text-slate-500 font-mono">{{ decl.employer.nuit }}</div>
+        </td>
+        <td class="px-5 py-3.5 text-slate-700 font-medium">{{ decl.get_period_display }}</td>
+        <td class="px-5 py-3.5">
+          {% if decl.status == 'DRAFT' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>{% trans "Rascunho" %}
+            </span>
+          {% elif decl.status == 'SUBMITTED' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>{% trans "Submetida" %}
+            </span>
+          {% elif decl.status == 'VALIDATED' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{% trans "Validada" %}
+            </span>
+          {% elif decl.status == 'REJECTED' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>{% trans "Rejeitada" %}
+            </span>
+          {% endif %}
+        </td>
+        <td class="px-5 py-3.5 text-right text-slate-700 font-semibold">{{ decl.total_employees }}</td>
+        <td class="px-5 py-3.5 text-right font-mono font-semibold text-slate-800">{{ decl.total_contributions|floatformat:0 }}</td>
+        <td class="px-5 py-3.5 text-right">
+          <a href="{% url 'agent-declaration-detail' decl.pk %}"
+             class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+            {% trans "Ver" %}
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="px-5 py-10 text-center text-slate-400 text-sm">
+          {% trans "Nenhuma declaração encontrada." %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

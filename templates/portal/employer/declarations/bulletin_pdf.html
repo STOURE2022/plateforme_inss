@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Boletim {{ declaration.reference }}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 20mm 18mm;
+      margin: 0 auto;
+    }
+    /* Header */
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 3px solid #1F3864;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-box {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #1F3864;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14pt;
+      color: #1F3864;
+    }
+    .org-info h1 {
+      font-size: 8pt;
+      font-weight: normal;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .org-info h2 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #1F3864;
+      margin-top: 2px;
+    }
+    .doc-type {
+      text-align: right;
+    }
+    .doc-type h3 {
+      font-size: 9pt;
+      font-weight: 700;
+      color: #1F3864;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .doc-type .ref {
+      font-size: 8pt;
+      color: #888;
+      margin-top: 4px;
+    }
+    /* Boletim title */
+    .bulletin-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .bulletin-title h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #1F3864;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .bulletin-title .period {
+      font-size: 12pt;
+      color: #555;
+      margin-top: 4px;
+    }
+    /* Info section */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .info-cell {
+      padding: 8px 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .info-cell:nth-child(odd) {
+      background: #f8f9fa;
+      border-right: 1px solid #eee;
+    }
+    .info-label {
+      font-size: 8pt;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .info-value {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-top: 2px;
+    }
+    /* Table */
+    .workers-title {
+      font-size: 10pt;
+      font-weight: 700;
+      color: #1F3864;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+    }
+    thead {
+      background: #1F3864;
+      color: #fff;
+    }
+    thead th {
+      padding: 8px 6px;
+      text-align: right;
+      font-weight: 700;
+      font-size: 8.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    thead th:first-child,
+    thead th:nth-child(2),
+    thead th:nth-child(3) {
+      text-align: left;
+    }
+    tbody tr:nth-child(even) { background: #f5f7fb; }
+    tbody td {
+      padding: 7px 6px;
+      border-bottom: 1px solid #e8eaf0;
+      text-align: right;
+    }
+    tbody td:first-child,
+    tbody td:nth-child(2),
+    tbody td:nth-child(3) {
+      text-align: left;
+    }
+    .totals-row {
+      background: #e8edf5 !important;
+      font-weight: 700;
+    }
+    .total-general {
+      background: #1F3864 !important;
+      color: #fff;
+      font-weight: 700;
+      font-size: 10pt;
+    }
+    .total-general td {
+      border-bottom: none;
+      color: #fff;
+    }
+    /* Validation section */
+    .validation-section {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .sign-box {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 12px;
+      min-height: 80px;
+    }
+    .sign-label {
+      font-size: 8pt;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .sign-name {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #1F3864;
+    }
+    .sign-date {
+      font-size: 9pt;
+      color: #555;
+      margin-top: 2px;
+    }
+    .stamp-box {
+      border: 2px dashed #ccc;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7pt;
+      color: #aaa;
+      text-align: center;
+      margin: 10px auto;
+    }
+    /* Footer */
+    .footer {
+      margin-top: 30px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+      text-align: center;
+      font-size: 7.5pt;
+      color: #aaa;
+    }
+    @media print {
+      .page { padding: 10mm 12mm; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-box">INSS</div>
+      <div class="org-info">
+        <h1>República da Guiné-Bissau</h1>
+        <h2>Instituto Nacional de Segurança Social</h2>
+      </div>
+    </div>
+    <div class="doc-type">
+      <h3>Boletim de Declaração</h3>
+      <div class="ref">Ref: {{ declaration.reference }}</div>
+    </div>
+  </div>
+
+  <!-- Bulletin title -->
+  <div class="bulletin-title">
+    <h2>Boletim de Declaração de Remunerações</h2>
+    <div class="period">Período: {{ declaration.get_period_display }}</div>
+  </div>
+
+  <!-- Employer info -->
+  <div class="info-grid">
+    <div class="info-cell">
+      <div class="info-label">Empregador</div>
+      <div class="info-value">{{ declaration.employer.company_name }}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">NUIT</div>
+      <div class="info-value">{{ declaration.employer.nuit }}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">Sector</div>
+      <div class="info-value">{{ declaration.employer.get_sector_display }}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">Referência</div>
+      <div class="info-value">{{ declaration.reference }}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">Data de Validação</div>
+      <div class="info-value">{{ declaration.validated_at|date:"d/m/Y"|default:"—" }}</div>
+    </div>
+    <div class="info-cell">
+      <div class="info-label">Validado por</div>
+      <div class="info-value">{{ declaration.validated_by.get_full_name|default:declaration.validated_by.email|default:"—" }}</div>
+    </div>
+  </div>
+
+  <!-- Workers table -->
+  <div class="workers-title">Relação de Trabalhadores</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Nº</th>
+        <th>NISS</th>
+        <th>Nome</th>
+        <th>Salário Base</th>
+        <th>Cota Trab. (4%)</th>
+        <th>Cota Emp. (8%)</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line in lines %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ line.affiliate.niss }}</td>
+        <td>{{ line.affiliate.full_name }}</td>
+        <td>{{ line.salary_base|floatformat:0 }}</td>
+        <td>{{ line.employee_amount|floatformat:0 }}</td>
+        <td>{{ line.employer_amount|floatformat:0 }}</td>
+        <td><strong>{{ line.total_amount|floatformat:0 }}</strong></td>
+      </tr>
+      {% endfor %}
+      <!-- Subtotals row -->
+      <tr class="totals-row">
+        <td></td>
+        <td colspan="2"><strong>TOTAIS — {{ declaration.total_employees }} trabalhador(es)</strong></td>
+        <td><strong>{{ declaration.total_salary_base|floatformat:0 }}</strong></td>
+        <td><strong>{{ declaration.total_employee_contributions|floatformat:0 }}</strong></td>
+        <td><strong>{{ declaration.total_employer_contributions|floatformat:0 }}</strong></td>
+        <td><strong>{{ declaration.total_contributions|floatformat:0 }}</strong></td>
+      </tr>
+      <!-- Total general -->
+      <tr class="total-general">
+        <td colspan="6" style="text-align:right;padding-right:12px;"><strong>TOTAL GERAL A PAGAR (XOF)</strong></td>
+        <td><strong>{{ declaration.total_contributions|floatformat:0 }}</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Validation section -->
+  <div class="validation-section">
+    <div class="sign-box">
+      <div class="sign-label">Validado por (INSS)</div>
+      <div class="sign-name">{{ declaration.validated_by.get_full_name|default:declaration.validated_by.email|default:"—" }}</div>
+      <div class="sign-date">Data: {{ declaration.validated_at|date:"d/m/Y"|default:"—" }}</div>
+      {% if declaration.validation_notes %}
+      <div style="font-size:8pt;color:#666;margin-top:4px;">{{ declaration.validation_notes }}</div>
+      {% endif %}
+    </div>
+    <div style="text-align:center;">
+      <div class="stamp-box">Carimbo<br>INSS</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Instituto Nacional de Segurança Social — Guiné-Bissau &bull;
+    Documento gerado automaticamente pelo sistema e-INSS &bull;
+    {{ declaration.validated_at|date:"d/m/Y H:i"|default:"" }}
+  </div>
+
+</div>
+</body>
+</html>

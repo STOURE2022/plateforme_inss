@@ -73,15 +73,49 @@
 </div>
 {% endif %}
 
-<!-- CTA -->
-<a href="{% url 'employer-contribution-create' %}"
-   class="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all"
-   style="background: linear-gradient(135deg, #1F3864, #2563EB);">
-  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-  </svg>
-  {% trans "Registar nova cotização" %}
-</a>
+<!-- Declarations pending card -->
+{% with decl_count=employer.payroll_declarations.all|length %}
+{% if decl_count > 0 %}
+<div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm mb-6">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center">
+        <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="font-semibold text-slate-900">{% trans "Declarações de Massa Salarial" %}</p>
+        <p class="text-sm text-slate-500">{{ decl_count }} declaração(ões) no histórico</p>
+      </div>
+    </div>
+    <a href="{% url 'employer-declaration-list' %}"
+       class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+      {% trans "Ver todas" %} &rarr;
+    </a>
+  </div>
+</div>
+{% endif %}
+{% endwith %}
+
+<!-- CTAs -->
+<div class="flex flex-wrap gap-3">
+  <a href="{% url 'employer-declaration-create' %}"
+     class="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all"
+     style="background: linear-gradient(135deg, #1F3864, #2563EB);">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    {% trans "Nova Declaração" %}
+  </a>
+  <a href="{% url 'employer-declaration-list' %}"
+     class="inline-flex items-center gap-2 bg-white border border-slate-300 hover:border-slate-400 text-slate-700 px-6 py-3 rounded-xl font-semibold text-sm shadow-sm hover:shadow transition-all">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+    </svg>
+    {% trans "Ver Declarações" %}
+  </a>
+</div>
 
 {% endif %}
 {% endblock %}
