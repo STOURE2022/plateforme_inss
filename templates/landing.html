@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 <head>
@@ -91,6 +92,25 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
           </svg>
         </a>
+        <!-- Language switcher -->
+        <div class="hidden sm:flex items-center gap-1 bg-white/10 rounded-lg p-1">
+          <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <input type="hidden" name="language" value="pt-br">
+            <button type="submit"
+              class="px-2.5 py-1 rounded-md text-xs font-bold transition-all {% if request.LANGUAGE_CODE == 'pt-br' or request.LANGUAGE_CODE == 'pt' %}bg-white text-inss-700{% else %}text-white/70 hover:text-white{% endif %}"
+              style="{% if request.LANGUAGE_CODE == 'pt-br' or request.LANGUAGE_CODE == 'pt' %}color:#1F3864;{% endif %}">PT</button>
+          </form>
+          <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <input type="hidden" name="language" value="fr">
+            <button type="submit"
+              class="px-2.5 py-1 rounded-md text-xs font-bold transition-all {% if request.LANGUAGE_CODE == 'fr' %}bg-white text-inss-700{% else %}text-white/70 hover:text-white{% endif %}"
+              style="{% if request.LANGUAGE_CODE == 'fr' %}color:#1F3864;{% endif %}">FR</button>
+          </form>
+        </div>
         <button id="hamburger-btn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-xl gap-1.5 focus:outline-none"
                 style="background:rgba(255,255,255,0.1);" aria-label="Menu">
           <span class="hamburger-line block w-5 h-0.5 bg-white rounded transition-all duration-300"></span>
