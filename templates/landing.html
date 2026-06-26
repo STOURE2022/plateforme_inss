@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n static %}
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 <head>
@@ -231,7 +231,7 @@
         <div class="relative w-full max-w-md">
           <div class="grid gap-3" style="grid-template-columns:3fr 2fr;grid-template-rows:240px 160px;">
             <div class="row-span-2 rounded-3xl overflow-hidden shadow-2xl relative photo-card">
-              <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=480&q=80"
+              <img src="{% static 'images/landing/medecin.jpg' %}"
                    alt="Médico na Guinée-Bissau" class="w-full h-full object-cover" loading="lazy">
               <div class="photo-overlay absolute inset-0"></div>
               <div class="absolute bottom-4 left-4 right-4">
@@ -243,16 +243,16 @@
               </div>
             </div>
             <div class="rounded-2xl overflow-hidden shadow-xl relative photo-card">
-              <img src="https://images.unsplash.com/photo-1631815583088-7d4b3e8e6ae2?auto=format&fit=crop&w=360&q=80"
-                   alt="Enfermeira e paciente, Bissau" class="w-full h-full object-cover" loading="lazy">
+              <img src="{% static 'images/landing/agent_sante_oculte.png' %}"
+                   alt="Consultation médicale" class="w-full h-full object-cover" loading="lazy">
               <div class="photo-overlay absolute inset-0"></div>
               <div class="absolute bottom-3 left-3">
                 <span class="text-white text-xs font-semibold drop-shadow">{% trans "Saúde digital" %}</span>
               </div>
             </div>
             <div class="rounded-2xl overflow-hidden shadow-xl relative photo-card">
-              <img src="https://images.unsplash.com/photo-1510602955109-0e2f29545fa8?auto=format&fit=crop&w=360&q=80"
-                   alt="Família guineense protegida" class="w-full h-full object-cover" loading="lazy">
+              <img src="{% static 'images/landing/citoyenne.png' %}"
+                   alt="Cidadã guineense" class="w-full h-full object-cover" loading="lazy">
               <div class="photo-overlay absolute inset-0"></div>
               <div class="absolute bottom-3 left-3">
                 <span class="text-white text-xs font-semibold drop-shadow">{% trans "Família protegida" %}</span>
@@ -278,7 +278,7 @@
               <div class="bg-white px-4 py-3">
                 <div class="flex gap-3 items-center">
                   <div class="w-12 h-14 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=80&h=96&q=80" alt="" class="w-full h-full object-cover" loading="lazy">
+                    <img src="{% static 'images/landing/temoignage_00.JPG' %}" alt="" class="w-full h-full object-cover" loading="lazy">
                   </div>
                   <div class="flex-1 space-y-1">
                     <div class="font-bold text-slate-900 text-xs">João M. Silva</div>
@@ -410,7 +410,7 @@
       <!-- Cidadão -->
       <a href="{% url 'html-login' %}" class="group feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal block">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1678695972687-033fa0bdbac9?auto=format&fit=crop&w=500&q=80"
+          <img src="{% static 'images/landing/citoyenne.png' %}"
                alt="Cidadã guineense" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(31,56,100,0.75) 100%);"></div>
           <div class="absolute bottom-3 left-4">
@@ -433,7 +433,7 @@
       <!-- Empregador -->
       <a href="{% url 'html-login' %}" class="group feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal block" style="transition-delay:0.1s;">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?auto=format&fit=crop&w=500&q=80"
+          <img src="{% static 'images/landing/entrepreneur.png' %}"
                alt="Empregador" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(5,46,22,0.75) 100%);"></div>
           <div class="absolute bottom-3 left-4">
@@ -456,7 +456,7 @@
       <!-- Agente INSS -->
       <a href="{% url 'html-login' %}" class="group feature-card rounded-3xl overflow-hidden shadow-sm reveal block" style="transition-delay:0.2s;">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1622253694238-3b22139576c6?auto=format&fit=crop&w=500&q=80"
+          <img src="{% static 'images/landing/agent_inss.png' %}"
                alt="Agente INSS" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(10,22,40,0.85) 100%);"></div>
           <div class="absolute bottom-3 left-4">
@@ -479,8 +479,8 @@
       <!-- Prestador -->
       <a href="{% url 'html-login' %}" class="group feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal block" style="transition-delay:0.3s;">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=500&q=80"
-               alt="Médico prestador de saúde" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+          <img src="{% static 'images/landing/prestataire_sante.jpg' %}"
+               alt="Prestador de saúde" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 30%,rgba(67,20,7,0.75) 100%);"></div>
           <div class="absolute bottom-3 left-4">
             <span class="text-white font-black text-base">{% trans "Prestador de Saúde" %}</span>
@@ -505,7 +505,7 @@
 
 <!-- ══════════════ BAND PHOTO IMPACT ══════════════ -->
 <section class="relative h-64 sm:h-72 overflow-hidden">
-  <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80"
+  <img src="{% static 'images/landing/agent_inss.png' %}"
        alt="Comunidade na Guinée-Bissau" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
   <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(10,22,40,0.88) 0%,rgba(31,56,100,0.72) 100%);"></div>
   <div class="relative z-10 h-full flex items-center justify-center text-center px-4">
@@ -535,8 +535,8 @@
 
       <div class="feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1622253694238-3b22139576c6?auto=format&fit=crop&w=600&q=80"
-               alt="Médico africano com paciente" class="w-full h-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/agent_sante_oculte.png' %}"
+               alt="Consultation médicale" class="w-full h-full object-cover" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 40%,rgba(10,22,40,0.5) 100%);"></div>
           <div class="absolute top-4 left-4 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.9);">
             <svg class="w-5 h-5" style="color:#2563EB;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -555,8 +555,8 @@
 
       <div class="feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal" style="transition-delay:0.1s;">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80"
-               alt="Profissional guineense com documentos" class="w-full h-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/entrepreneur.png' %}"
+               alt="Entrepreneurs" class="w-full h-full object-cover" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 40%,rgba(5,46,22,0.5) 100%);"></div>
           <div class="absolute top-4 left-4 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.9);">
             <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -575,8 +575,8 @@
 
       <div class="feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal" style="transition-delay:0.2s;">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1510602955109-0e2f29545fa8?auto=format&fit=crop&w=600&q=80"
-               alt="Mãe e filha na Guinée-Bissau" class="w-full h-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/citoyenne.png' %}"
+               alt="Cidadã guineense" class="w-full h-full object-cover" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 40%,rgba(67,20,7,0.45) 100%);"></div>
           <div class="absolute top-4 left-4 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.9);">
             <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -595,8 +595,8 @@
 
       <div class="feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal" style="transition-delay:0.1s;">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?auto=format&fit=crop&w=600&q=80"
-               alt="Empresário africano" class="w-full h-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/entrepreneur.png' %}"
+               alt="Entrepreneurs" class="w-full h-full object-cover" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 40%,rgba(30,10,60,0.45) 100%);"></div>
           <div class="absolute top-4 left-4 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.9);">
             <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -615,8 +615,8 @@
 
       <div class="feature-card rounded-3xl overflow-hidden shadow-sm reveal" style="transition-delay:0.2s;background:linear-gradient(135deg,#1F3864,#2563EB);">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1631815583088-7d4b3e8e6ae2?auto=format&fit=crop&w=600&q=80"
-               alt="Médico africano em procedimento clínico" class="w-full h-full object-cover opacity-40" loading="lazy">
+          <img src="{% static 'images/landing/agent_sante_oculte.png' %}"
+               alt="Consultation médicale" class="w-full h-full object-cover opacity-40" loading="lazy">
           <div class="absolute inset-0 flex items-center justify-center">
             <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -634,8 +634,8 @@
 
       <div class="feature-card bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm reveal" style="transition-delay:0.3s;">
         <div class="h-44 relative overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=600&q=80"
-               alt="Médico com radiografia" class="w-full h-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/medecin.jpg' %}"
+               alt="Médecin" class="w-full h-full object-cover" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 40%,rgba(50,10,10,0.45) 100%);"></div>
           <div class="absolute top-4 left-4 w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(255,255,255,0.9);">
             <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -674,7 +674,7 @@
       <div class="text-center reveal">
         <div class="relative inline-block mb-6">
           <div class="w-36 h-36 rounded-3xl mx-auto overflow-hidden shadow-xl relative">
-            <img src="https://images.unsplash.com/photo-1678695972687-033fa0bdbac9?auto=format&fit=crop&w=300&q=80"
+            <img src="{% static 'images/landing/citoyenne.png' %}"
                  alt="Cidadã guineense a registar-se" class="w-full h-full object-cover" loading="lazy">
             <div class="absolute inset-0 flex items-center justify-center" style="background:rgba(31,56,100,0.65);">
               <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -691,8 +691,8 @@
       <div class="text-center reveal" style="transition-delay:0.15s;">
         <div class="relative inline-block mb-6">
           <div class="w-36 h-36 rounded-3xl mx-auto overflow-hidden shadow-xl relative">
-            <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=300&q=80"
-                 alt="Médico africano com paciente idoso" class="w-full h-full object-cover" loading="lazy">
+            <img src="{% static 'images/landing/agent_inss.png' %}"
+                 alt="Agente INSS" class="w-full h-full object-cover" loading="lazy">
             <div class="absolute inset-0 flex items-center justify-center" style="background:rgba(184,134,11,0.65);">
               <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
@@ -708,8 +708,8 @@
       <div class="text-center reveal" style="transition-delay:0.3s;">
         <div class="relative inline-block mb-6">
           <div class="w-36 h-36 rounded-3xl mx-auto overflow-hidden shadow-xl relative">
-            <img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=300&q=80"
-                 alt="Consulta médica em Bissau" class="w-full h-full object-cover" loading="lazy">
+            <img src="{% static 'images/landing/prestataire_sante.jpg' %}"
+                 alt="Prestador de saúde" class="w-full h-full object-cover" loading="lazy">
             <div class="absolute inset-0 flex items-center justify-center" style="background:rgba(5,110,60,0.65);">
               <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -805,7 +805,7 @@
       <div class="flex justify-center reveal" style="transition-delay:0.2s;">
         <div class="relative w-80 h-80">
           <div class="absolute inset-6 rounded-full overflow-hidden shadow-2xl">
-            <img src="https://images.unsplash.com/photo-1622253694238-3b22139576c6?auto=format&fit=crop&w=500&q=80"
+            <img src="{% static 'images/landing/agent_inss.png' %}"
                  alt="Segurança digital" class="w-full h-full object-cover opacity-50" loading="lazy">
           </div>
           <div class="absolute inset-0 rounded-full border border-white/10 animate-pulse-slow"></div>
@@ -856,7 +856,7 @@
           "Finalmente consigo verificar as minhas contribuições sem sair de casa. O cartão digital é aceite em todos os hospitais parceiros. Uma revolução para a nossa proteção social."
         </p>
         <div class="flex items-center gap-3">
-          <img src="https://i.pravatar.cc/80?img=14" alt="Mamadou S." class="w-12 h-12 rounded-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/temoignage_00.JPG' %}" alt="Mamadou S." class="w-12 h-12 rounded-full object-cover" loading="lazy">
           <div>
             <div class="font-bold text-slate-900 text-sm">Mamadou Sow</div>
             <div class="text-slate-400 text-xs">{% trans "Cidadão · Bissau" %}</div>
@@ -874,7 +874,7 @@
           "A gestão das cotizações dos nossos 120 funcionários nunca foi tão simples. O portal empresarial centraliza tudo e as declarações são enviadas em poucos cliques."
         </p>
         <div class="flex items-center gap-3">
-          <img src="https://i.pravatar.cc/80?img=15" alt="Fátima B." class="w-12 h-12 rounded-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/temoignage_01.JPG' %}" alt="Fátima B." class="w-12 h-12 rounded-full object-cover" loading="lazy">
           <div>
             <div class="font-bold text-slate-900 text-sm">Fátima Baldé</div>
             <div class="text-slate-400 text-xs">{% trans "Diretora RH · Empresa Comercial" %}</div>
@@ -892,7 +892,7 @@
           "A verificação instantânea do QR code transformou o nosso atendimento. Em segundos sabemos se o paciente está coberto. Zero papel, zero demora, 100% confiável."
         </p>
         <div class="flex items-center gap-3">
-          <img src="https://i.pravatar.cc/80?img=68" alt="Dr. Carlos M." class="w-12 h-12 rounded-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/medecin.jpg' %}" alt="Dr. Carlos M." class="w-12 h-12 rounded-full object-cover" loading="lazy">
           <div>
             <div class="font-bold text-slate-900 text-sm">Dr. Carlos Mendes</div>
             <div class="text-slate-400 text-xs">{% trans "Médico · Clínica Central, Bissau" %}</div>
@@ -999,8 +999,8 @@
       <!-- Side image (2/5 width on desktop) -->
       <div class="hidden lg:block lg:col-span-2 reveal" style="transition-delay:0.2s;">
         <div class="rounded-3xl overflow-hidden shadow-xl relative h-full min-h-96">
-          <img src="https://images.unsplash.com/photo-1631815583088-7d4b3e8e6ae2?auto=format&fit=crop&w=600&q=80"
-               alt="Profissional de saúde em Bissau" class="w-full h-full object-cover" loading="lazy">
+          <img src="{% static 'images/landing/agent_sante_oculte.png' %}"
+               alt="Profissional de saúde" class="w-full h-full object-cover" loading="lazy">
           <div class="absolute inset-0" style="background:linear-gradient(180deg,transparent 40%,rgba(10,22,40,0.85) 100%);"></div>
           <div class="absolute bottom-6 left-6 right-6">
             <p class="text-white font-bold text-lg mb-2">{% trans "Precisas de ajuda?" %}</p>
@@ -1038,7 +1038,7 @@
 <!-- ══════════════ CTA FINAL ══════════════ -->
 <section class="py-14 relative overflow-hidden">
   <!-- Background photo -->
-  <img src="https://images.unsplash.com/photo-1510602955109-0e2f29545fa8?auto=format&fit=crop&w=1600&q=80"
+  <img src="{% static 'images/landing/agent_inss.png' %}"
        alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
   <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(10,22,40,0.93) 0%,rgba(31,56,100,0.88) 100%);"></div>
 
@@ -1046,10 +1046,10 @@
     <!-- Avatars -->
     <div class="flex items-center justify-center mb-6">
       <div class="flex -space-x-3">
-        <img src="https://i.pravatar.cc/48?img=14" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
-        <img src="https://i.pravatar.cc/48?img=15" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
-        <img src="https://i.pravatar.cc/48?img=68" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
-        <img src="https://i.pravatar.cc/48?img=45" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
+        <img src="{% static 'images/landing/temoignage_00.JPG' %}" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
+        <img src="{% static 'images/landing/temoignage_01.JPG' %}" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
+        <img src="{% static 'images/landing/medecin.jpg' %}" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
+        <img src="{% static 'images/landing/citoyenne.png' %}" class="w-12 h-12 rounded-full border-2 border-white object-cover" loading="lazy" alt="">
         <div class="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-white"
              style="background:#B8860B;">+50k</div>
       </div>
